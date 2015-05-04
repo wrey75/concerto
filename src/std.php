@@ -410,24 +410,24 @@ class std {
     }
 
 
-	/**
-	 *	Converts an ISO date to a timestamp.
-	 */
-	public static function iso2local( string $isodt ) {
-        $date = DateTime::createFromFormat('Y-m-d', $isodt);
-		return $date->getTimestamp();
-	}
+// 	/**
+// 	 *	Converts an ISO date to a timestamp.
+// 	 */
+// 	public static function iso2local( string $isodt ) {
+//         $date = DateTime::createFromFormat('Y-m-d', $isodt);
+// 		return $date->getTimestamp();
+// 	}
 
-	/**
-	 *	Intended for a local conversion of dates.
-	 *
-	 *	@deprecated DO NOT USE _ANYMORE_
-	 */
-    public static function iso2local( $isodt, $lang = 'fr' ) {
-        $FORMATS = array('fr'=>'d/m/Y' );
-        $date = DateTime::createFromFormat('Y-m-d', $isodt);
-        return $date->format( $FORMATS[$lang] );
-    }
+// 	/**
+// 	 *	Intended for a local conversion of dates.
+// 	 *
+// 	 *	@deprecated DO NOT USE _ANYMORE_
+// 	 */
+//     public static function iso2local( $isodt, $lang = 'fr' ) {
+//         $FORMATS = array('fr'=>'d/m/Y' );
+//         $date = DateTime::createFromFormat('Y-m-d', $isodt);
+//         return $date->format( $FORMATS[$lang] );
+//     }
 
    
     public static function actionList( array $actions, $separator = "&nbsp;|&nbsp;" ) {
