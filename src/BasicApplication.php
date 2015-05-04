@@ -106,7 +106,7 @@ class BasicApplication {
 	public function script( $url, $type = null ){
 		$arr = ['src'=>$url];
 		if( $type ) $arr['type'] = $type;
-		return std::tagln("script", $arr );
+		return std::tag("script", $arr ) . "</script>\n";
 	}
 	
 	/**
