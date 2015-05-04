@@ -1,6 +1,6 @@
 <?php
 
-namespace \Concerto
+namespace Concerto;
 
 
 /**
@@ -19,7 +19,7 @@ class stdTest extends PHPUnit_Framework_TestCase {
 	{
 		$this->assertEquals( std::lastChar(""), '\0'); 
 		$this->assertEquals( std::lastChar("Helene"), 'e'); 
-		$this->assertEquals( std::lastChar("Là"), "à"); 
+		$this->assertEquals( std::lastChar("Leo"), "o"); 
 	}
 	
 	

@@ -1,14 +1,14 @@
 <?php
 
-namespace \Concerto\Converters
+namespace \Concerto\Converters;
 
 
-class FrenchDigitsextends PHPUnit_Framework_TestCase
+class FrenchDigits extends PHPUnit_Framework_TestCase
 {
 
 	public function testNum2text()
 	{
-		$this->assertEquals(0, "zéro" );
+		$this->assertEquals(0, "zero" );
 		$this->assertEquals(1, "un" );
 		$this->assertEquals(2, "deux");
 		$this->assertEquals(9, "neuf");

@@ -157,7 +157,12 @@ class BasicApplication {
 		return $ret;
 	}
 	
-	public function footer( $title, $infos ){
+	/**
+	 * Generate the footer of the page.
+	 * 
+	 * @return string the footer to print.
+	 */
+	public function footer(){
 		return " </body>\n"
 			. "</html>\n";
 	}
