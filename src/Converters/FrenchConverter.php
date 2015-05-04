@@ -3,7 +3,7 @@
 namespace \Concerto\Converters;
 
 
-class FrenchDigits {
+class FrenchConverter {
 
 	/**
 	 * Convert to a written digit. Works only for

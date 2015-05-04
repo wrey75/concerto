@@ -1,8 +1,8 @@
 <?php
 
-namespace \Concerto;
+namespace \Concerto\Driver;
 
-class MysqlDriver {
+class MySQL {
 
 	/**
 	 * Convert a value from the database
