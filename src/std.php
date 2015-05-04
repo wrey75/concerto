@@ -120,6 +120,11 @@ class std {
 					$tag .= ' ' . $value;
 				}
 				else if( isset($value) ){
+					if( is_array($value) ){
+						// When the argument is given as an array, implode it to
+						// a single value (usefull for "class" attribute). 
+						$value = implode(' ',$value);
+					}
 					$tag .= ' '.$key.'="'
 						.str_replace("\"", "&quot;", str_replace("&", "&amp;", $value))
 						.'"';
@@ -128,6 +133,20 @@ class std {
 		}
 		$tag .= $close;
 		return $tag;
+	}
+	
+	/**
+	 * Implode the value passed as parameter.
+	 * 
+	 * @param unknown $arr a value to implode.
+	 * @return string the string value of the imploded value. 
+	 */
+	public static function implode( $arr ){
+		if( $arr === NULL ) return '';
+		if( is_array( $arr ) ){
+			return implode( ' ', $arr );
+		}
+		return (string)$arr;
 	}
 
   	/**
