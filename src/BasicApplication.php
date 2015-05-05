@@ -78,25 +78,36 @@ class BasicApplication {
 		return $this->getTabulation() . std::tagln( "div", $attrs );
 	}
 	
-	public function close_div(){
-		$this->tabs--;
-		$ret = $this->getTabulation() . "</div>";
-		if( $this->debug ){
-			// Display the class or ID linked.
-			list( $id, $class ) = array_pop( $this->div );
-			if( $id ){
-				$ret .= "<!-- #{$id} -->";
-			}
-			else {
-				if( !is_array($class) ) $class = explode(' ', $class);
-				$ret .= "<!--";
-				foreach( $class as $c ){
-					$ret .= " .${c}";
+	/**
+	 * Closes one or more &lt;div&t; elements.
+	 * 
+	 * @param number $nb the numver of &lt;div&t; to close (defaults to 1).
+	 * @return string the HTML code to display.
+	 */
+	public function close_div($nb = 1){
+		while( $nb > 1 ){
+			$ret = $this->getTabulation() . "</div>";
+			if( $this->debug ){
+				// Display the class or ID linked.
+				list( $id, $class ) = array_pop( $this->div );
+				if( $id ){
+					$ret .= $this->comment("#{$id}");
 				}
-				$ret .= " -->";
+				else {
+					if( is_array($class) ) {
+						$class = implode(' .', $class);
+					}
+					else {
+						$class = ".{$class}";
+					}
+					$ret .= $this->comment($class);
+				}
+				$ret .= "\n";
 			}
+			$nb--;
+			$this->tabs--;
 		}
-		return $ret . "\n";
+		return $ret;
 	}
 	
 	/**
@@ -113,6 +124,27 @@ class BasicApplication {
 			return $ret;
 		}
 		return $this->getTabulation() . std::tagln("link", ["rel"=>"stylesheet", 'href'=>$url ] );
+	}
+	
+	/**
+	 * Generate an HTML5 comment.
+	 * 
+	 * @param string|array $cmt the comment or several comments in an array.
+	 * @return string the HTML code to display (empty if production code).
+	 */
+	public function comment( $cmt ) {
+		$ret = "";
+		if( $this->debug ){
+			$ret .= "<!-- ";
+			if( is_array($cmt) ){
+				$ret .= implode("\n" + $this->getTabulation(), $cmt);
+			}
+			else {
+				$ret .= $cmt;
+			}
+			$ret .= " -->\n";
+		}
+		return $ret;
 	}
 	
 	public function meta($key, $value){
@@ -192,7 +224,7 @@ class BasicApplication {
 	 * 
 	 * @return string the footer to print.
 	 */
-	public function footer(){
+	public function footer(){		
 		return " </body>\n"
 			. "</html>\n";
 	}
