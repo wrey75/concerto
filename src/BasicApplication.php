@@ -35,6 +35,15 @@ class BasicApplication {
 		
 		// Initialisation stuff..
 		$this->debug = @$this->config["app"]["debug"];
+		$this->init();
+	}
+	
+	/**
+	 * Initialization called at construct time. Dhould
+	 * be overridden by thz implementation.
+	 */
+	public function init(){
+	
 	}
 	
 	/**
@@ -93,9 +102,16 @@ class BasicApplication {
 	/**
 	 * Returns a CSS link.
 	 * 
-	 * @param unknown $url
+	 * @param array|string $url an URL or a set of URLs.
+	 * @return the HTML tags to load the CSS.
+	 * 
 	 */
 	public function css( $url ){
+		if( is_array($url)){
+			$ret = "";
+			foreach ($url as $u) $ret .= $this->css($u);
+			return $ret;
+		}
 		return std::tagln("link", ["rel"=>"stylesheet", 'href'=>$url ] );
 	}
 	
@@ -103,7 +119,21 @@ class BasicApplication {
 		return std::tagln( "meta", [ 'name'=>$key, 'content'=>"width=device-width, initial-scale=1" ]);
 	}
 
+	/**
+	 * Returns a SCRIPT link.
+	 *
+	 * @param array|string $url an URL or a set of URLs to get the Javascript files.
+	 * @param string $type the type of the script (usually "text/javascript" or simply omitted).
+	 * @return the HTML tags to load the script.
+	 *
+	 */
 	public function script( $url, $type = null ){
+		if( is_array($url)){
+			$ret = "";
+			foreach ($url as $u) $ret .= $this->css($u, $type);
+			return $ret;
+		}
+		
 		$arr = ['src'=>$url];
 		if( $type ) $arr['type'] = $type;
 		return std::tag("script", $arr ) . "</script>\n";
