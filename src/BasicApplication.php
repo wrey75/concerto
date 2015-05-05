@@ -78,6 +78,8 @@ class BasicApplication {
 		return $this->getTabulation() . std::tagln( "div", $attrs );
 	}
 	
+	
+	
 	/**
 	 * Closes one or more &lt;div&t; elements.
 	 * 
@@ -136,14 +138,12 @@ class BasicApplication {
 	public function comment( $cmt ) {
 		$ret = "";
 		if( $this->debug ){
-			$ret .= "<!-- ";
 			if( is_array($cmt) ){
-				$ret .= implode("\n" + $this->getTabulation(), $cmt);
+				$ret = "<!--" . implode("\n" + $this->getTabulation(), $cmt) . "\n-->";
 			}
 			else {
-				$ret .= $cmt;
+				$ret = "<!-- {$cmt} -->";
 			}
-			$ret .= " -->\n";
 		}
 		return $ret;
 	}
@@ -229,4 +229,35 @@ class BasicApplication {
 		return " </body>\n"
 			. "</html>\n";
 	}
+	
+	public function h( $level, $text, $subtext = null ){
+		$ret = sprintf( "<h%d>", $level );
+		$ret .= std::html($text);
+		if( $subtext ){
+			$ret .= " <small>" . std::html($text) . "</small>";
+		}
+		$ret .= sprintf( "</h%d>", $level );
+		return $this->getTabulation() . $ret . "\n";
+	}
+	
+	public function h1( $title, $subtitle = null ){
+		$ret = $this->open_div("page-header");
+		$ret .= $this->getTabulation() . $this->h(1, $title, $subtitle);
+		$ret .= $this->close_div();
+		return $ret;
+	}
+	
+	
+	/**
+	 * Formatte the text into a paragraph.
+	 * 
+	 * @param string $html the text of the paragraph
+	 * 		previously formatted in HTML.
+	 * @return string the HTML embedded with &lt;P&gt; and &lt;/P&gt;.
+	 */
+	public function p( string $html ){
+		$ret = std::tag("p", ["class"=>"text-justify"]) . $html . "</p>\n";
+		return $this->getTabulation() . $ret;
+	}
+	
 }
