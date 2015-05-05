@@ -89,7 +89,7 @@ class BasicApplication {
 	public function close_div($nb = 1){
 		$ret = "";
 		while( $nb > 0 ){
-			$ret = $this->getTabulation() . "</div>";
+			$ret .= $this->getTabulation() . "</div>";
 			if( $this->debug ){
 				// Display the class or ID linked.
 				list( $id, $class ) = array_pop( $this->div );
