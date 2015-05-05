@@ -112,11 +112,11 @@ class BasicApplication {
 			foreach ($url as $u) $ret .= $this->css($u);
 			return $ret;
 		}
-		return std::tagln("link", ["rel"=>"stylesheet", 'href'=>$url ] );
+		return $this->getTabulation() . std::tagln("link", ["rel"=>"stylesheet", 'href'=>$url ] );
 	}
 	
 	public function meta($key, $value){
-		return std::tagln( "meta", [ 'name'=>$key, 'content'=>"width=device-width, initial-scale=1" ]);
+		return $this->getTabulation() . std::tagln( "meta", [ 'name'=>$key, 'content'=>"width=device-width, initial-scale=1" ]);
 	}
 
 	/**
@@ -130,13 +130,13 @@ class BasicApplication {
 	public function script( $url, $type = null ){
 		if( is_array($url)){
 			$ret = "";
-			foreach ($url as $u) $ret .= $this->css($u, $type);
+			foreach ($url as $u) $ret .= $this->script($u, $type);
 			return $ret;
 		}
 		
 		$arr = ['src'=>$url];
 		if( $type ) $arr['type'] = $type;
-		return std::tag("script", $arr ) . "</script>\n";
+		return $this->getTabulation() . std::tag("script", $arr ) . "</script>\n";
 	}
 	
 	/**
