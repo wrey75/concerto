@@ -161,7 +161,7 @@ class std {
 	/**
 	 *	@deprecated used std::link instead.
 	 */
-	public static function url( string $url, string $text = null ){
+	public static function url( $url, $text = null ){
 		if( $text === NULL ) $text = $url;
 		return std::tag('a', array('href'=>$url)) . $text . '</a>';
 	}
