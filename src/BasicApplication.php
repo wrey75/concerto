@@ -85,7 +85,8 @@ class BasicApplication {
 	 * @return string the HTML code to display.
 	 */
 	public function close_div($nb = 1){
-		while( $nb > 1 ){
+		$ret = "";
+		while( $nb > 0 ){
 			$ret = $this->getTabulation() . "</div>";
 			if( $this->debug ){
 				// Display the class or ID linked.
