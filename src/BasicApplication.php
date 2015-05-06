@@ -148,6 +148,10 @@ class BasicApplication {
 		return $ret;
 	}
 	
+	protected function tabbed( $html ){
+		return $this->getTabulation() . "$html\n";
+	}
+	
 	public function meta($key, $value){
 		return $this->getTabulation() . std::tagln( "meta", [ 'name'=>$key, 'content'=>"width=device-width, initial-scale=1" ]);
 	}
