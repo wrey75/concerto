@@ -41,6 +41,25 @@ class BasicApplication {
 	}
 	
 	/**
+	 * Get a configuration value.
+	 * 
+	 * @param string $key a key giving the final key. Use
+	 * 		dots to get internal value of an array.
+	 * @param $defaultValue a default value (set to NULL
+	 * 		by default).
+	 * @return Ambigous <string, multitype:, NULL> the
+	 * 		value from the configuration.
+	 */
+	public function config( $key, $defaultValue = null ){
+		$keys = explode('.', $key);
+		$arr = $this->config;
+		foreach ($keys as $k){
+			$arr = isset( $this->config[$k] ) ? $this->config[$k] : NULL;
+		}
+		return ( $arr === NULL ? $arr : $defaultValue );
+	}
+	
+	/**
 	 * Initialization called at construct time. Dhould
 	 * be overridden by thz implementation.
 	 */
