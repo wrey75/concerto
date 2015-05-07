@@ -24,6 +24,8 @@ class BasicApplication {
 	protected $debug = TRUE;
 	protected $div = array();
 	public $config = array();
+	public $IE_version = 0;	// Version of Internet Explorer
+	public $bot = FALSE;
 	
 	public function __construct( $config = array() ){
 		if( $config ){
@@ -44,6 +46,78 @@ class BasicApplication {
 	 */
 	public function init(){
 	
+	}
+	
+	/**
+	 *  Returns the Microsoft Internet Explorer version. If the
+	 *  user agent is not a IE browser, the returned value is 100.
+	 * 
+	 *  @return the IE version or 100 if not Microsoft.
+	 */
+	public function IE_version() {
+		if( !$this->IE_version ){
+			if( preg_match( '/MSIE ([0-9.]*)/', @$_SERVER['HTTP_USER_AGENT'], $matches ) ){
+				$this->IE_version = float( $matches[1] );
+			}
+			else {
+				$this->IE_version = 100;
+			}
+		}
+		return $this->IE_version;
+	}
+	
+	
+	protected function show_sub_menu( $submenu ){
+		$ret = $this->tabbed( '<ul class="dropdown-menu" role="menu">' );
+		$this->tabs++;
+		foreach( $submenu as $k => $v ){
+			// Only 2 levels accepted...
+			$ret .= $this->add_menu_item( ['url'=>$k, 'text'=>std::html($v)] );
+		}
+		$this->tabs--;
+		$ret .= $this->tabbed('</ul>');
+		return $ret;
+	}
+	
+	protected function add_menu_item( $item ){
+		$attribs = array();
+		if( isset($item['active']) ){
+			$attribs['class'] = 'active';
+		}
+		$url = $item['url'];
+		$text = $item['text'];
+		return $this->tabbed(
+				std::tag("li", $attribs) .
+				std::tag("a", [ 'href'=>$url ]) .
+				$text.
+				'</a></li>');
+	}
+	
+	/**
+	 * Show the navigation bar menu based on the menu
+	 * passed as the parameter. 
+	 * 
+	 * @param array $menu the menu for the application
+	 * @return string the menu as it must be displayed.
+	 */
+	public function show_menu( $menu, $active = null ) {
+		$ret = $this->tabbed( '<ul class="nav navbar-nav">' );
+		foreach( $menu as $k => $v ){
+			if( is_array($v) ){
+				// Sub menu
+				$ret .= $this->tabbed( '<li class="dropdown">' );
+				$this->tabs++;
+				$ret .= $this->tabbed( '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' . $k . '<span class="caret"></span></a>' );
+				$ret .= $this->show_sub_menu( $v );
+				$this->tabs--;
+				$ret .= $this->tabbed( '</li>');
+			}
+			else {
+				$ret .= $this->add_menu_item( ['url'=>$k, 'text'=>std::html($v)] );
+			}
+		}
+		$ret .= $this->tabbed( '</ul>' );
+		return $ret;
 	}
 	
 	/**
