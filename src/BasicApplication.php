@@ -352,7 +352,7 @@ class BasicApplication {
 	 * 		previously formatted in HTML.
 	 * @return string the HTML embedded with &lt;P&gt; and &lt;/P&gt;.
 	 */
-	public function p( string $html ){
+	public function p( $html ){
 		$ret = std::tag("p", ["class"=>"text-justify"]) . $html . "</p>\n";
 		return $this->getTabulation() . $ret;
 	}
