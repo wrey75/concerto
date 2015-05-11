@@ -41,6 +41,13 @@ class BasicApplication {
 	}
 	
 	/**
+	 * Returns TRUE if this is the development environment.
+	 */
+	public function isDebug(){
+		return $this->debug;
+	}
+	
+	/**
 	 * Get a configuration value.
 	 * 
 	 * @param string $key a key giving the final key. Use
@@ -352,8 +359,11 @@ class BasicApplication {
 	 * 		previously formatted in HTML.
 	 * @return string the HTML embedded with &lt;P&gt; and &lt;/P&gt;.
 	 */
-	public function p( $html ){
-		$ret = std::tag("p", ["class"=>"text-justify"]) . $html . "</p>\n";
+	public function p( $html, $attr = array() ){
+		if( !isset($attr['class']) ){
+			$attr["class"] = "text-justify";
+		}
+		$ret = std::tag("p", $attr) . $html . "</p>\n";
 		return $this->getTabulation() . $ret;
 	}
 	

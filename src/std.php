@@ -169,11 +169,16 @@ class std {
 	/**
 	 *	Create an anchor. 
 	 *
+	 *	@param string $url the URL to follow
+	 *	@param string $text the text to display in the HTML format.
+	 *  @param array $attrs the complementary attributes for the
+	 *  	anchor tag.
+	 *
 	 */
-	public static function link( string $url, string $text = null, $attrs = [] ){
+	public static function link( $url, $text = null, $attrs = [] ){
 		if( $text === NULL ) $text = $url;
 		$attrs['href'] = $url;
-		return std::tag('a', $url) . $text . '</a>';
+		return std::tag('a', $attrs) . $text . '</a>';
 	}
 
 	/**
@@ -401,6 +406,8 @@ class std {
 
 	/**
 	 *	Get a link including an image rather than text.
+	 *  @deprecated not suitable for quality programming.
+	 *  
 	 */
     public static function imgref( $img, $url, $params = array() ){
         $href = std::mkurl( $url, $params );
