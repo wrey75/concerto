@@ -114,20 +114,26 @@ class std {
 		$tag = "<" . $name;
   	
 		if( count($attributes) > 0 ){
-			foreach( $attributes as $key => $value ){
-				if( is_int($key) ){
-					// Tag without "=" like "ckecked"
-					$tag .= ' ' . $value;
-				}
-				else if( isset($value) ){
-					if( is_array($value) ){
-						// When the argument is given as an array, implode it to
-						// a single value (usefull for "class" attribute). 
-						$value = implode(' ',$value);
+			if( !is_array($attributes) ){
+				echo "<pre>"; debug_print_backtrace(); echo "</pre>";
+				trigger_error( "array expected but [".$attributes."] received." );
+			}
+			else {
+				foreach( $attributes as $key => $value ){
+					if( is_int($key) ){
+						// Tag without "=" like "ckecked"
+						$tag .= ' ' . $value;
 					}
-					$tag .= ' '.$key.'="'
-						.str_replace("\"", "&quot;", str_replace("&", "&amp;", $value))
-						.'"';
+					else if( isset($value) ){
+						if( is_array($value) ){
+							// When the argument is given as an array, implode it to
+							// a single value (usefull for "class" attribute). 
+							$value = implode(' ',$value);
+						}
+						$tag .= ' '.$key.'="'
+							.str_replace("\"", "&quot;", str_replace("&", "&amp;", $value))
+							.'"';
+					}
 				}
 			}
 		}

@@ -361,7 +361,10 @@ class BasicApplication {
 	 */
 	public function p( $html, $attr = array() ){
 		if( !isset($attr['class']) ){
-			$attr["class"] = "text-justify";
+			if( !is_array($attr) ){
+				$attr = array();
+			}
+			$attr['class'] = $attr;
 		}
 		$ret = std::tag("p", $attr) . $html . "</p>\n";
 		return $this->getTabulation() . $ret;
