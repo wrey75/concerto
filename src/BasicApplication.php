@@ -338,7 +338,7 @@ class BasicApplication {
 		$ret = sprintf( "<h%d>", $level );
 		$ret .= std::html($text);
 		if( $subtext ){
-			$ret .= " <small>" . std::html($text) . "</small>";
+			$ret .= " <small>" . std::html($subtext) . "</small>";
 		}
 		$ret .= sprintf( "</h%d>", $level );
 		return $this->getTabulation() . $ret . "\n";
