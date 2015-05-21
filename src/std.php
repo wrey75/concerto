@@ -472,12 +472,19 @@ class std {
      * @param unknown $str string to display
      * @return string text converted in HTML5.
      */
-    public static function html( $str ){
-    	if( is_array($str) ){
+    public static function html( $str, $newlines = "<br>" ){
+    	if( !is_array($str) ){
 			// Should not be an array, but in case
-    		$str = implode('; ', $str);
+    		$str = array($str);
     	}
-    	$ret = htmlspecialchars( $str );
+    	
+    	$ret = '';
+    	$first_line = TRUE;
+    	foreach( $str as $line ){
+    		if( !$first_line ) $ret .= $newlines;
+    		$ret .= htmlspecialchars( $line );
+    		$first_line = FALSE;
+    	}
     	return $ret;
     }
     
