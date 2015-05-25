@@ -36,7 +36,7 @@ class BasicApplication {
 		}
 		
 		// Initialisation stuff..
-		$this->debug = @$this->config["app"]["debug"];
+		$this->debug = $this->getConfig("app.debug", FALSE);
 		$this->init();
 	}
 	
@@ -45,6 +45,15 @@ class BasicApplication {
 	 */
 	public function isDebug(){
 		return $this->debug;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @deprecated use getConfig() instead.
+	 */
+	public function config( $key, $defaultValue = null ){
+		return getCongig( $key, $defaultValue );
 	}
 	
 	/**
@@ -57,13 +66,13 @@ class BasicApplication {
 	 * @return Ambigous <string, multitype:, NULL> the
 	 * 		value from the configuration.
 	 */
-	public function config( $key, $defaultValue = null ){
+	public function getConfig( $key, $defaultValue = null ){
 		$keys = explode('.', $key);
 		$arr = $this->config;
 		foreach ($keys as $k){
-			$arr = isset( $this->config[$k] ) ? $this->config[$k] : NULL;
+			$arr = isset( $arr[$k] ) ? $arr[$k] : NULL;
 		}
-		return ( $arr === NULL ? $arr : $defaultValue );
+		return ( $arr !== NULL ? $arr : $defaultValue );
 	}
 	
 	/**
