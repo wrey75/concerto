@@ -26,6 +26,7 @@ class BasicApplication {
 	public $config = array();
 	public $IE_version = 0;	// Version of Internet Explorer
 	public $bot = FALSE;
+	public $log;
 	
 	public function __construct( $config = array() ){
 		if( $config ){
@@ -33,6 +34,17 @@ class BasicApplication {
 				$config = json_decode($config, TRUE);
 			}
 			$this->config = $config;
+		}
+		
+		// Set a log file (when possible)
+		$log_infos = $this->getConfig("app.log");
+		if( $log_infos ){
+			$filepath = $log_infos['file'];
+			$level = $log_infos['level'];
+			$this->log = new Logger($filepath, $level);
+		}
+		else {
+			$this->log = new Logger("stdout:", Logger::CRITICAL);
 		}
 		
 		// Initialisation stuff..
@@ -67,6 +79,7 @@ class BasicApplication {
 	 * 		value from the configuration.
 	 */
 	public function getConfig( $key, $defaultValue = null ){
+		// Check with hierarchy.
 		$keys = explode('.', $key);
 		$arr = $this->config;
 		foreach ($keys as $k){
@@ -377,6 +390,27 @@ class BasicApplication {
 		}
 		$ret = std::tag("p", $attr) . $html . "</p>\n";
 		return $this->getTabulation() . $ret;
+	}
+	
+	
+	public function debug($msg){
+		$this->log->debug($msg);
+	}
+
+	public function info($msg){
+		$this->log->info($msg);
+	}
+	
+	public function fatal($msg){
+		$this->log->fatal($msg);
+	}
+	
+	public function warn($msg){
+		$this->log->warn($msg);
+	}
+	
+	public function error($msg){
+		$this->log->error($msg);
 	}
 	
 }
