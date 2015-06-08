@@ -82,7 +82,7 @@ class std {
 		}
 		return "\0";
 	}
-
+	
 	/**
 	 * Convert a link to a script tag.
 	 * 
@@ -582,6 +582,12 @@ class std {
 		return $e === $needle;
 		//return( $e && (std::len($e) == std::len($needle)) );
 	}
+
+	
+	public static function beginsWith( $str, $needle ){
+		$len = strlen( $needle );
+		return (strcmp( $needle, substr( $str, 0, $len ) ) == 0);
+	}
 	
 	/**
 	 * Capitalize the first character of the string.
@@ -591,7 +597,7 @@ class std {
 	 * @return string the string capitalized.
 	 * 		
 	 */
-	public static function capitalizeFirst(string $text){
+	public static function capitalizeFirst($text){
 		if( !$text ) return "";
 		$text = trim( $text );
 		if( strlen($text) < 1 ) return "";

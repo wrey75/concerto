@@ -65,7 +65,7 @@ class BasicApplication {
 	 * @deprecated use getConfig() instead.
 	 */
 	public function config( $key, $defaultValue = null ){
-		return getCongig( $key, $defaultValue );
+		return $this->getConfig( $key, $defaultValue );
 	}
 	
 	/**
