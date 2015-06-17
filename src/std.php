@@ -286,10 +286,33 @@ class std {
 	 * 		parameter has not been given (non mandatory)
 	 * @return Ambigous <unknown, string>
 	 */
-	static public function get( $name, $value = null ){
+	static public function get( $name, $defaultValue = null ){
+		global $ANGULAR_POST;
 		$name = self::normalizeVariableName( $name );
-		return (isset( $_REQUEST[$name]) ? $_REQUEST[$name] : $value );
+		if (isset( $_REQUEST[$name]) ){
+			return $_REQUEST[$name];
+		}
+		else if (@$ANGULAR_POST && isset( $ANGULAR_POST[$name]) ){
+			return $ANGULAR_POST[$name];
+		}
+		return $defaultValue;
 	}
+	
+	/**
+	 * Convert an angular $http call to something compatible
+	 * with JQuery call. Note this can be called even no
+	 * AngularJS is used because the $_REQUEST values
+	 * are used in preference when call std::get().
+	 * 
+	 * @param string $name the variable name
+	 * @param string $value the default value.
+	 * @return string the expected value
+	 */
+	static public function angularToPost(){
+		global $ANGULAR_POST;
+		$ANGULAR_POST = json_decode(file_get_contents('php://input'),true);
+	}
+	
 
 	/**
 	 * Normalize the text provided. A normalized text
