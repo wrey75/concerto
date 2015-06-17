@@ -34,6 +34,7 @@ class BootstrapForm {
 	public $encasulate_enabled;
 	public $error_list;
 	public $input_size;
+	public $required = false;
 	
 	public $hint_class; // Class(es) for hints.
 	
@@ -57,6 +58,23 @@ class BootstrapForm {
 		$this->angularCtrl = FALSE;
 		
 		$this->hint_class = 'help-block hidden-xs';
+	}
+	
+	/**
+	 * Set the next fields in the group to be required.
+	 * Note this attribute is only valid for input tags
+	 * (not necessarly all the tags available in a form).
+	 * 
+	 * The library uses the internal HTML attribute (then
+	 * this method is not fully reliable).
+	 * 
+	 * @param $required if the next field is required.
+	 * 
+	 * @return an empty string.
+	 */
+	public function setRequired($required = true){
+		$this->required = $required;
+		return '';
 	}
 	
 	/**
@@ -113,13 +131,17 @@ class BootstrapForm {
 	 */
 	public function open(){
 		$arr = array('class'=>$this->mode, 
-				'role'=>'form', 
-				'action'=>$this->action,
-				'method'=>$this->method);
+				'role'=>'form'
+				);
 		if( $this->angularCtrl ){
 			if( is_string($this->angularCtrl) ){
 				$arr['ng-controller'] = $this->angularCtrl;
 			}
+			$arr['ng-submit'] = $this->action;
+		}
+		else {
+			$arr['action'] = $this->action;
+			$arr['method'] = $this->method;
 		}
 		$ret = std::tagln('form', $arr);
 		return $ret;
@@ -186,6 +208,7 @@ class BootstrapForm {
 	 */
 	public function close_group() {
 		$this->group = null;
+		$this->required = false;
 		return "</div>\n";
 	}
 	
@@ -468,6 +491,11 @@ class BootstrapForm {
 		}
 		if( $placeholder ){
 			$attributes['placeholder'] = $placeholder;
+		}
+		
+		if( $this->required ){
+			// Add the required qttribute
+			$attributes[] = 'required';
 		}
 	
 		$ret = std::tag('input', $attributes) . "\n";
