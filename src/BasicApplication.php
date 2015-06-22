@@ -413,4 +413,15 @@ class BasicApplication {
 		$this->log->error($msg);
 	}
 	
+	
+	/**
+	 * Convert a plain text to an HTML
+	 * text including french quotes.
+	 * 
+	 * @param string $texte plain text
+	 */
+	public function frquotes( $texte )
+	{
+		return "&laquo;&nbsp;" . std::html($texte) . "&nbsp;&raquo;";
+	}
 }

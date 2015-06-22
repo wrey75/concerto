@@ -398,7 +398,7 @@ class BootstrapForm {
 		return $ret;
 	}
 	
-	public function textarea( $name, $placeholder = null ) {
+	public function textarea( $name, $placeholder = null, $rows = null ) {
 		$attributes = array(
 				'class' => "form-control {$this->input_size}" );
 		
@@ -422,6 +422,10 @@ class BootstrapForm {
 			$attributes['placeholder'] = $placeholder;
 		}
 	
+		if( $rows ){
+			$attributes['rows'] = $rows;
+		}
+		
 		$ret = std::tag('textarea', $attributes);
 		if( !$this->angularCtrl ){
 			$ret .= std::html($this->find($name));
