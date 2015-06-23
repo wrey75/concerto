@@ -105,7 +105,7 @@ class BasicApplication {
 	public function IE_version() {
 		if( !$this->IE_version ){
 			if( preg_match( '/MSIE ([0-9.]*)/', @$_SERVER['HTTP_USER_AGENT'], $matches ) ){
-				$this->IE_version = float( $matches[1] );
+				$this->IE_version = floatval( $matches[1] );
 			}
 			else {
 				$this->IE_version = 100;
