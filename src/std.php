@@ -3,6 +3,7 @@
 namespace Concerto;
 
 
+use Symfony\Component\Validator\Constraints\False;
 /**
  * This is a basic class for PHP development. It is
  * intended to implement very useful stuff not available
@@ -313,7 +314,31 @@ class std {
 		$ANGULAR_POST = json_decode(file_get_contents('php://input'),true);
 	}
 	
-
+	/**
+	 * Checks if the array passed is associative. In PHP,
+	 * there is no "associative" array in the way, there is no
+	 * real way to distinguish them of a plain array having an 
+	 * index starting at 0 and ending at (n-1) where n is the
+	 * number of elements.
+	 * 
+	 * The code is based on:
+	 * http://www.zomeoff.com/check-if-an-array-is-associative-or-sequentialindexed-in-php/
+	 * 
+	 * @param array $array an array to check.
+	 * @return TRUE if the array is associative, False
+	 * 		if the array is NULL, empty or not an array 
+	 * 		at all.
+	 */
+	static public function is_associative( $array ){
+		if( !is_array($array) ) return FALSE;
+		$nb = count($array);
+		if( $nb == 0 ) return FALSE;
+		
+		// Check on basic arrays
+		return array_keys($array) !== range(0, $nb - 1);
+	}
+	
+	
 	/**
 	 * Normalize the text provided. A normalized text
 	 * is a text which contains only lowercase letters
@@ -625,6 +650,13 @@ class std {
 		$text = trim( $text );
 		if( strlen($text) < 1 ) return "";
 		return std::upper(mb_substr($text,0,1,'UTF-8')) . mb_substr($text,1,NULL,'UTF-8');
+	}
+	
+	public static function dump($a){
+ 		echo " -->";
+ 		echo '<pre>';
+ 		print_r($a);
+ 		echo "</pre>\n";
 	}
 }
 
