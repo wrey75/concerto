@@ -658,6 +658,23 @@ class std {
  		print_r($a);
  		echo "</pre>\n";
 	}
+	
+	/**
+	 * Convert the value in input to a valid
+	 * timestamp. The input value can be a DateTime
+	 * object or a plain timestamp or even null (in
+	 * this case, we consider the current timestamp).
+	 *
+	 * @param <DateTime, int> $ts the value to translate in timestamp
+	 * @return int a valid timestamp (seconds since 1st Jan 1970)
+	 */
+	public function timestamp($ts){
+		if( $ts == null ) return time();
+		if( $ts instanceof DateTime ){
+			$ts = $ts->getTimestamp();
+		}
+		return $ts;
+	}
 }
 
 
