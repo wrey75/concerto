@@ -351,6 +351,7 @@ class DataTable {
 	        	    
 	        	    $style = '';
 				    if( isset($data["$key-style"]) ) $style = $data["$key-style"];
+				    if( isset($data["{$key}-order"]) ) $opt['data-order'] = $data["{$key}-order"];
 	        	    if( $style || $rowstyle ){
 	        		    $opt["style"] = $style . $rowstyle;
 	        	    }
