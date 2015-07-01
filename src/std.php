@@ -4,6 +4,8 @@ namespace Concerto;
 
 
 use Symfony\Component\Validator\Constraints\False;
+
+
 /**
  * This is a basic class for PHP development. It is
  * intended to implement very useful stuff not available
@@ -668,12 +670,12 @@ class std {
 	 * @param <DateTime, int> $ts the value to translate in timestamp
 	 * @return int a valid timestamp (seconds since 1st Jan 1970)
 	 */
-	public function timestamp($ts){
-		if( $ts == null ) return time();
-		if( $ts instanceof DateTime ){
-			$ts = $ts->getTimestamp();
+	public static function timestamp($dt){
+		if( $dt == null ) return time();
+		if( $dt instanceof \DateTime ){
+			$dt = $dt->getTimestamp();
 		}
-		return $ts;
+		return intval($dt);
 	}
 }
 
