@@ -539,6 +539,20 @@ class std {
     }
     
     /**
+     * This function will clean up the HTML text.
+     * BE CAREFUL: the resulting text must be espaced in
+     * HTML to be displayed!
+     * 
+     * @param string $html the HTML to clean.
+     * @return string the plain text.
+     */
+    public static function plain( $html ){
+    	$ret = strip_tags($html);
+    	$ret = html_entity_decode($ret, ENT_HTML401 | ENT_NOQUOTES, 'UTF-8');
+    	return $ret;
+    }
+    
+    /**
 	 *	Convert a timestamp to an ISO date.
 	 */
     public static function isodate( $dt = null ){
