@@ -382,11 +382,10 @@ class BasicApplication {
 	 * @return string the HTML embedded with &lt;P&gt; and &lt;/P&gt;.
 	 */
 	public function p( $html, $attr = array() ){
-		if( !isset($attr['class']) ){
-			if( !is_array($attr) ){
-				$attr = array();
-			}
-			$attr['class'] = $attr;
+		if( !is_array($attr) ){
+			// If the attr is not an array, we consider as a class.
+			$cls = $attr;
+			$attr = array( "class" => $cls );
 		}
 		$ret = std::tag("p", $attr) . $html . "</p>\n";
 		return $this->getTabulation() . $ret;
