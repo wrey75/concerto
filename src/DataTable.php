@@ -15,6 +15,7 @@ namespace Concerto;
  */
 class DataTable {
 	private $id;
+	private $ajax;
 	private $callback;
 	private $headers;
 	static public $options = array();
@@ -55,6 +56,17 @@ class DataTable {
 	
 	public function setWaitingText($txt = "Loading, please wait" ) {
 		$this->waitingText = $txt;
+	}
+	
+	/**
+	 * Set a page to load data rather than using the direct 
+	 * display.
+	 * 
+	 * @param string $url the URL for data
+	 */
+	public function setAjaxPage( $url ){
+		$this->ajax = $url;
+		$this->opt['ajax'] = $url;
 	}
 
 	public function getJavaScript(){
@@ -108,6 +120,9 @@ class DataTable {
 		
 		foreach( $columns as $colname => $value ){
 			$column = null;
+			if( $this->ajax ){
+				$column['mData'] = $colname;
+			}
 			$column['sType'] = "html"; 
 			$column['sClass'] = '';
 			$values = explode( $this->separator, $value );
