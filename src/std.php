@@ -691,6 +691,29 @@ class std {
 		}
 		return intval($dt);
 	}
+	
+	/**
+	 * Clean of the text for real text output. Based
+	 * on rules about encoding URLs.
+	 *
+	 * @param string $str the text to encode.
+	 * @return string an encoded text without punctuation
+	 * 		but accents and UTF8 characters are kept
+	 * 		for a better view on search engines.
+	 */
+	public static function url_text($str){
+		$clean = '';
+		$clean = mb_strtolower($str, 'UTF-8' );
+		// $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+		$clean = preg_replace("/[?\/\\&+'\"!,;:.()]/", ' ', $clean);
+		$clean = preg_replace("/ +/", ' ', $clean);
+		$clean = trim($clean);
+		$clean = str_replace(' ', '-', $clean);
+		$clean = urlencode($clean);
+		if( !$clean ) $clean = 'empty'; // avoid empty data
+		return $clean;
+	}
+	
 }
 
 

@@ -190,14 +190,16 @@ class BasicApplication {
 	 * @param string|array $class a class or a list of classes.
 	 * @param string $id a option id for this &lt;div&gt;.
 	 */
-	public function open_div( $class, $id = null, $attrs = array() ){
-		$this->tabs++;
-		$attrs['class'] = std::implode($class);
+	public function open_div( $class, $id = null, $attrs = array() ){	
+		if( $class ) $attrs['class'] = std::implode($class);
+		if( !$id && !$class ) $id = uniqid();
 		if( $id ){
 			$attrs['id'] = $id;
 		}
 		array_push( $this->div, [ $id, $class ] );
-		return $this->getTabulation() . std::tagln( "div", $attrs );
+		$ret = $this->getTabulation() . std::tagln( "div", $attrs );
+		$this->tabs++;
+		return $ret;
 	}
 	
 	
@@ -211,6 +213,7 @@ class BasicApplication {
 	public function close_div($nb = 1){
 		$ret = "";
 		while( $nb > 0 ){
+			$this->tabs--;
 			$ret .= $this->getTabulation() . "</div>";
 			if( $this->debug ){
 				// Display the class or ID linked.
@@ -230,7 +233,6 @@ class BasicApplication {
 				$ret .= "\n";
 			}
 			$nb--;
-			$this->tabs--;
 		}
 		return $ret;
 	}

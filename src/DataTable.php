@@ -246,11 +246,17 @@ class DataTable {
 						$column['bUseRendered'] = false;
 						$column['sType'] = "date";
 						$value = ($val ? $val : $this->date_format );
-						$fnRender = "function(o,val) {
-									var d = new Date(val);
-									var ret = \$.datepicker.formatDate( \"$value\", d );
-									return ret; }";
-						$column['fnRender'] = $this->jsFunction($fnRender);
+						$mRender = "function(data, type, row) {
+										if( type === 'display' ){
+										  var d = new Date(data * 1000);
+										  var ret = \$.datepicker.formatDate( \"$value\", d );
+										  return ret; 
+										}
+										else {
+											return data;
+										}
+									}";
+						$column['mRender'] = $this->jsFunction($mRender);
 					}
 					else if( $key == 'numeric' ){
                         // Special for numeric
