@@ -810,7 +810,7 @@ class std {
 		if( $max_length < 10 ) $max_length = 10; 
 		if( std::len($text) > $max_length ){
 			$text = mb_substr($text, 0, $max_length - 5);
-			$text = trim(trim);
+			$text = trim($text);
 			$text .= "...";
 		}
 		return $text;
