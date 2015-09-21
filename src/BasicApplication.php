@@ -120,7 +120,7 @@ class BasicApplication {
 		$this->tabs++;
 		foreach( $submenu as $k => $v ){
 			// Only 2 levels accepted...
-			$ret .= $this->add_menu_item( ['url'=>$k, 'text'=>std::html($v)] );
+			$ret .= $this->add_menu_item( ['url'=>$k, 'text'=>$v /* std::html($v)*/ ] );
 		}
 		$this->tabs--;
 		$ret .= $this->tabbed('</ul>');
@@ -161,7 +161,7 @@ class BasicApplication {
 				$ret .= $this->tabbed( '</li>');
 			}
 			else {
-				$ret .= $this->add_menu_item( ['url'=>$k, 'text'=>std::html($v)] );
+				$ret .= $this->add_menu_item( ['url'=>$k, 'text'=>$v /*std::html($v)*/] );
 			}
 		}
 		$ret .= $this->tabbed( '</ul>' );
@@ -358,6 +358,14 @@ class BasicApplication {
 			. "</html>\n";
 	}
 	
+	/**
+	 * Display an header.
+	 * 
+	 * @param int $level the level (from 1 to 6)
+	 * @param string $text the text in plain UTF-8.
+	 * @param string $subtext a sub text (not mandatory)
+	 * @return string the HTML to display.
+	 */
 	public function h( $level, $text, $subtext = null ){
 		$ret = sprintf( "<h%d>", $level );
 		$ret .= std::html($text);

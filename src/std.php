@@ -532,7 +532,7 @@ class std {
     	$first_line = TRUE;
     	foreach( $str as $line ){
     		if( !$first_line ) $ret .= $newlines;
-    		$ret .= htmlspecialchars( $line );
+    		$ret .= htmlspecialchars( $line, ENT_COMPAT | ENT_HTML401, 'UTF-8' );
     		$first_line = FALSE;
     	}
     	return $ret;
@@ -633,7 +633,7 @@ class std {
 	 * @param string $str 
 	 * @return number
 	 */
-	public static function len( string $str ){
+	public static function len( $str ){
 		return mb_strlen($str, 'UTF-8');
 	}
 	
@@ -694,7 +694,8 @@ class std {
 	
 	/**
 	 * Clean of the text for real text output. Based
-	 * on rules about encoding URLs.
+	 * on rules about encoding URLs. This function is intended
+	 * to maximize the results given by the search engines.
 	 *
 	 * @param string $str the text to encode.
 	 * @return string an encoded text without punctuation
@@ -702,18 +703,118 @@ class std {
 	 * 		for a better view on search engines.
 	 */
 	public static function url_text($str){
-		$clean = '';
-		$clean = mb_strtolower($str, 'UTF-8' );
-		// $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
+		$clean = $str;
+		$clean = std::lower($clean);
+		if( std::len($clean) > 130 ){
+			// Cut the text...!
+			$clean = mb_substr( $clean, 0, 120, 'UTF-8' );
+		}
+		$search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
+		$replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
+		$clean = str_replace($search, $replace, $clean);
+		
+ 		if (function_exists('iconv')){
+ 			// Add a second round for more complex stuff..
+ 			$clean = iconv('UTF-8', 'ascii//IGNORE', $clean);
+ 		}
 		$clean = preg_replace("/[?\/\\&+'\"!,;:.()]/", ' ', $clean);
 		$clean = preg_replace("/ +/", ' ', $clean);
 		$clean = trim($clean);
 		$clean = str_replace(' ', '-', $clean);
+		$clean = preg_replace("/[-]+/", '-', $clean);
 		$clean = urlencode($clean);
+		// $clean = str_replace('%C3%A9', 'e', $clean);
+		// $clean = str_replace('%C3%A8', 'e', $clean);
+		// $clean = str_replace('%C3%A2', 'a', $clean);
 		if( !$clean ) $clean = 'empty'; // avoid empty data
 		return $clean;
 	}
 	
+	/**
+	 * Make a prety print output of a JSON string.
+	 * 
+	 * From http://stackoverflow.com/questions/6054033/pretty-printing-json-with-php
+	 * 
+	 * @param string $json a JSON string.
+	 * @param string $html TRUE to have a HTML
+	 *   output, FALSE will give you an ASCII output
+	 *   to embed in a &lt;pre&gt; tag after escaped
+	 *   it to std::html() for special chars.
+	 * @return string the string (plain or HTML)
+	 */
+	public static function prettyJson($json, $html = false)
+	{
+		$result = '';
+		$level = 0;
+		$in_quotes = false;
+		$in_escape = false;
+		$ends_line_level = NULL;
+		$json_length = strlen( $json );
+	
+		for( $i = 0; $i < $json_length; $i++ ) {
+			$char = $json[$i];
+			$new_line_level = NULL;
+			$post = "";
+			if( $ends_line_level !== NULL ) {
+				$new_line_level = $ends_line_level;
+				$ends_line_level = NULL;
+			}
+			if ( $in_escape ) {
+				$in_escape = false;
+			} else if( $char === '"' ) {
+				$in_quotes = !$in_quotes;
+			} else if( ! $in_quotes ) {
+				switch( $char ) {
+					case '}': 
+					case ']':
+						$level--;
+						$ends_line_level = NULL;
+						$new_line_level = $level;
+						break;
+	
+					case '{': 
+					case '[':
+						$level++;
+					case ',':
+						$ends_line_level = $level;
+						break;
+	
+					case ':':
+						$post = " ";
+						break;
+	
+					case " ": 
+					case "\t":
+					case "\n": 
+					case "\r":
+						$char = "";
+						$ends_line_level = $new_line_level;
+						$new_line_level = NULL;
+						break;
+				}
+			} else if ( $char === '\\' ) {
+				$in_escape = true;
+			}
+			if( $new_line_level !== NULL ) {
+				$result .= "\n".str_repeat( "\t", $new_line_level );
+			}
+			$result .= $char.$post;
+		}
+	
+		return $result;
+	}
+	
+	
+	public static function ellipsis($text, $max_length)
+	{
+		if( $max_length < 10 ) $max_length = 10; 
+		if( std::len($text) > $max_length ){
+			$text = mb_substr($text, 0, $max_length - 5);
+			$text = trim(trim);
+			$text .= "...";
+		}
+		return $text;
+	}
 }
 
 
