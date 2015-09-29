@@ -712,11 +712,10 @@ class std {
 		$search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
 		$replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
 		$clean = str_replace($search, $replace, $clean);
-		
- 		if (function_exists('iconv')){
- 			// Add a second round for more complex stuff..
- 			$clean = iconv('UTF-8', 'ascii//IGNORE', $clean);
- 		}
+//  		if (function_exists('iconv')){
+//  			// Add a second round for more complex stuff..
+//  			$clean = iconv('UTF-8', 'ascii//IGNORE', $clean);
+//  		}
 		$clean = preg_replace("/[?\/\\&+'\"!,;:.()]/", ' ', $clean);
 		$clean = preg_replace("/ +/", ' ', $clean);
 		$clean = trim($clean);
@@ -804,12 +803,16 @@ class std {
 		return $result;
 	}
 	
-	
+	/**
+	 * 
+	 * @param string $text the text to ellipsis
+	 * @param int $max_length the maximum length you accept.
+	 */
 	public static function ellipsis($text, $max_length)
 	{
 		if( $max_length < 10 ) $max_length = 10; 
 		if( std::len($text) > $max_length ){
-			$text = mb_substr($text, 0, $max_length - 5);
+			$text = mb_substr($text, 0, $max_length - 5, 'utf-8');
 			$text = trim($text);
 			$text .= "...";
 		}
