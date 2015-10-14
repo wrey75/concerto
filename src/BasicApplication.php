@@ -277,7 +277,7 @@ class BasicApplication {
 	}
 	
 	public function meta($key, $value){
-		return $this->getTabulation() . std::tagln( "meta", [ 'name'=>$key, 'content'=>$value ]);
+		return $this->getTabulation() . std::tagln( "meta", [ 'name'=>$key, 'content'=>"width=device-width, initial-scale=1" ]);
 	}
 
 	/**

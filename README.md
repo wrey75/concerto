@@ -1,8 +1,6 @@
 # concerto
 
-
 Be careful -- this library is in its "beta stage". But it is currently used in production for the French website http://www.koikonfait.com/. I mean there is no official release yet and the documentation is mainly inside the source code (which is nice for autocompletion in Eclipse).
-
 
 ## Notes
 
@@ -25,4 +23,5 @@ weak points in PHP:
 Based on what we know about applications, a BasicApplication offers a way to use
 easily an out-of-box application.
 
-    
+
+
