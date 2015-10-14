@@ -22,6 +22,8 @@ class DataTable {
 	private $opt = null;
 	private $skip_script = false;
 	private $functions = array();
+	private $columns = array();
+	
 	static public $static_date_format = "dd/mm/yy"; 
 	static public $static_decimal_char = ",";
 	static public $static_thousand_char = "&nbsp;";
@@ -116,15 +118,15 @@ class DataTable {
 	public function setColumns( $columns ){
 		$this->headers = array();
 		$target = 0;
-		$this->aoColumns = array();
+		$this->columns = array();
 		
 		foreach( $columns as $colname => $value ){
-			$column = null;
+			$column = array();
 			if( $this->ajax ){
-				$column['mData'] = $colname;
+				$column['data'] = $colname;
 			}
-			$column['sType'] = "html"; 
-			$column['sClass'] = '';
+			$column['type'] = "html"; 
+			$className = '';
 			$values = explode( $this->separator, $value );
 			$i = 0;
 			foreach( $values as $v ){
@@ -149,85 +151,87 @@ class DataTable {
 
 					if( $key == 'left' ){
                         // Left-aligned
-						$column['sClass'] .= " text-left"; 
+						$className .= " text-left"; 
 					}
 					else if( $key == 'right' ){
                         // Right-aligned
-						$column['sClass'] .= " text-right"; 
+						$className .= " text-right"; 
 					}
 					else if( $key == 'center' ){
                         // Center aligned
-						$column['sClass'] .= " text-center"; 
+						$className .= " text-center"; 
 					}
 					else if( $key == 'class' ){
                         // Set a class
-						$column['sClass'] = $val;
+						$className = $val;
 					}
 					else if( $key == 'hidden' ){
                         // Make the column invisible
-						$column['bVisible'] = false;
+						$column['visible'] = false;
 					}
 					else if( $key == 'desc' ){
                         // Sort direction on reverse order
-						$column['asSorting'] = 'desc';
+						$column['orderSequence'] = 'desc';
 					}
 					else if( $key == 'sort' ){
                         // Sort direction
-						$column['asSorting'] = $value;
+						$column['orderSequence'] = $value;
 					}
 					else if( $key == 'mailto' ){
                         // Render a mail link
-                        $fnRender = "function(o,val) {
-                                    val = val + \"|\" + val;
-                                    var parts = val.split('|');
-                                    var ret = '<a href=\"mailto:' + parts[0] + '\">' + parts[1] + '</a>';
-                                    return ret; }";
-						$column['fnRender'] = $this->jsFunction($fnRender);
+                        $fnRender = "function(val,type) {
+                        		var ret = val;
+                        		if(type=='display'){
+                     		        val = val + \"|\" + val;
+                     		        var parts = val.split('|');
+                         			ret = '<a href=\"mailto:' + parts[0] + '\">' + parts[1] + '</a>';
+                        		}
+                                return ret; }";
+						$column['render'] = $this->jsFunction($fnRender);
 					}
 					else if( $key == 'link' ){
                         // Render a link, the value of the
                         // column is divided in 2 parts: the first
                         // is the rendered, the second the reference for the
                         // link.
-                        $fnRender = "function(o,val) {
-                                                
+                        $fnRender = "function(val,type) {
+                        		var ret = val;
+                        		if(type=='display'){
                         			var re = /(.*)\|([a-zA-Z0-9_\-]+)/
     								var parts = re.exec(val)
     								if (parts) {
-    								
-                                    // var parts = val.split('|');
-                                    	var url = \"$val\";
-                                    // var href = url.replace(\"*\", parts[1] );
+    								   	var url = \"$val\";
                                     	var href = url.replace(\"*\", parts[2] );
-                                    // var ret = '<a href=\"' + href + '\">' + parts[0] + '</a>';
                                     	var ret = '<a href=\"' + href + '\">' + parts[1] + '</a>';
                                     }
                                     else ret = val;
-                                    return ret; }";
-						$column['fnRender'] = $this->jsFunction($fnRender);
+                                 }
+                                 return ret; }";
+						$column['render'] = $this->jsFunction($fnRender);
 					}
 					else if( $key == 'nosort' ){
                         // Remove the column sort
-						$column['bSortable'] = false;
+						$column['orderable'] = false;
 					}
 					else if( $key == 'default' ){
                         // Set a default value
-						$column['sDefaultContent'] = $val;
+						$column['defaultContent'] = $val;
 					}
 					else if( $key == 'width' ){
-						$column['sWidth'] = $val; 
+						$column['width'] = $val; 
 					}
 					else if( $key == 'money'){
-						$column['sClass'] .= " align-right"; 
-						$column['sType'] = "numeric"; 
-						$column['bUseRendered'] = false;
+						$className .= " align-right"; 
+						$column['type'] = "num";
 						//$value = ($val ? $val : $this->money_format );
- 						$fnRender = "function(o,val) {
- 						if( val ){
- 							nStr = parseFloat(val).toFixed(2);
- 							x = nStr.split('.');
- 							x1 = x[0];
- 							x2 = x.length > 1 ? '" . $this->decimal_char . "' + x[1] : '';";
+ 						$fnRender = "function(val,type) {
+ 						var ret = val;
+ 						if(type=='display'){
+ 							if( val ){
+ 								nStr = parseFloat(val).toFixed(2);
+ 								x = nStr.split('.');
+ 								x1 = x[0];
+ 								x2 = x.length > 1 ? '" . $this->decimal_char . "' + x[1] : '';";
 						if( $this->thousand_char ){
 							$fnRender .= "var rgx = /(\d+)(\d{3})/;
 							while (rgx.test(x1)) {
@@ -235,37 +239,34 @@ class DataTable {
 							}";
 						}
 						$fnRender .= "	return x1 + x2;
+							}
 						}
-						return ''; }";
-						$column['fnRender'] = $this->jsFunction($fnRender);
+						return ret; }";
+						$column['render'] = $this->jsFunction($fnRender);
 					}
 					else if( $key == 'date' ){
 						// Date formating
 						// Use UI Datepicker provided by JQuery UI
 						// (make sense as no function is available in Javascript!!!) 
-						$column['bUseRendered'] = false;
-						$column['sType'] = "date";
 						$value = ($val ? $val : $this->date_format );
-						$mRender = "function(data, type, row) {
-										if( type === 'display' ){
-										  var d = new Date(data * 1000);
-										  var ret = \$.datepicker.formatDate( \"$value\", d );
-										  return ret; 
+						$column['type'] = "date";
+						$mRender = "function(val, type) {
+										var d = new Date(val * 1000);
+										if(type=='display'){
+											var ret = \$.datepicker.formatDate( \"$value\", d );
+											return ret; 
 										}
-										else {
-											return data;
-										}
+										return d;
 									}";
-						$column['mRender'] = $this->jsFunction($mRender);
+						$column['render'] = $this->jsFunction($mRender);
 					}
 					else if( $key == 'numeric' ){
                         // Special for numeric
-						$column['sClass'] .= " align-right"; 
-						$column['sType'] = "numeric";
-						$column['bUseRendered'] = false;
+						$className .= " align-right"; 
+						$column['type'] = "num";
 					}
 					else if( $key == 'optional' ){
-						$column['sClass'] .= " hidden-xs";
+						$className .= " hidden-xs";
 					}
 					else if( strlen($key) == 0){
 						// Simply ignore (usually a ";" added at the end
@@ -277,10 +278,12 @@ class DataTable {
 				}
 				$i++;
 			}
-			$column['sClass'] = trim($column['sClass']);
-			$this->aoColumns[$colname] = $column;
+			if( $className ){
+				$column['className'] = trim($className);
+			}
+			$this->columns[$colname] = $column;
 		}
-		$this->opt['aoColumns'] = array_values($this->aoColumns);
+		$this->opt['columns'] = array_values($this->columns);
 	}
 	
 	/**
