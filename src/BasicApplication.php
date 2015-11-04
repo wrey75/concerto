@@ -114,7 +114,13 @@ class BasicApplication {
 		return $this->IE_version;
 	}
 	
-	
+	/**
+	 * Show the sub menu. The $submenu passed as parameter
+	 * is an associative array containing the URLs as keys
+	 * and the text as values.
+	 * 
+	 * @param array $submenu the sub menu to display.
+	 */
 	protected function show_sub_menu( $submenu ){
 		$ret = $this->tabbed( '<ul class="dropdown-menu" role="menu">' );
 		$this->tabs++;
@@ -127,6 +133,14 @@ class BasicApplication {
 		return $ret;
 	}
 	
+	/**
+	 * Add a menu item.
+	 * 
+	 * @param array $item an associative array containing the URL as
+	 * 		'url' key and the text to display (in HTML) as the
+	 * 		'text' key. The key 'active' can be set to true.
+	 * @return a &lt;li&gt; tag containing the link.
+	 */
 	protected function add_menu_item( $item ){
 		$attribs = array();
 		if( isset($item['active']) ){
@@ -272,12 +286,25 @@ class BasicApplication {
 		return $ret;
 	}
 	
+	/**
+	 * Returns the HTML provided as parameter with spaces
+	 * and a return character.
+	 * 
+	 * @param string $html original HTML.
+	 * @return string formatted HTML.
+	 */
 	protected function tabbed( $html ){
 		return $this->getTabulation() . "$html\n";
 	}
 	
+	/**
+	 * Create a &lt;META&gt; tag.
+	 * 
+	 * @param string $key the data for the "name" attribute. 
+	 * @param string $value the data for the "content" attribute. 
+	 */
 	public function meta($key, $value){
-		return $this->getTabulation() . std::tagln( "meta", [ 'name'=>$key, 'content'=>"width=device-width, initial-scale=1" ]);
+		return $this->getTabulation() . std::tagln( "meta", [ 'name'=>$key, 'content'=>$value ]);
 	}
 
 	/**
