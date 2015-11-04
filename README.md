@@ -23,5 +23,12 @@ weak points in PHP:
 Based on what we know about applications, a BasicApplication offers a way to use
 easily an out-of-box application.
 
+## The `std` class
+The basic class used everywhere.
 
+## The `Logger` class
+To log data. You can create as many loggers as you want.
+
+## The `DataTable` class
+Used to print tables (using the `<table>` tag).
 

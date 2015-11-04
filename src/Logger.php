@@ -3,29 +3,32 @@
 namespace Concerto;
 	
 /**
- * A light, permissions-checking logging class. 
+ * A light, permissions-checking logging class. Based
+ * on a code from Kenneth Katzgrau <katzgrau@gmail.com>
+ * (July 26, 2008).
  * 
- * Author	: Kenneth Katzgrau <katzgrau@gmail.com>
- * Date	    : July 26, 2008
- * 
- * Website	: http://codefury.net
- * Version	: 1.0
  *
  * Usage: 
- *		$log = new KLogger ( "log.txt" , Logger::INFO );
+ *		$log = new Logger ( "log.txt" , Logger::INFO );
  *		$log->info("Returned a million search results");	//Prints to the log file
  *		$log->fatal("Oh dear.");				//Prints to the log file
  *		$log->debug("x = 5");					//Prints nothing due to priority setting
  *
  * Comments: 
- *    Originally written for use with wpSearch. The code is
- *    now adapted and enhanced by OxANDE to provide a
+ *    Originally written for use with wpSearch. The code has been
+ *    enhanced for the Concerto library to provide a
  *    log information.
+ * 
+ * IMPORTANT NOTE: NEVER LOG SENSIBLE INFORMATION
+ * LIKE PASSWORDS OR CREDENTIALS -- EVEN IN DEBUG
+ * MODE.
+ * 
+ * @since v0.2 
  * 
  */	
 class Logger {
-	// The default logger.
-	public static $defaultLog;
+
+	public static $defaultLog; // A default logger
 	public $withDate = FALSE;
 	public $priority;
 	public $MessageQueue;
@@ -41,7 +44,10 @@ class Logger {
 	const EMERGENCY = 600;	// Emergency: system is unusable.
 		
 	protected $format;
+	protected $now;
 	protected $log_file;
+	protected $sec; // Last log timestamp
+	protected $usec; // microseconds (<1.0)
 			
 	/**
 	 * Return an instance with no log capabilities
@@ -60,13 +66,27 @@ class Logger {
 	 */
 	public function __construct( $filepath = "stdout:", $priority = Logger::INFO )
 	{
-		
-		$this->format = "%d - %5l --> ";
-		$this->log_file = $filepath;
+		$this->format = "%T%f - %5l --> %m";
 		$this->MessageQueue = array();
 		$this->userName = "<guest>";
 		$this->priority = $priority;
-			
+		if( is_array($filepath)){
+			$arr = $filepath;
+			$this->log_file = @$arr['file'];
+			if( isset($arr['level']) ){
+				$this->priority = $arr['level'];
+			}
+			if( isset($arr['user']) ){
+				$this->userName = $arr['user'];
+			}
+			if( isset($arr['format']) ){
+				$this->setFormat( $arr['format'] );
+			}
+		}
+		else {
+			$this->log_file = $filepath;
+		}
+		
 		if ( file_exists( $this->log_file ) ){
 			if ( !is_writable($this->log_file) ){
 				$this->MessageQueue[] = "The file exists, but could not be opened for writing. Check that appropriate permissions have been set.";
@@ -76,67 +96,127 @@ class Logger {
 	}
 	
 
-	public function setFormat( $fmt ){
-		$this->format = $fmt;
+	/**
+	 * Information log. Should be used to display information
+	 * useful for the understanding the program (usually gives
+	 * non-confidential configuration information).
+	 * 
+	 * @param string $txt text to show
+	 */
+	public function info($txt)
+	{
+		$this->Log( $txt , Logger::INFO );
+	}
+		
+	/**
+	 * Debug log. Should be used to display debugging
+	 * information intended for the developper only.
+	 * 
+	 * @param string $txt text to show
+	 */
+	public function debug($txt)
+	{
+		$this->Log( $txt , Logger::DEBUG );
 	}
 	
-		
-	public function info($line)
-	{
-		$this->Log( $line , Logger::INFO );
-	}
-		
-	public function debug($line)
-	{
-		$this->Log( $line , Logger::DEBUG );
-	}
-		
-	public function warn($line)
+
+	/**
+	 * Warning log. Something wrong or abnormal
+	 * but can be workarounded automatically or,
+	 * if not, can be ignored.
+	 *
+	 * @param string $txt text to show
+	 */
+	public function warn($txt)
 	{
 		$this->Log( $line , Logger::WARNING );	
 	}
-	
-	public function error($line)
+
+
+	/**
+	 * Error log. Something wrong and need
+	 * an external maintenance (disk is full,
+	 * can not access database...). The program
+	 * is not stopped.
+	 *
+	 * @param string $txt text to show
+	 */
+	public function error($txt)
 	{
-		$this->Log( $line , Logger::ERROR );		
+		$this->Log( $txt, Logger::ERROR );		
 	}
 
 	/**
-	 * Log a fatal error. Used by the fatalError()
-	 * function if a log is available...
+	 * Log a fatal error. The program MUST
+	 * be aborted immediatly with a completion
+	 * error.
 	 * 
-	 * @param unknown_type $line
+	 * The abort of the program MUST be done
+	 * by the caller.
+	 * 
+	 * @param string $txt text to show
 	 */
-	public function fatal($line)
+	public function fatal($txt)
 	{
-		$this->Log( $line , Logger::FATAL );
+		$this->Log( $txt, Logger::FATAL );
 	}
 	
-	
+	/**
+	 * Check if the debug() will ouput something.
+	 * 
+	 * @return true if the log is displayed.
+	 */
 	public function isDebugEnabled(){
-		return ( $this->priority <= self::DEBUG );
+		return ( $this->priority <= Logger::DEBUG );
 	}
 	
-	public function isInfoEnabled(){
-		return ( $this->priority <= self::INFO );
+	/**
+	 * Check if the info() will ouput something.
+	 * 
+	 * @return true if the log is displayed.
+	 */
+	 public function isInfoEnabled(){
+		return ( $this->priority <= Logger::INFO );
 	}
 	
+	/**
+	 * Check if the warn() will ouput something.
+	 * 
+	 * @return true if the log is displayed.
+	 */
+	public function isWarnEnabled(){
+		return ( $this->priority <= Logger::WARN );
+	}
+	
+	/**
+	 * @deprecated use isWarnEnabled() instead.
+	 * 
+	 */
 	public function isWarningEnabled(){
-		return ( $this->priority <= self::WARN );
+		return $this->isWarnEnabled();
 	}
 	
+	/**
+	 * Check if the error() will ouput something.
+	 * 
+	 * @return true if the log is displayed.
+	 */
 	public function isErrorEnabled(){
-		return ( $this->priority <= self::ERROR );
+		return ( $this->priority <= Logger::ERROR );
 	}
-		
+	
+	/**
+	 * Log the text provided.
+	 *
+	 * @param string $line the line of log to display
+	 * @param int $priority the priority (use 
+	 * 	a constant when possible like Logger::ERROR).
+	 */
 	protected function Log($line, $priority)
 	{
-
-		
 		if ( $this->priority <= $priority )
 		{
-			
-			$status = $this->getTimeLine( $priority );
+			list($this->usec, $this->sec) = explode(" ", microtime());
 			
 			// We explode the contents by lines to
 			// keep the status at the beginning of
@@ -144,51 +224,143 @@ class Logger {
 			// for each line (that makes sense).
 			$lines = explode("\n", $line);
 
+			$freeLine = '';
 			foreach( $lines as $i => $txt ){
-				$this->WriteFreeFormLine( "$status$txt\n" );
-				$status = str_repeat( " ", strlen($status) );
+				$freeLine .= $this->getFormattedText( $priority, $txt ) . "\n";
 			}
+			$this->WriteFreeFormLine( $freeLine );
 		}
 	}
 	
-	public function WriteFreeFormLine( $line )
+	/**
+	 * Write the text provided to the disk. The
+	 * text must be already formatted.
+	 * 
+	 * @param string $line the data to log.
+	 */
+	protected function WriteFreeFormLine( $line )
 	{
 		if( $this->log_file == "syslog:" ){
+			// Send to the system log
 			syslog(LOG_WARNING, $line);
 		}
 		else if( $this->log_file == "stdout:" ){
 			echo "\n** $line\n";
 		}
 		else {
-
-			
 			$fic = fopen( $this->log_file, "a" );
 			if( $fic ){
 				fwrite( $fic, $line );
 				fclose( $fic );
 			}
 			else {
-				// echo "*** $this->log_file || $line ***<pre>"; debug_print_backtrace(); exit;
 				$this->MessageQueue[] = 'LOG: Can not open "{$this->log_file}"';
 				$this->MessageQueue[] = $line;
 			}
 		}
 	}
-	
-	protected function getFormattedDate(){
-		$format = ($this->withDate ? "Y-m-d " : "" ) . "H:i:s";
-		$t = date( $format );
-		list($usec, $sec) = explode(" ", microtime());
-		$t .= substr( sprintf("%0.3f", (float)$usec), 1);
-		return $t;
-	}
 
+
+// 	/**
+// 	 * Format the date to be added in the log file.
+// 	 * 
+// 	 * @return the formatted date.
+// 	 */
+// 	protected function getFormattedDate(){
+// 		$format = ($this->withDate ? "Y-m-d " : "" ) . "H:i:s";
+// 		$t = date( $format );
+// 		list($usec, $sec) = explode(" ", microtime());
+// 		$t .= substr( sprintf("%0.3f", (float)$usec), 1);
+// 		return $t;
+// 	}
+
+	/**
+	 * Set the user name. The user name is used
+	 * when the %u is encountred in the format.
+	 * 
+	 * @param string $username the user name.
+	 */
 	public function setUser( $username ){
 		$this->userName = $username;
 	}
-		
-	private function getTimeLine( $level )
+	
+// 	private function getTimeLine( $level )
+// 	{
+// 		$i = 0;
+// 		$len = strlen( $this->format );
+// 		$ret = "";
+// 		while( $i < $len ){
+// 			$c = $this->format[$i];
+// 			if( $c == '%' ){
+// 				$i++;
+// 				$size = 0;
+// 				while( $this->format[$i] >= '0' && $this->format[$i] < '9' ){
+// 					$size = $size * 10 + ($this->format[$i] - '0'); 
+// 					$i++;
+// 				}
+// 				$type = $this->format[$i++];
+// 				switch( $type ){
+// 					case 'd' : // Date
+// 						$t = $this->getFormattedDate();
+// 						break;
+// 					case 'u' : // User (must be provided)
+// 						$t = $this->userName;
+// 						break;
+// 					case 'l' : // Log level
+// 						$t = self::getLevelAsString($level);
+// 						break;			
+// 					default :
+// 						$t = "???";
+// 						break;
+// 				}	
+// 				if( $size > 0 ) {
+// 					// Complete with spaces or trunk...
+// 					$t = substr($t . str_repeat(" ", $size), 0, $size );
+// 				}
+// 				$ret .= $t;
+// 			}
+// 			else {
+// 				$ret .= $c;
+// 				$i++;
+// 			}
+// 		}
+// 		return $ret;
+// 	}
+	
+
+	/**
+	 * Set the log format. You can add special variables:
+	 * 
+	 * %D : The date (formatted YYYY-MM-DD)
+	 * 
+	 * %T : The time (formatted HH:MM:SS)
+	 * 
+	 * %f : The microseconds (including the dot)
+	 * 
+	 * %u : User (must be provided)
+	 * 
+	 * %l : The level of the log (expressed as a string)
+	 * 
+	 * %m : The message. If not provided, we automatically
+	 * add the message at the end of the format.
+	 *
+	 * @param string $fmt the format for the logs.
+	 */
+	public function setFormat( $fmt ){
+		$this->format = $fmt;
+	}
+	
+	/**
+	 * Formats the line.
+	 * 
+	 * @param int $level the log level.
+	 * @param string $text the text to include.
+	 * 
+	 * @return the text to write.
+	 */
+	private function getFormattedText( $level, $text )
 	{
+		$messageAdded = false;
 		$i = 0;
 		$len = strlen( $this->format );
 		$ret = "";
@@ -197,30 +369,49 @@ class Logger {
 			if( $c == '%' ){
 				$i++;
 				$size = 0;
+				
+				// Check if a size is given for the type
 				while( $this->format[$i] >= '0' && $this->format[$i] < '9' ){
-					$size = $size * 10 + ($this->format[$i] - '0'); 
+					$size = $size * 10 + ($this->format[$i] - '0');
 					$i++;
 				}
-				
+
+				// Add the information
 				$type = $this->format[$i++];
 				switch( $type ){
-					case 'd' : // Date
-						$t = $this->getFormattedDate();
+					case 'D' : // Day (ISO Format)
+						$size = 0;
+						$t = date( "Y-m-d", $this->sec);
 						break;
-						
+
+					case 'T' : // Time (ISO Format: HH:MM:SS)
+						$size = 0;
+						$t = date( "H:i:s", $this->sec);
+						break;
+
+					case 'f' : // micro-seconds (3 characters)
+						$size = 0;
+						$t = sprintf("%0.3", $this->usec);
+						break;
+							
 					case 'u' : // User (must be provided)
 						$t = $this->userName;
 						break;
-						
+	
 					case 'l' : // Log level
 						$t = self::getLevelAsString($level);
+						break;
+
+					case 'm' : // Log level
+						$messageAdded = true;
+						$t = $text;
 						break;
 						
 					default :
 						$t = "???";
 						break;
 				}
-				
+	
 				if( $size > 0 ) {
 					// Complete with spaces or trunk...
 					$t = substr($t . str_repeat(" ", $size), 0, $size );
@@ -232,9 +423,21 @@ class Logger {
 				$i++;
 			}
 		}
+		
+		if(!$messageAdded){
+			// Add the message even not explicitly added in the format.
+			$ret .= " $text";
+		}
 		return $ret;
 	}
 	
+	
+	/**
+	 * Convert the log levl as a string.
+	 * 
+	 * @param int $level the log level
+	 * @return string the level name.
+	 */
 	public static function getLevelAsString($level){
 		if( $level >= self::CRITICAL ){
 			return "FATAL";
@@ -251,16 +454,6 @@ class Logger {
 		return "DEBUG";
 	}
 	
-	/**
-	 * Old version.
-	 * 
-	 * @param unknown_type $level
-	 */
-	private function getTimeLine2( $level )
-	{
-		$time = $this->getFormattedDate();
-		return "$time - " . substr(self::getLevelAsString($level)) . " -->";
-	}
 		
 	/**
 	 * Returns the default logger (you have to set it manually).

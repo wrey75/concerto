@@ -3,9 +3,6 @@
 namespace Concerto;
 
 
-use Symfony\Component\Validator\Constraints\False;
-
-
 /**
  * This is a basic class for PHP development. It is
  * intended to implement very useful stuff not available

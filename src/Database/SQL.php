@@ -1,5 +1,6 @@
-<?php
+// <?php
 
+// namespace Concerto\database;
 
 // /**
 //  * This class is intended to be a thin layer to
@@ -16,14 +17,30 @@
 // 	/**
 // 	 * Declares a connection.
 // 	 *
-// 	 * @param unknown $dsn
-// 	 * @param unknown $login
-// 	 * @param unknown $password
-// 	 * @param unknown $options
+// 	 * @param string $dsn the Data Source Name for the database. If it is
+// 	 * 		an array, then the variable must contains the 'dsn', 'login' and
+// 	 * 		'password' entries;
+// 	 * @param string $login the login to connect the database
+// 	 * @param string $password the password to connect the database
+// 	 * @param array $options an array containing other information.
 // 	 */
 // 	public function __construct( $dsn, $login, $password, $options = array() ){
 // 		$this->log = KLogger::getNull();
-	
+
+// 		if( is_array($dsn) ){
+// 			// Explode the variables.
+// 			$arr = $dsn;
+// 			$dsn = @$arr['dsn'];
+// 			$login = @$arr['login'];
+// 			$password = @$arr['password'];
+			
+// 			$log = @$arr['log'];
+// 			if( $log ){
+// 				// Create the log file associated.
+// 				$this->log = new \Concerto\Logger($log);
+// 			}
+// 		}
+		
 // 		$this->db = new PDO( $dsn, $login, $password, $options );
 // 		$this->log->debug("Connected to $dsn" );
 // 		$this->beginTransaction();
@@ -42,7 +59,7 @@
 // 	 * 
 // 	 * @param string $sql the SQL request.
 // 	 */
-// 	protected function error( string $sql ){
+// 	protected function error( $sql ){
 // 		$info = $this->getErrorInfo();
 // 		$this->fails[] = array(
 // 			'request' => $sql,
