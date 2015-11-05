@@ -1,7 +1,12 @@
 <?php
 
+namespace Concerto\Database;
+
 /**
  * A Database colum. Describes a SQL column in the database.
+ * 
+ * The description is very important because it defines how
+ * the data is processed.
  * 
  * 
  * @author wrey75 William Rey
@@ -37,7 +42,7 @@ class DBColumn {
 	private $description;
 	private $foreignKeyName;
 	private $foreignTableName;
-	
+	private $label;
 	
 	/**
 	 * Declares a new column for the related table.
@@ -47,28 +52,51 @@ class DBColumn {
 	 * @param number $precision  the precision in digits or length of the column (for VARCHARs and NUMRICs). Not currently
 	 * 		used (given as information).
 	 * @param number $status     the status of of column (see flags)
-	 * @param string $desc       the description of the column.
+	 * @param string $desc       description of the column (can be NULL).
+	 * @param array  $stuff      other stuff linked to the column (description and other).
 	 */
-	public function __construct( string $columnName, string $type = self::VARCHAR, $precision = 0, $status = 0, string $desc = NULL, string $foreign ){
+	public function __construct( $columnName, $type = self::VARCHAR, $precision = 0, $status = 0, $desc = NULL, $stuff = [] ){
 		$this->columnName = $columnName;
 		$this->columnType = $type;
 		$this->columnPrecision = $precision;
 		$this->columnStatus = $status;
 		$this->description = $desc;
 		
-		// Foreign key (if apply)
-		$this->foreignKeyName = NULL;
-		$this->foreignTableName = NULL;
-		if( $this->isForeignKey() ){
-			if( strpos($this->$foreign, ":") > 0 ){
-				list( $this->foreignTableName, $this->foreignKeyName ) = explode( ":", $foreign);
-			}
-			else {
-				$this->foreignKeyName = $foreign;
-			}
+		if( @$stuff['description'] ){
+			// The description can overwrite the description passed
+			// as parameter;
+			$this->description = $stuff['description'];
 		}
+
+		if( @$stuff['label'] ){
+			$this->label = $stuff['label'];
+		}
+		
+		if( @$stuff['foreign_key'] ){
+			$this->foreignKeyName = $stuff['foreign_key'];
+		}
+		if( @$stuff['foreign_table'] ){
+			$this->foreignTableName = $stuff['foreign_table'];
+		}
+
+		
+//     ************************************
+//     OLD VERSION
+//     ************************************
+// 		// Foreign key (if apply)
+// 		$this->foreignKeyName = NULL;
+// 		$this->foreignTableName = NULL;
+// 		if( $this->isForeignKey() ){
+// 			if( strpos($this->$foreign, ":") > 0 ){
+// 				list( $this->foreignTableName, $this->foreignKeyName ) = explode( ":", $foreign);
+// 			}
+// 			else {
+// 				$this->foreignKeyName = $foreign;
+// 			}
+// 		}
 	}
 
+	
 	/**
 	 * Returns the description of the column.
 	 * 
@@ -143,5 +171,39 @@ class DBColumn {
 		return $this->columnPrecision;
 	}
 	
+	public function getLabel() {
+		return $this->label;
+	}	
+
+    /**
+     * Convert a value from the database
+     * to a compatible type in PHP. NOTE:
+     * the dates and times are translqted to
+     * timestamps.
+     *
+     */
+    public function fromSql( $value ){
+        if( !isset($value) ) return NULL;
+        switch( $this->columnType ){
+            case self::VARCHAR :
+                return $value;
+
+            case self::INTEGER :
+                return intval($value);
+
+            case self::DATE :
+            case self::DATETIME :
+                return new DateTime( $value );
+
+            case self::NUMERIC :
+                return $value;
+
+            case self::BOOLEAN :
+                return ($value == 'Y' ? TRUE : FALSE);
+
+            default:
+                throw new Exception("Unknown SQL TYPE: " . $this->columnType);
+        }
+    }
 }
 

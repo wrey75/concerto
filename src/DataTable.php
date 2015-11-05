@@ -2,6 +2,8 @@
 
 namespace Concerto;
 
+define('CRLF', "\x0d\x0a");
+
 /**
  * This class creates table of data based on
  * any datasource.
@@ -155,7 +157,7 @@ class DataTable {
 					}
 					else if( $key == 'right' ){
                         // Right-aligned
-						$className .= " text-right"; 
+						$className .= " text-right";
 					}
 					else if( $key == 'center' ){
                         // Center aligned
@@ -262,10 +264,11 @@ class DataTable {
 					}
 					else if( $key == 'numeric' ){
                         // Special for numeric
-						$className .= " align-right"; 
+						$className .= " text-right"; 
 						$column['type'] = "num";
 					}
 					else if( $key == 'optional' ){
+						// We hide the column when the screen is very small.
 						$className .= " hidden-xs";
 					}
 					else if( strlen($key) == 0){
@@ -387,4 +390,4 @@ class DataTable {
 	}
 	
 }
-?>
+

@@ -1,6 +1,6 @@
 <?php
 
-namespace \Concerto\Database;
+namespace Concerto\Database;
 
 /** 
  * Converter from PHP to Database and vice-versa.

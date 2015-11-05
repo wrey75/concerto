@@ -1,4 +1,0 @@
-
-# Object-relational mapping
-
-This 

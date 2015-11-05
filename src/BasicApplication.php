@@ -89,7 +89,7 @@ class BasicApplication {
 	}
 	
 	/**
-	 * Initialization called at construct time. Dhould
+	 * Initialization called at construct time. Should
 	 * be overridden by thz implementation.
 	 */
 	public function init(){
@@ -355,9 +355,10 @@ class BasicApplication {
 			. " <head>\n"
 			. "  <title>" . std::html($title) . "</title>\n";
 
-		$ret .= "  " . $this->css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css");
-		$ret .= "  " . $this->css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css");
-		$ret .= "  " . $this->script("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js");
+		
+		$ret .= "  " . $this->css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css");
+		$ret .= "  " . $this->css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css");
+		$ret .= "  " . $this->script("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js");
 		$ret .= "  " . $this->meta("viewport", "width=device-width, initial-scale=1");
 		
 		// IE8 support

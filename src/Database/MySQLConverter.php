@@ -1,6 +1,6 @@
 <?php
 
-namespace \Concerto\Database;
+namespace Concerto\Database;
 
 /**
  * Specific convertion to apply on MySQL.
