@@ -205,5 +205,44 @@ class DBColumn {
                 throw new Exception("Unknown SQL TYPE: " . $this->columnType);
         }
     }
+    
+    /**
+     * Return the type of the column as a string.
+     * 
+     * @return the type of the column.
+     */
+    public function getTypeAsString(){
+    	$type = "?"; // Image the worst case
+    	switch( $this->columnType){
+    		case DBColumn::VARCHAR:
+    			$type = "VARCHAR";
+    			break;
+    			
+    		case DBColumn::INTEGER:
+    			$type = "INTEGER";
+    			break;
+  			case DBColumn::DATE:
+  				$type = "DATE";
+  				break;
+			case DBColumn::DATETIME:
+ 				$type = "DATETIME";
+ 				break;
+			case DBColumn::BOOLEAN:
+				$type = "BOOLEAN";
+				break;
+			case DBColumn::NUMERIC:
+				$type = "NUMERIC";
+				break;
+			case DBColumn::TEXT:
+				$type = "TEXT";
+				break;
+    		default:
+    			break;
+    	}
+    	if( $this->columnPrecision ){
+    		$type .= "({$this->columnPrecision})";
+    	}
+    	return $type; 
+    }
 }
 

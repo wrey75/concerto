@@ -2,11 +2,12 @@
 
 namespace Concerto\Form;
 
-use \Concerto\std as std;
-use PhpOption\Some;
+use Concerto\std as std;
+
 
 /**
  * This class helps to create forms using Bootstrap CSS style.
+ * It is not awesome but easy to use.
  * 
  * You can create HORIZONTAL or classic forms.
  * 
