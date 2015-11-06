@@ -175,37 +175,7 @@ class DBColumn {
 		return $this->label;
 	}	
 
-    /**
-     * Convert a value from the database
-     * to a compatible type in PHP. NOTE:
-     * the dates and times are translqted to
-     * timestamps.
-     *
-     */
-    public function fromSql( $value ){
-        if( !isset($value) ) return NULL;
-        switch( $this->columnType ){
-            case self::VARCHAR :
-                return $value;
-
-            case self::INTEGER :
-                return intval($value);
-
-            case self::DATE :
-            case self::DATETIME :
-                return new DateTime( $value );
-
-            case self::NUMERIC :
-                return $value;
-
-            case self::BOOLEAN :
-                return ($value == 'Y' ? TRUE : FALSE);
-
-            default:
-                throw new Exception("Unknown SQL TYPE: " . $this->columnType);
-        }
-    }
-    
+ 
     /**
      * Return the type of the column as a string.
      * 
@@ -243,6 +213,16 @@ class DBColumn {
     		$type .= "({$this->columnPrecision})";
     	}
     	return $type; 
+    }
+    
+    
+    /**
+     * Returns the type of the column.
+     * 
+     * @return int the type
+     */
+    public function getType() {
+    	return $this->columnType;
     }
 }
 

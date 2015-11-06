@@ -5,6 +5,7 @@ namespace Concerto\Database;
 use Concerto;
 use Concerto\std;
 use Concerto\DataTable;
+use Concerto\Form\BootstrapForm;
 
 /**
  * A class to simplify the CRUD interface. Note that
@@ -40,7 +41,7 @@ class DBUserInterface {
 			$dao = DAO::getDefault();
 		}
 		$this->dao = $dao;
-		$this->entity = new $name($dao);
+		$this->entity = new $name();
 		if( !is_a($this->entity, 'Concerto\Database\DBEntity' )){
 			throw new \Exception('$name: Not a subclass of ' . Concerto\Database\DBEntity );
 		}
@@ -87,7 +88,7 @@ class DBUserInterface {
 	public function showData( $hidden = [], $where = null ) {
 		$tbl = new Concerto\DataTable;
 
-		$rows = $this->entity->select($where);
+		$rows = $this->dao->select($this->entity, $where);
 		
 		$tbl->setColumns( $this->dataTableColumns($hidden) );
 		echo $tbl->getHeader();
@@ -144,8 +145,60 @@ class DBUserInterface {
 		echo $tbl->getFooter();
 	}
 	
-	public function showForm($value) {
+	/**
+	 * Show the form.
+	 * 
+	 * @param DBEntity $obj the enity to edit.
+	 *
+	 */
+	public function showForm($obj) {
+		$form = new BootstrapForm($obj);
+		$ret = $form->open();
 		
+		$columns = $obj->getColumns();
+
+		foreach( $columns as $k=>$col ) {
+			$read_only = ( $col->isSequence() || $col->isAutomatic() );
+			
+			$label = $this->getLabel($k, $col);
+			$ret .= $form->new_group($k);
+			$ret .= $form->label($label);
+			$placeholder = null;
+			
+			if( $read_only ){
+				if( $col->isSequence() && !$obj->_isPersistent ){
+					$placeholder = "The ID will be set by the database.";
+				}
+				$ret .= $form->input_disabled( $k, $placeholder );
+			}
+			else if( $col->getType() == DBColumn::VARCHAR ){
+				// A simple input
+				$ret .= $form->input_text( $k );
+			}
+			else if( $col->getType() == DBColumn::INTEGER || $col->getType() == DBColumn::NUMERIC ){
+				// A simple input
+				$ret .= $form->input_number( $k );
+			}
+			$data = [];
+			$data["property"] = $k;
+			$data["colname"] = $col->getName();
+			$data["desc"] = $col->getDescription();
+			$data["label"] = $this->getLabel($k,$col);
+			$data["type"] = $col->getTypeAsString();
+			$ret .= "<hr>\n";
+		}
+		
+		$buttons = [
+			'submit' => ($obj->_isPersistent ? "Update" : "Insert")
+		];
+		if( $obj->_isPersistent ){
+			$buttons['delete'] = "Delete";
+		}
+		
+		$ret .= $form->submit_buttons( $buttons );
+
+		$ret .= $form->close();
+		echo $ret;
 	}
 	
 }

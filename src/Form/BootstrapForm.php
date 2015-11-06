@@ -36,6 +36,7 @@ class BootstrapForm {
 	public $error_list;
 	public $input_size;
 	public $required = false;
+	public $disabled = false;
 	
 	public $hint_class; // Class(es) for hints.
 	
@@ -75,6 +76,23 @@ class BootstrapForm {
 	 */
 	public function setRequired($required = true){
 		$this->required = $required;
+		return '';
+	}
+	
+	/**
+	 * Set the next fields in the group to be disabled.
+	 * Note this attribute is only valid for input tags
+	 * (not necessarly all the tags available in a form).
+	 *
+	 * The library uses the internal HTML attribute (then
+	 * this method is not fully reliable).
+	 *
+	 * @param boolean $disabled if the next field is required.
+	 *
+	 * @return an empty string.
+	 */
+	public function setDisabled($disabled = true){
+		$this->disabled = $disabled;
 		return '';
 	}
 	
@@ -131,9 +149,7 @@ class BootstrapForm {
 	 * 		information provided.
 	 */
 	public function open(){
-		$arr = array('class'=>$this->mode, 
-				'role'=>'form'
-				);
+		$arr = array('class'=>$this->mode, 'role'=>'form' );
 		if( $this->angularCtrl ){
 			if( is_string($this->angularCtrl) ){
 				$arr['ng-controller'] = $this->angularCtrl;
@@ -148,12 +164,13 @@ class BootstrapForm {
 		return $ret;
 	}
 	
+	
 	/**
 	 * The closing tag.
 	 * 
 	 * @return string the string the display.
 	 */
-	public function close( ) {
+	public function close() {
 		$ret = "\n";
 		if( $this->toggle_buttons ){
 			
@@ -193,7 +210,7 @@ class BootstrapForm {
 			$ret .= "\n</script>\n";
 		}
 		
-		$ret .= '</form>' . CRLF;
+		$ret .= "</form>\n";
 		if( $this->group ) $ret = $this->close_group() . $ret;
 		if( $this->tooltips ){
 			$ret .= "<script>\n\$(function () { $(\"[data-toggle='tooltip']\").tooltip(); });\n</script>\n	";
@@ -210,6 +227,7 @@ class BootstrapForm {
 	public function close_group() {
 		$this->group = null;
 		$this->required = false;
+		$this->disabled = false;
 		return "</div>\n";
 	}
 	
@@ -317,7 +335,7 @@ class BootstrapForm {
 	public function toogle_inline_buttons( $name, $values ){
 		$this->toggle_buttons = true;
 		$default_val = $this->find($name);
-		$ret = '<div class="btn-group btn-toggle" data-toggle="buttons">' . CRLF;
+		$ret = '<div class="btn-group btn-toggle" data-toggle="buttons">' . "\n";
 		foreach( $values as $k=>$v ){
 			$classes = "btn";
 			$arr = array("type"=>"radio", "name"=>$name, "id"=>"{$name}_{$k}", "value"=>$k);
@@ -333,7 +351,7 @@ class BootstrapForm {
 			$ret .= $v;
 			$ret .= "</label>\n";
 		}
-		$ret .= '</div>';
+		$ret .= "</div>\n";
 		
 		// TODO: fix the bug because nothing shown in editing a record.
 		$ret = $this->horizontal($ret);
@@ -498,11 +516,16 @@ class BootstrapForm {
 			$attributes['placeholder'] = $placeholder;
 		}
 		
-		if( $this->required ){
+		if( $this->disabled ){
+			// Add the disable qttribute
+			$attributes[] = 'disabled';
+		}
+		else if( $this->required ){
 			// Add the required qttribute
+			// Not compatible with DISABLED.
 			$attributes[] = 'required';
 		}
-	
+		
 		$ret = std::tag('input', $attributes) . "\n";
 		$ret .= $this->hint_text();
 		$ret = $this->horizontal($ret);
@@ -531,6 +554,19 @@ class BootstrapForm {
 	 * @return string the HTML to display.
 	 */
 	public function input_text( $name, $placeholder = null ) {
+		return $this->input('text', $name, $placeholder);
+	}
+	
+	/**
+	 * Force a INPUT disabled. You can set the disable flag
+	 * to TRUE and use a specific type but if you know the
+	 * input is disabled, simply use this method.
+	 * 
+	 * @param string $name name of the input (should be ignored)
+	 * @param string $placeholder placeholder for this input (should be ignored).
+	 */
+	public function input_disabled( $name, $placeholder = null ) {
+		$this->setDisabled();
 		return $this->input('text', $name, $placeholder);
 	}
 	
@@ -763,17 +799,18 @@ function initialize() {
 	}
 	
 	/**
-	 * Show the buttons
+	 * Show the buttons. The array contains the button name as the
+	 * key and the value is displayed to the user. 
 	 * 
-	 * @param array $array an array of button for validation.
+	 * @param array $arr an associative array of buttons for validation.
 	 * 
 	 * @return string the HTML to display.
 	 */
-	public function submit_buttons( $array  ) {
+	public function submit_buttons( $arr ) {
 		$ret = $this->close_group_if_necessary();
 		
 		$btns = "";
-		foreach( $array as $k=>$v ){
+		foreach( $arr as $k=>$v ){
 			$classes = "btn";
 			if( $k == 'submit' ) $classes .= ' btn-primary';
 			if( $k == 'success' ) $classes .= ' btn-primary';
@@ -782,7 +819,7 @@ function initialize() {
 		}
 		
 		if( $this->mode == self::HORIZONTAL ){
-			$ret .= '<div class="form-group">' . CRLF;
+			$ret .= std::tagln("div", [ 'class'=>"form-group" ]);
 				
 			$ret .= std::tag('div', array('class'=>$this->horiz_label_class)) . "&nbsp;</div>\n";
 			$ret .= std::tagln('div', array('class'=>$this->horiz_field_class)) . "{$btns}</div>\n";

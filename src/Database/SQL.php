@@ -420,5 +420,4 @@ class SQL {
 	public function getErrorInfo(){
 		return $this->conn->errorInfo();
 	}
-	
 }

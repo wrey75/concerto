@@ -99,4 +99,86 @@ class BasicConverter {
 		$ts = \Concerto\std::timestamp($ts);
 		return $this->sqlstr( date("H:i:s", $ts) );
 	}
+	
+	
+
+	/**
+	 * Convert a value from the database
+	 * to a compatible type in PHP. 
+	 * 
+	 * NOTE:
+	 * the dates and times are translated to
+	 * DateTime.
+	 * 
+	 * @param DBColumn $col the column.
+	 * @return mixed $value the value to convert from SQL to basic.
+	 * 
+	 * @return the value converted.
+	 *
+	 */
+	public function fromSql( $col, $value ){
+		if( !isset($value) ) return NULL;
+		switch( $col->getType() ){
+			case DBColumn::VARCHAR :
+				return $value;
+	
+			case DBColumn::INTEGER :
+				return intval($value);
+					
+			case DBColumn::DATE :
+			case DBColumn::DATETIME :
+				return new DateTime( $value );
+	
+			case DBColumn::NUMERIC :
+				return $value;
+					
+			case DBColumn::BOOLEAN :
+				return ($value == 'Y' ? TRUE : FALSE);
+	
+			default:
+				throw new SQLException("Unknown SQL TYPE: " . $col->getType());
+		}
+	}
+	
+
+	
+	/**
+	 * Convert some data to a SQL value.
+	 * 
+	 * @param DBColumn $col the column.
+	 * @param mixed $value the data to convert.
+	 * @throws SQLException if an exception occurred.
+	 */
+	public function sqlOf( $col, $value ){
+		if( $value === null ) return 'NULL';
+		switch( $col->getType() ){
+			case DBColumn::VARCHAR :
+				$precision = $col->getPrecision();
+				if( $precision && (strlen($value) > $precision) ){
+					// The length is exceeded
+				}
+				return $this->sqlstr($value);
+	
+			case DBColumn::INTEGER :
+				return intval($value);
+					
+			case DBColumn::DATE :
+				return $this->sqldate( $value );
+				break;
+	
+			case DBColumn::DATETIME :
+				return $this->sqldatetime( $value );
+				break;
+	
+			case DBColumn::NUMERIC :
+				return (is_numeric( $value ) ? $value : 'NULL' );
+					
+			case DBColumn::BOOLEAN :
+				return $this->sqlstr($value ? 'Y' : 'N');
+	
+			default:
+				throw new SQLException("Unknown SQL TYPE: " . $this->columnType);
+		}
+	}
 }
+
