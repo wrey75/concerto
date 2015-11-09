@@ -28,7 +28,9 @@ namespace Concerto;
  */	
 class Logger {
 
+	/** @var Logger */
 	public static $defaultLog; // A default logger
+	
 	public $withDate = FALSE;
 	public $priority;
 	public $MessageQueue;
@@ -95,6 +97,14 @@ class Logger {
 		}
 	}
 	
+	/**
+	 * Set the file name for the logger.
+	 * 
+	 */
+	public function setFilePath( $file_path )
+	{
+		$this->log_file = $file_path;
+	}
 
 	/**
 	 * Information log. Should be used to display information
@@ -105,7 +115,7 @@ class Logger {
 	 */
 	public function info($txt)
 	{
-		$this->Log( $txt , Logger::INFO );
+		$this->Log( $txt, Logger::INFO );
 	}
 		
 	/**
@@ -116,7 +126,7 @@ class Logger {
 	 */
 	public function debug($txt)
 	{
-		$this->Log( $txt , Logger::DEBUG );
+		$this->Log( $txt, Logger::DEBUG );
 	}
 	
 
@@ -129,7 +139,7 @@ class Logger {
 	 */
 	public function warn($txt)
 	{
-		$this->Log( $line , Logger::WARNING );	
+		$this->Log( $txt, Logger::WARNING );	
 	}
 
 
@@ -228,7 +238,7 @@ class Logger {
 			foreach( $lines as $i => $txt ){
 				$freeLine .= $this->getFormattedText( $priority, $txt ) . "\n";
 			}
-			$this->WriteFreeFormLine( $freeLine );
+			$this->WriteFreeFormLine( $freeLine, $priority );
 		}
 	}
 	
@@ -238,14 +248,17 @@ class Logger {
 	 * 
 	 * @param string $line the data to log.
 	 */
-	protected function WriteFreeFormLine( $line )
+	protected function WriteFreeFormLine( $line, $priority )
 	{
 		if( $this->log_file == "syslog:" ){
 			// Send to the system log
-			syslog(LOG_WARNING, $line);
+			syslog($priority, $line);
 		}
 		else if( $this->log_file == "stdout:" ){
 			echo "\n** $line\n";
+		}
+		else if( $this->log_file == "apache:" ){
+			trigger_error( "$line\n", E_USER_NOTICE );
 		}
 		else {
 			$fic = fopen( $this->log_file, "a" );

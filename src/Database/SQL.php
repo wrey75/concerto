@@ -3,6 +3,7 @@
 namespace Concerto\Database;
 
 use PDO;
+use Concerto\Logger;
 
 /**
  * SQL Connection. This object implements
@@ -13,6 +14,8 @@ use PDO;
  */
 class SQL {
 	protected $conn; // Database connection (PDO)
+	
+	/** @var Logger */
 	protected $log;  // Logger for errors.
 	protected $canLogQueries;
 	
@@ -20,7 +23,7 @@ class SQL {
 		
 	public function __construct(){
 		$this->conn = NULL;
-		$this->log = NULL;
+		$this->log = Logger::getDefault();
 		$this->canLogQueries = false;
 		
 // 		if( $data !== NULL ){
@@ -260,7 +263,7 @@ class SQL {
 			// We get the first 20 characters for 
 			// security reason.
 			$secured = substr( $sql, 0, 20 );
-			if( strlen($secured) > 20 ){
+			if( strlen($sql) > 20 ){
 				$secured .= "...";
 			}
 		}
@@ -401,7 +404,7 @@ class SQL {
 	 * 
 	 */
 	protected function sqlError( $query, $info = null ){
-		$info = $this->getErrorInfo();
+		$info = $this->getLastError();
 		$this->fails[] = array(
 				'request' => $query,
 				'error' => $info,
@@ -413,11 +416,26 @@ class SQL {
 	}
 	
 	/**
-	 * Get the last database error.
+	 * Get the last database error. The associative array returned
+	 * contains the following information:
+	 * 
+	 * <ul>
+	 *   <li><code>state</code>: SQLSTATE error code (a five characters
+	 *   alphanumeric identifier defined in the ANSI SQL standard).</li>
+	 *   <li><code>code</code>: Driver specific error code.</li>
+	 *   <li><code>message</code>: Driver specific error message.</li>
+	 * </ul>
 	 *
-	 * @return multitype:
+	 * @return array an associative array (see description)
+	 * 	or NULL if no error.
 	 */
-	public function getErrorInfo(){
-		return $this->conn->errorInfo();
+	public function getLastError(){
+		$infos = $this->conn->errorInfo();
+		if( !$infos ) return NULL;
+		return [
+			'state' => $infos[0],
+			'code' => $infos[1],
+			'message' => $infos[2]
+		];
 	}
 }

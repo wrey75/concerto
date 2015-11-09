@@ -98,6 +98,58 @@ class DBUserInterface {
     	}
     	echo $tbl->getFooter();
 	}
+
+
+	/**
+	 * Display all the stuff based on pure SQL
+	 * request.
+	 * 
+	 * @param string $sql the query.
+	 */
+	public function showDataFromSQL( $query )
+	{
+		$tbl = new Concerto\DataTable;
+		
+		if( std::beginsWith($query, '?') ){
+			$sql = "SELECT * FROM " . substr($query,1);
+		}
+		else {
+			$sql = $query;
+		}
+		
+		$rs = $this->dao->query($sql);
+		if( $rs ){
+			$tableColDef = [];
+			$nb_cols = $rs->columnCount();
+			for($i = 0; $i < $nb_cols; $i++){
+				$info = $rs->getColumnMeta($i);
+				$tableColDef[ "col_$i" ] = $info['name'];
+			}
+			$tbl->setColumns($tableColDef);
+			echo $tbl->getHeader();			
+		
+			// Show data
+			foreach( $rs as $row ) {
+				$data = [];
+				for($i = 0; $i < $nb_cols; $i++){
+					$data[ "col_$i" ] = $row[$i];
+				}
+				echo $tbl->getRow( $data );
+			}
+			echo $tbl->getFooter();
+		}
+		else {
+			$tbl->setColumns([
+					'state' => 'SQL State',
+					'code' => 'SQL Error Code',
+					'message' => 'SQL Error message',
+			]);
+			echo $tbl->getHeader();
+			echo $tbl->getRow( $this->dao->getLastError() );
+			echo $tbl->getFooter();
+		}
+	}
+	
 	
 	/**
 	 * Retrieve or compute the label of the column.
@@ -146,6 +198,16 @@ class DBUserInterface {
 	}
 	
 	/**
+	 * Process the form.
+	 * 
+	 */
+	public function processForm() {
+		if( @$_REQUEST['_entity'] ){
+			echo "*** {$_REQUEST['_entity']} ***\n";
+		}
+	}
+	
+	/**
 	 * Show the form.
 	 * 
 	 * @param DBEntity $obj the enity to edit.
@@ -187,6 +249,8 @@ class DBUserInterface {
 			$data["type"] = $col->getTypeAsString();
 			$ret .= "<hr>\n";
 		}
+		
+		$ret .= $form->hidden("_entity", get_class($obj));
 		
 		$buttons = [
 			'submit' => ($obj->_isPersistent ? "Update" : "Insert")

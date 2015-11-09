@@ -8,7 +8,7 @@ namespace Concerto\Database;
  * This class overrides only the specificities
  * for MySQL conversions.
  * 
- * @author wre
+ * @author wrey75
  *
  */
 class MySQLConverter extends BasicConverter {

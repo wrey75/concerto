@@ -644,7 +644,15 @@ class std {
 		//return( $e && (std::len($e) == std::len($needle)) );
 	}
 
-	
+	/**
+	 * Checks if the $needle value begins the $str string.
+	 * 
+	 * @param string $str the string where to search.
+	 * @param string $needle the string to search.
+	 * @return TRUE is the string is stored at the start
+	 * of the string.
+	 * 
+	 */
 	public static function beginsWith( $str, $needle ){
 		$len = strlen( $needle );
 		return (strcmp( $needle, substr( $str, 0, $len ) ) == 0);
