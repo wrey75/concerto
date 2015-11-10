@@ -13,6 +13,7 @@ use Concerto\Logger;
  * 
  */
 class SQL {
+	static $showLogQueryWarning = FALSE;
 	protected $conn; // Database connection (PDO)
 	
 	/** @var Logger */
@@ -46,12 +47,17 @@ class SQL {
 	 * 
 	 * Connect to the database.
 	 * 
-	 * @param array $data the data to connect the database.
+	 * @param array $data the data to connect the database. Can be a string (in this case, it is the DSN)
 	 * @param string $login the login (if not provided in the $data array)
 	 * @param string $password the password (if not provided in the $data array)
 	 * @throws SQLException
 	 */
-	protected function connect($data, $login = null, $password = null){		
+	protected function connect($data, $login = null, $password = null){
+		if( !is_array($data) ){
+			// Apply as an array
+			$data = ['dsn'=>$data];
+		}
+		
 		$dsn = $data['dsn'];
 		if( !$login ) $login = @$data['login'];
 		if( !$password ) $password = @$data['password'];
@@ -66,8 +72,11 @@ class SQL {
 		}
 		
 		if( @$data['canLogQueries'] ){
-			$this->log->info("The SQL queries will be displayed.");
-			$this->canLogQueries = true;
+			if( !SQL::$showLogQueryWarning ){
+				SQL::$showLogQueryWarning = true;
+				$this->log->info("The SQL queries will be displayed.");
+				$this->canLogQueries = true;
+			}
 		}
 		
 // 		echo "** $dsn **\n";
@@ -404,7 +413,7 @@ class SQL {
 	 * 
 	 */
 	protected function sqlError( $query, $info = null ){
-		$info = $this->getLastError();
+		$info = $this->conn->errorInfo();
 		$this->fails[] = array(
 				'request' => $query,
 				'error' => $info,

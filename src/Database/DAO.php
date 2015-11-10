@@ -9,7 +9,8 @@ use Concerto;
  * Data Access Object. This object implements
  * the database access part of the application.
  * 
- * 
+ * This part is in charge of the entities (the SQL
+ * underlying is reponsible of the access). In addition
  * 
  */
 class DAO extends SQL {
@@ -18,6 +19,14 @@ class DAO extends SQL {
 	
 	protected static $singleton = NULL;
 	
+	/**
+	 * Creates a DAO.
+	 * 
+	 * @param array|string $data the connection information (expressed as an array) or
+	 * the DSN if only a string is provided.
+	 * @param string $login the login (if not NULL, replace the login give in $data)
+	 * @param string $password the password (if not NULL, replace the password give in $data)
+	 */
 	public function __construct($data, $login = null, $password = null){
 		parent::__construct();
 		$this->converter = new BasicConverter();
@@ -35,6 +44,11 @@ class DAO extends SQL {
 	 * @throws DAOException a DAOException (or a SQLException).
 	 */
 	protected function connect($data, $login = null, $password = null ){
+		if( !is_array($data) ){
+			// Apply as an array 
+			$data = ['dsn'=>$data];
+		}
+		
 		try {
 			$dsn = $data['dsn'];
 			$this->db = parent::connect($data,$login,$password);
@@ -97,7 +111,7 @@ class DAO extends SQL {
 	 * @return the number of inserted records.
 	 *
 	 */
-	public function insert( $obj ) {
+	public function insert( &$obj ) {
 		if( is_array($obj) ){
 			$ok = 0;
 			foreach( $obj as $single ) $ok += $this->insert( $single );
@@ -127,7 +141,7 @@ class DAO extends SQL {
 				$val = $obj->$col;
 				if( isset($val) ){ // Ignore NULL values
 					$columnList[] = $definition->getName();
-					$values[] = $definition->sqlOf($val);
+					$values[] = $this->converter->sqlOf($definition, $val);
 					$included = TRUE;
 				}
 			}
@@ -162,7 +176,7 @@ class DAO extends SQL {
 	 *
 	 * @param DBEntity $obj the object to update.
 	 */
-	public function update($obj) {
+	public function update(&$obj) {
 		$versionColumn = null;
 		$columns = $obj->getColumns();
 		
@@ -172,8 +186,8 @@ class DAO extends SQL {
 		}
 	
 		// Create the UPDATE clause
-		$set = "";
-		$where = "";
+		$set = [];
+		$where = [];
 		$data = get_object_vars($obj);
 		foreach( $columns as $name => $definition ){
 			$val = $data[$name];
@@ -192,11 +206,11 @@ class DAO extends SQL {
 				$versionColumn = $name;
 			}
 			else if( !$definition->isAutomatic() && !is_null($sqlVal) ) {
-				if( strlen($set) > 0 ) $set .= ", ";
-				$set .= "$columnName = $sqlVal";
+				//if( strlen($set) > 0 ) $set .= ", ";
+				$set[] = "$columnName = $sqlVal";
 			}
 		}
-		$table = $this->getTableName();
+		$table = $obj->getTableName();
 		$sql = "UPDATE $table SET " . implode( ", ", $set) . " WHERE " . implode( " AND ", $where) . ";";
 	
 		$nb = $this->execute($sql);

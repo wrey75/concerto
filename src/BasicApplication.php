@@ -39,9 +39,10 @@ class BasicApplication {
 		// Set a log file (when possible)
 		$log_infos = $this->getConfig("app.log");
 		if( $log_infos ){
-			$filepath = $log_infos['file'];
-			$level = $log_infos['level'];
-			$this->log = new Logger($filepath, $level);
+// 			$filepath = @$log_infos['file'];
+// 			$level = @$log_infos['level'];
+// 			if( !$level ) $level = Logger::ERROR; 
+			$this->log = new Logger($log_infos);
 		}
 		else {
 			$this->log = new Logger("stdout:", Logger::CRITICAL);

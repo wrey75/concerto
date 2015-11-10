@@ -2,7 +2,6 @@
 
 namespace Concerto;
 
-define('CRLF', "\x0d\x0a");
 
 /**
  * This class creates table of data based on
@@ -75,8 +74,8 @@ class DataTable {
 
 	public function getJavaScript(){
 		$ret = "<script>\n";
-		$ret .= '$(document).ready( function() {' . CRLF;
-		$ret .= '   $(\'#' . $this->id . '\').dataTable(' . CRLF;
+		$ret .= '$(document).ready( function() {' . "\n";
+		$ret .= '   $(\'#' . $this->id . '\').dataTable(' . "\n";
 		$json = json_encode( $this->opt );
         foreach( $this->functions as $key => $value ){
            $json = "   " . str_replace( "\"##$key##\"", $value, $json ) . "\n"; 

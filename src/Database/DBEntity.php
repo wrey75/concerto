@@ -207,7 +207,7 @@ abstract class DBEntity {
 	 * This method is not intended 
 	 * 
 	 */
-	public function newInstance(){
+	public static function newInstance(){
 		return new static();
 	}
 	

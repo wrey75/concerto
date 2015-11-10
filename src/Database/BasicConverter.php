@@ -22,7 +22,7 @@ class BasicConverter {
 	 * 	Note that zero-length strings and NULL values
 	 * 	are translated as "NULL".
 	 */
-	public function strsql( $str ){
+	public function sqlstr( $str ){
 	 	if( strlen($str) == 0 ) {
 			// Empty string generates a NULL string
 			return "NULL";
@@ -30,6 +30,16 @@ class BasicConverter {
 		$ret = str_replace( "'", "''", $str );
 		return "'$ret'";
 	}
+	
+	/**
+	 * 
+	 * @deprecated use sqlstr() instead.
+	 * 
+	 */
+	public function strsql( $str ){
+		return $this->sqlstr($str);
+	}
+	
 	
 	/**
 	 * Convert an integer to a SQL value.
@@ -127,7 +137,7 @@ class BasicConverter {
 					
 			case DBColumn::DATE :
 			case DBColumn::DATETIME :
-				return new DateTime( $value );
+				return new \DateTime( $value );
 	
 			case DBColumn::NUMERIC :
 				return $value;

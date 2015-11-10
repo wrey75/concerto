@@ -823,6 +823,26 @@ class std {
 		}
 		return $text;
 	}
+	
+	/**
+	 * Ensure a value is stored in a array.
+	 * 
+	 * @param mixed $value the value
+	 * 
+	 * @return array an array with all the values. If
+	 * $value is NULL, the returned value is an empty
+	 * array. If $value was already an array, return it
+	 * without change. In all other cases, returns an
+	 * array of one element (the element is $value). 
+	 * 
+	 */
+	public static function to_array($value)
+	{
+		if( is_array($value) ) return $value;
+		if( $value === NULL ) return [];
+		return [ $value ];
+	}
+	
 }
 
 
