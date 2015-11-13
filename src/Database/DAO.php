@@ -165,7 +165,7 @@ class DAO extends SQL {
 			// Get the last inserted ID if apply...
 			$this->$identityPropName = $this->getLastId( $identityColumnName );
 		}
-		$obj->_isPersistent = true;
+		$obj->setDAO($this);
 		return TRUE;
 	}
 	
@@ -180,9 +180,9 @@ class DAO extends SQL {
 		$versionColumn = null;
 		$columns = $obj->getColumns();
 		
-		if( !$obj->_isPersistent ){
+		if( !$obj->isPersistent() ){
 			trigger_error("Object $obj is not set as persistent!", E_USER_NOTICE);
-			$obj->_isPersistent = true;
+			$obj->setDAO($this);
 		}
 	
 		// Create the UPDATE clause
@@ -267,7 +267,7 @@ class DAO extends SQL {
 		if( $nb != 1 ){
 			$this->logQuery($sql, "Delete of $nb rows instead of one!" );
 		}
-		$obj->_isPersistent = FALSE;
+		$obj->setDAO(NULL);
 		return TRUE;
 	}
 	
@@ -426,7 +426,7 @@ class DAO extends SQL {
 		if( $rows ){
 			foreach( $rows as $row){
 				$obj = $fakeObj->newInstance();
-				$obj->_isPersistent = true;
+				$obj->setDAO($this);
 				$entities[] = $this->sql2entity($obj, $row);
 			}
 		}

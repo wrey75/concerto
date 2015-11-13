@@ -558,6 +558,17 @@ class BootstrapForm {
 	}
 	
 	/**
+	 * Inputs password.
+	 *
+	 * @param string $name name of the variable.
+	 * @param string $placeholder the placeholder if exists.
+	 * @return string the HTML to display.
+	 */
+	public function input_password( $name, $placeholder = null ) {
+		return $this->input('password', $name, $placeholder);
+	}
+	
+	/**
 	 * Force a INPUT disabled. You can set the disable flag
 	 * to TRUE and use a specific type but if you know the
 	 * input is disabled, simply use this method.

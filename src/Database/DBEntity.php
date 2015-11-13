@@ -12,25 +12,25 @@ namespace Concerto\Database;
  * 
  * Once you have done this, a good idea is to create the properties
  * as public variables. It is only for IDE editors.
- * 
+ *
  * By definition, a function named validateXXX() where "XXX" is
  * the property name can be used to validate the field. This
  * is used by the DBUserInterface class when inserting,
  * updating.
- * 
+ *
  * @author wre
  *
  */
-abstract class DBEntity {
+abstract class DBEntity implements \JsonSerializable {
 	
-	/**
-	 * Set to TRUE if the record is persistent (that means the
-	 * record has been persisted through INSERT or has been 
-	 * retrieved from the database).
-	 * 
-	 * @var bool
-	 */
-	public $_isPersistent = false; 
+// 	/**
+// 	 * Set to TRUE if the record is persistent (that means the
+// 	 * record has been persisted through INSERT or has been 
+// 	 * retrieved from the database).
+// 	 * 
+// 	 * @var bool
+// 	 */
+// 	protected $_isPersistent = false;
 	
 	/**
 	 * The DAO which retrieved this entity. Used for retrieving
@@ -43,7 +43,7 @@ abstract class DBEntity {
 	 * @var DAO
 	 * 
 	 */
-	public $_dao = null;
+	protected $_dao = null;
 	
 	
 	/**
@@ -178,9 +178,11 @@ abstract class DBEntity {
 	}
 
 	/**
-	 * Lazy loading of objects based on foreign keys.
+	 * Lazy loading of objects based on foreign keys. This is based
+	 * on missing keys and the fact we can only load lazy data on
+	 * existing loaded objects (considering the DAO is kept).
  	 *
-	 * @param unknown_type $property
+	 * @param string $name name of the property requested.
 	 */
 	public function __get( $name ){
 		$found = false;
@@ -189,8 +191,10 @@ abstract class DBEntity {
 		foreach( $cols as $k => $c ){
 			if( $c->isForeignKey() ){
 				if( $name === $c->foreignKeyName() ){
+					$class = $c->foreignKeyTable();
+					$callable = array($this->getDAO(), $class . "::getById");
+					$ret = call_user_func( $callable, $this->$k );
 					$found = true;
-					$ret = call_user_func( $c->foreignKeyTable() . "::getById", $this->$k );
 				}
 			}
 		}
@@ -211,5 +215,60 @@ abstract class DBEntity {
 		return new static();
 	}
 	
+
+	
+	public function isPersistent()
+	{
+		return ($this->_dao != null);
+	}
+
+	
+	/**
+	 * Set the Data Access Object (DAO). Setting
+	 * a DAO also se
+	 * 
+	 * @param DAO $dao the DAO
+	 */
+	public function setDAO( $dao )
+	{
+		$this->_dao = $dao;
+	}
+
+	public function getDAO()
+	{
+		return $this->_dao;
+	}
+	
+	
+	/**
+	 * Updates based on the DAO which retrieved it.
+	 * 
+	 */
+	public function update(){
+		$this->_dao->update($this);
+	}
+	
+	
+	/**
+	 * Delete itself. This is possible because
+	 * the entity knows its DAO. Note only an persistent entity
+	 * can be deleted.
+	 */
+	public function delete(){
+		$this->_dao->delete($this);
+	}
+	
+	/**
+	 * Returns the object serialized.
+	 * 
+	 */
+	public function jsonSerialize(){
+		$ret = [];
+		$columnDefinitions = static::getColumns();
+		foreach( $columnDefinitions as $prop => $definition ){
+			$ret[$prop] = $this->$prop;
+		}
+		return $ret;
+	}
 };
 
