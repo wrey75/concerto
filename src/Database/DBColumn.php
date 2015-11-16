@@ -251,6 +251,25 @@ class DBColumn {
 		return $this->label;
 	}	
 
+	public function getModifierAsString(){
+		$ret = []; 
+		if( $this->columnStatus & self::NOT_NULL ){
+			$ret[] = "NOT NULL";
+		}
+		if( $this->columnStatus & self::FOREIGN ){
+			$ret[] = "FOREIGN KEY";
+		}
+		
+		
+		if( $this->columnStatus & self::VERSION == self::VERSION){
+			$ret= [ "VERSION" ];
+		}
+		if( $this->columnStatus & self::IDENTITY == self::IDENTITY){
+			$ret= [ "IDENTITY" ];
+		}
+		
+		return implode(", ", $ret);
+	}
  
     /**
      * Return the type of the column as a string.
@@ -281,6 +300,9 @@ class DBColumn {
 				break;
 			case DBColumn::TEXT:
 				$type = "TEXT";
+				break;
+			case DBColumn::GROUP:
+				$type = "ARRAY";
 				break;
     		default:
     			break;

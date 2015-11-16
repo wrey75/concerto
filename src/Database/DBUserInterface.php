@@ -101,7 +101,7 @@ class DBUserInterface {
         		if( $col->isDate() ){
         			if( $val ){
         				$data["{$prop}-order"] = $val->getTimestamp();
-        				$data["{$prop}"] = $val->format("Y-m-d");
+        				$data[$prop] = $val->format("Y-m-d");
         			}
         			else {
         				$data["{$prop}-order"] = 0;
@@ -109,7 +109,7 @@ class DBUserInterface {
         			}
         		}
         		else if( $col->isGroup() ){
-        			$data["{$prop}"] = implode(", ", $val);
+        			$data[$prop] = implode(", ", $val);
         		}
         		else if( $col->isBoolean() ){
         			$data[$prop] = $col->boolean2string($val);
@@ -203,6 +203,7 @@ class DBUserInterface {
 				"property"=> "Property",
 				"colname" => "Column name",
 				"type" => "Type",
+				"modifier" => "Specials",
 				"label" => "Label",
 				"desc" => "Description"
 		] );
@@ -216,6 +217,7 @@ class DBUserInterface {
 			$data["desc"] = $col->getDescription();
 			$data["label"] = $this->getLabel($k,$col);
 			$data["type"] = $col->getTypeAsString();
+			$data["modifier"] = $col->getModifierAsString();
 			echo $tbl->getRow( $data );
 		}
 		echo $tbl->getFooter();
