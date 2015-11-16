@@ -143,7 +143,7 @@ class BasicConverter {
 				return $value;
 					
 			case DBColumn::BOOLEAN :
-				return ($value == 'Y' ? TRUE : FALSE);
+				return ($value == 'Y' ? TRUE : ($value == 'N' ? FALSE : NULL));
 	
 			case DBColumn::GROUP :
 				return explode(',', $value);
@@ -187,7 +187,7 @@ class BasicConverter {
 				return (is_numeric( $value ) ? $value : 'NULL' );
 					
 			case DBColumn::BOOLEAN :
-				return $this->sqlstr($value ? 'Y' : 'N');
+				return $this->sqlstr($value === TRUE ? 'Y' : ($value === FALSE ? 'N' : NULL) );
 				
 			case DBColumn::GROUP :
 				return $this->sqlstr( implode(',', $value) );

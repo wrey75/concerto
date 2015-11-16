@@ -106,6 +106,9 @@ class DBUserInterface {
         		else if( $col->isGroup() ){
         			$data["{$prop}"] = implode(", ", $val);
         		}
+        		else if( $col->isBoolean() ){
+        			$data[$prop] = $col->boolean2string($val);
+        		}
         		else {
         			$data[$prop] = $val;
         		}

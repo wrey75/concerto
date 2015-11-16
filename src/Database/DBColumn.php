@@ -44,6 +44,7 @@ class DBColumn {
 	private $foreignKeyName;
 	private $foreignTableName;
 	private $label;
+	private $options;
 	
 	/**
 	 * Declares a new column for the related table.
@@ -62,6 +63,7 @@ class DBColumn {
 		$this->columnPrecision = $precision;
 		$this->columnStatus = $status;
 		$this->description = $desc;
+		$this->options = $stuff;
 		
 		if( @$stuff['description'] ){
 			// The description can overwrite the description passed
@@ -80,6 +82,9 @@ class DBColumn {
 			$this->foreignTableName = $stuff['foreign_table'];
 		}
 
+		if( $type == self::BOOLEAN && !@$stuff['booleans']){
+			$this->options['booleans'] = ['YES', 'NO', ''];
+		}
 		
 //     ************************************
 //     OLD VERSION
@@ -183,6 +188,43 @@ class DBColumn {
 	public function isGroup() {
 		switch( $this->columnType ){
 			case self::GROUP :
+				return TRUE;
+	
+			default :
+				return FALSE;
+		}
+	}
+	
+	/**
+	 * Convert a Boolean to a string.
+	 * 
+	 * @param boolean a boolean value or NULL.
+	 * @return string the string for display.
+	 * 
+	 */
+	public function boolean2string($val){
+		$ret = '';
+		if( $val === TRUE){
+			$ret = @$this->options['booleans'][0];
+		}
+		else if( $val === FALSE){
+			$ret = @$this->options['booleans'][1];
+		}
+		else if( $val ){
+			$ret = @$this->options['booleans'][2];
+		}
+		return $ret;
+	}
+
+	/**
+	 * Checks if the column is a boolean.
+	 *
+	 * @return TRUE if the column is a boolean,
+	 * FALSE in all other cases.
+	 */
+	public function isBoolean() {
+		switch( $this->columnType ){
+			case self::BOOLEAN :
 				return TRUE;
 	
 			default :
