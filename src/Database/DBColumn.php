@@ -21,6 +21,7 @@ class DBColumn {
 	const DATETIME = 4;
 	const BOOLEAN = 5;
 	const NUMERIC = 6;
+	const GROUP = 7;
 	const TEXT = 1; // Same as varchar
 	
 	// The mode flags.

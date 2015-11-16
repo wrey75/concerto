@@ -145,6 +145,9 @@ class BasicConverter {
 			case DBColumn::BOOLEAN :
 				return ($value == 'Y' ? TRUE : FALSE);
 	
+			case DBColumn::GROUP :
+				return explode(',', $value);
+				
 			default:
 				throw new SQLException("Unknown SQL TYPE: " . $col->getType());
 		}
@@ -185,6 +188,9 @@ class BasicConverter {
 					
 			case DBColumn::BOOLEAN :
 				return $this->sqlstr($value ? 'Y' : 'N');
+				
+			case DBColumn::GROUP :
+				return $this->sqlstr( implode(',', $value) );
 	
 			default:
 				throw new SQLException("Unknown SQL TYPE: " . $this->columnType);
