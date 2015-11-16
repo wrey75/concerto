@@ -90,7 +90,6 @@ class DBUserInterface {
 	 */
 	public function showData( $hidden = [], $where = null ) {
 		$tbl = new Concerto\DataTable;
-
 		$rows = $this->dao->select($this->entity, $where);
 		$columns = $this->entity->getColumns();
 		$tbl->setColumns( $this->dataTableColumns($hidden) );
@@ -100,8 +99,14 @@ class DBUserInterface {
         	foreach( $columns as $prop => $col ){
         		$val = $row->$prop;
         		if( $col->isDate() ){
-        			$data["{$prop}-order"] = $val->getTimestamp();
-        			$data["{$prop}"] = $val->format("Y-m-d"); // ** $val / $prop ** "; // $val->format( "Y-m-d");
+        			if( $val ){
+        				$data["{$prop}-order"] = $val->getTimestamp();
+        				$data["{$prop}"] = $val->format("Y-m-d");
+        			}
+        			else {
+        				$data["{$prop}-order"] = 0;
+        				$data[$prop] = '';
+        			}
         		}
         		else if( $col->isGroup() ){
         			$data["{$prop}"] = implode(", ", $val);
