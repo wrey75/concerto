@@ -157,6 +157,39 @@ class DBColumn {
 		return $this->columnName;
 	}
 
+	/**
+	 * Checks if the column is a date (or a DATETIME).
+	 * 
+	 * @return TRUE if the column is DATE or DATETIME,
+	 * FALSE in all other cases.
+	 */
+	public function isDate() {
+		switch( $this->columnType ){
+			case self::DATE :
+			case self::DATETIME :
+				return TRUE;
+	
+			default :
+				return FALSE;
+		}
+	}
+	
+	/**
+	 * Checks if the column is a group.
+	 *
+	 * @return TRUE if the column is a group,
+	 * FALSE in all other cases.
+	 */
+	public function isGroup() {
+		switch( $this->columnType ){
+			case self::GROUP :
+				return TRUE;
+	
+			default :
+				return FALSE;
+		}
+	}
+	
 	public function isNumeric() {
 		switch( $this->columnType ){
 			case self::NUMERIC :

@@ -370,13 +370,13 @@ class DataTable {
 	        	    $opt = array();
 
  	        	    $val = @$data[$key];
-// 	        	    if( $val instanceof DateTime ){
-// 		        	    	$opt["data-order"] = $val->getTimeStamp();
-// 		        	    	$val = $val->format( "r");
-// 		        	}
+//  	        	    if( is_a($val, 'DateTime') ){
+//  		        	    $opt["data-order"] = $val->getTimeStamp();
+//  		        	    $val = intval($val->getTimestamp());
+//  		        	}
 	        	    
 	        	    $style = '';
-				    if( isset($data["$key-style"]) ) $style = $data["$key-style"];
+				    if( isset($data["{$key}-style"]) ) $style = $data["$key-style"];
 				    if( isset($data["{$key}-order"]) ) $opt['data-order'] = $data["{$key}-order"];
 	        	    if( $style || $rowstyle ){
 	        		    $opt["style"] = $style . $rowstyle;

@@ -67,7 +67,10 @@ class DBUserInterface {
 				if( $col->isNumeric() ){
 					$info .= "|numeric";
 				}
-				
+// 				else if( $col->isDate() ){
+//					Dates are NOT timestamp and cabe in the past (before 1970).
+// 					$info .= "|date";
+// 				}
 				$ret[$k] = $info;
 			}
 		}
@@ -89,11 +92,24 @@ class DBUserInterface {
 		$tbl = new Concerto\DataTable;
 
 		$rows = $this->dao->select($this->entity, $where);
-		
+		$columns = $this->entity->getColumns();
 		$tbl->setColumns( $this->dataTableColumns($hidden) );
 		echo $tbl->getHeader();
         foreach( $rows as $row ) {
-        	$data = (array)$row;
+        	$data = [];
+        	foreach( $columns as $prop => $col ){
+        		$val = $row->$prop;
+        		if( $col->isDate() ){
+        			$data["{$prop}-order"] = $val->getTimestamp();
+        			$data["{$prop}"] = $val->format("Y-m-d"); // ** $val / $prop ** "; // $val->format( "Y-m-d");
+        		}
+        		else if( $col->isGroup() ){
+        			$data["{$prop}"] = implode(", ", $val);
+        		}
+        		else {
+        			$data[$prop] = $val;
+        		}
+        	}
     		echo $tbl->getRow( $data );
     	}
     	echo $tbl->getFooter();
