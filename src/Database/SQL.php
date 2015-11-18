@@ -74,7 +74,7 @@ class SQL {
 		if( @$data['canLogQueries'] ){
 			if( !SQL::$showLogQueryWarning ){
 				SQL::$showLogQueryWarning = true;
-				$this->log->info("The SQL queries will be displayed.");
+				$this->log->debug("The SQL queries will be displayed.");
 				$this->canLogQueries = true;
 			}
 		}
@@ -196,6 +196,7 @@ class SQL {
 	 * 
 	 */
 	public function beginTransaction(){
+		// $this->log->info( "BEGIN TRANSACTION");
 		$this->conn->beginTransaction();
 		$this->fails = array();
 	}
