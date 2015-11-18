@@ -68,7 +68,7 @@ class Logger {
 	 */
 	public function __construct( $filepath = "stdout:", $priority = Logger::INFO )
 	{
-		$this->format = "%T%f - %5l --> %m";
+		$this->format = "%T%f - %-5l : %m";
 		$this->MessageQueue = array();
 		$this->userName = "<guest>";
 		$this->priority = $priority;
@@ -382,13 +382,19 @@ class Logger {
 			if( $c == '%' ){
 				$i++;
 				$size = 0;
+				$sign = 1;
 				
 				// Check if a size is given for the type
+				if( $this->format[$i] == '-' ){
+					$sign = -1;
+					$i++;
+				}
 				while( $this->format[$i] >= '0' && $this->format[$i] < '9' ){
 					$size = $size * 10 + ($this->format[$i] - '0');
 					$i++;
 				}
-
+				
+				
 				// Add the information
 				$type = $this->format[$i++];
 				switch( $type ){
@@ -425,9 +431,13 @@ class Logger {
 						break;
 				}
 	
-				if( $size > 0 ) {
+				if( $size > 0 && $sign > 0) {
 					// Complete with spaces or trunk...
 					$t = substr($t . str_repeat(" ", $size), 0, $size );
+				}
+				else if( $size > 0 && $sign < 0) {
+					// Alignment on right (rather than on left!)
+					$t = substr(str_repeat(" ", $size) . $t, -$size );
 				}
 				$ret .= $t;
 			}

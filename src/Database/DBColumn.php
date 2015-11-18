@@ -35,6 +35,7 @@ class DBColumn {
     const VERSION = 10;   // Used for optimistic locks. Include NOT_NULL => versionning
     const LABEL = 16;     // Used for label
     const FOREIGN = 32;   // It is a Foreign key
+    const PASSWORD = 64;  // Consider password (only informative)
     
 	private $columnName;
 	private $columnType;
@@ -142,6 +143,10 @@ class DBColumn {
 	
 	public function isForeignKey(){
 		return (($this->columnStatus & self::FOREIGN) == self::FOREIGN);
+	}
+
+	public function isPassword(){
+		return (($this->columnStatus & self::PASSWORD) == self::PASSWORD);
 	}
 	
 	public function foreignKeyName(){

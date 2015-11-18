@@ -127,6 +127,7 @@ class DataTable {
 				$column['data'] = $colname;
 			}
 			$column['type'] = "html"; 
+			$column['plain'] = true;
 			$className = '';
 			$values = explode( $this->separator, $value );
 			$i = 0;
@@ -220,6 +221,9 @@ class DataTable {
 					}
 					else if( $key == 'width' ){
 						$column['width'] = $val; 
+					}
+					else if( $key == 'html' ){
+						$column['plain'] = false;
 					}
 					else if( $key == 'money'){
 						$className .= " align-right"; 
@@ -368,19 +372,14 @@ class DataTable {
 			    $ret .= std::tagln("tr", $options);
 	            foreach( $this->headers as $key => $value ){
 	        	    $opt = array();
-
  	        	    $val = @$data[$key];
-//  	        	    if( is_a($val, 'DateTime') ){
-//  		        	    $opt["data-order"] = $val->getTimeStamp();
-//  		        	    $val = intval($val->getTimestamp());
-//  		        	}
-	        	    
 	        	    $style = '';
 				    if( isset($data["{$key}-style"]) ) $style = $data["$key-style"];
 				    if( isset($data["{$key}-order"]) ) $opt['data-order'] = $data["{$key}-order"];
 	        	    if( $style || $rowstyle ){
 	        		    $opt["style"] = $style . $rowstyle;
 	        	    }
+	        	    if( $this->columns[$key]['plain'] ) $val = std::html($val);
 				    $ret .= "  " . std::tag("td", $opt ) . $val . std::tagln("/td");
 			    }
 			    $ret .= std::tagln("/tr");
