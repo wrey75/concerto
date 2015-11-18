@@ -101,7 +101,8 @@ class DBUserInterface {
         		if( $col->isDate() ){
         			if( $val ){
         				$data["{$prop}-order"] = $val->getTimestamp();
-        				$data[$prop] = $val->format("Y-m-d");
+        				$ret = $val->format(($col->getType() == DBColumn::DATETIME) ? "c" : "Y-m-d");
+        				$data[$prop] = preg_replace( "/\+(.*)/", "<small>+$1</small>", str_replace( 'T',' ', $ret) );
         			}
         			else {
         				$data["{$prop}-order"] = 0;
@@ -117,7 +118,17 @@ class DBUserInterface {
         		else {
         			$data[$prop] = $val;
         		}
+        		
+        		if( $col->isPassword()){
+        			$val = substr($data[$prop], 0, 12);
+        			$ext = "";
+        			for( $i = 0; $i < strlen($val); $i++ ){
+        				$ext .= "*";
+        			}
+        			$data[$prop] = $ext;
+        		}
         	}
+        	
     		echo $tbl->getRow( $data );
     	}
     	echo $tbl->getFooter();

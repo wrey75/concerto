@@ -370,11 +370,6 @@ class DataTable {
 	        	    $opt = array();
 
  	        	    $val = @$data[$key];
-//  	        	    if( is_a($val, 'DateTime') ){
-//  		        	    $opt["data-order"] = $val->getTimeStamp();
-//  		        	    $val = intval($val->getTimestamp());
-//  		        	}
-	        	    
 	        	    $style = '';
 				    if( isset($data["{$key}-style"]) ) $style = $data["$key-style"];
 				    if( isset($data["{$key}-order"]) ) $opt['data-order'] = $data["{$key}-order"];

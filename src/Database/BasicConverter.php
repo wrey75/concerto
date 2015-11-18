@@ -83,7 +83,7 @@ class BasicConverter {
 	 */
 	public function sqldatetime($ts){
 		$ts = \Concerto\std::timestamp($ts);
-		return $this->sqlstr( date("C", $ts) );
+		return $this->sqlstr( date("Y-m-d H:i:s", $ts) );
 	}
 	
 	/**
