@@ -54,7 +54,7 @@ class JsonSerializer {
 	 *
 	 * @param mixed $value
 	 * @return string JSON encoded
-	 * @throws Zumba\Exception\JsonSerializerException
+	 * @throws JsonSerializerException
 	 */
 	public function serialize($value) {
 		$this->reset();
@@ -104,7 +104,7 @@ class JsonSerializer {
 	 *
 	 * @param mixed $value
 	 * @return mixed
-	 * @throws Zumba\Exception\JsonSerializerException
+	 * @throws JsonSerializerException
 	 */
 	protected function serializeData($value) {
 		if (is_scalar($value) || $value === null) {
@@ -208,7 +208,7 @@ class JsonSerializer {
 	 *
 	 * @param aray $value
 	 * @return object
-	 * @throws Zumba\Exception\JsonSerializerException
+	 * @throws JsonSerializerException
 	 */
 	protected function unserializeObject($value) {
 		$className = $value[static::CLASS_IDENTIFIER_KEY];

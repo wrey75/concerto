@@ -13,6 +13,34 @@ use Concerto\std as std;
  * 
  * I added some stuff for generating AngularJS.
  * 
+ * There is some very special stuff. Basically, you use the class
+ * by creating an instance containing the data you already initialized
+ * (if any) and then you can create the form group by group. A group is 
+ * basically a field but with some attached not mandatory stuff (like the label).
+ * here a typical example:
+ * 
+ * <pre>
+ * $data = [
+ * 		'_login' => std::get('login'),
+ * 		'_password' => '' ];
+ * $form = new Bootstrap($data);
+ * 
+ * echo $form->open()
+ * 
+ * echo $form->new_group('login');
+ * echo $form->label("Login:");
+ * echo $form->input_text('_login');
+ * 
+ * echo $form->new_group('password');
+ * echo $form->label("Password:");
+ * echo $form->input_password('_password');
+ * 
+ * echo $form->new_group();
+ * echo $form->submit_button('Log in');
+ * 
+ * echo $form->close()
+ * </pre>
+ * 
  * @author wrey75@gmail.com
  *
  */
@@ -494,10 +522,9 @@ class BootstrapForm {
 	 * @param string $placeholder the placeholder if exists.
 	 * @return string
 	 */
-	protected function input( $type, $name, $placeholder = null ) {
-		$attributes = array(
-				'type' => $type,
-				'class' => "form-control {$this->input_size}" );
+	protected function input( $type, $name, $placeholder = null, $attributes = [] ) {
+		$attributes['type'] = $type;
+		$attributes['class'] = "form-control {$this->input_size}";
 		if( $this->angularCtrl ){
 			$attributes['ng-model'] = $this->angular_model($name);
 		}
@@ -630,7 +657,7 @@ class BootstrapForm {
 		$ret .= $this->hint_text();
 		$ret = $this->horizontal($ret);
 		
-		$ret .= "\n" . std::tag( 'script', ['src'=>"https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" ]) ."</script>\n";
+		$ret .= "\n" . std::tag( 'script', ['src'=>"https://maps.googleapis.com/maps/api/js?libraries=places" ]) ."</script>\n";
 		$ret .= 
 		"<script type=\"text/javascript\">
 				
@@ -661,6 +688,31 @@ class BootstrapForm {
 	}
 	
 	/**
+	 * Location search. Display an input that is tighly coupled with a Google Map.
+	 * 
+	 * @param string $name the name of the input. Note the exact position will
+	 * 		be available in 2 hidden boxes called ${name}_lat and ${name}_lng
+	 * 		for the latitude and the longitude respectively.
+	 * @param string $placeholder the placeholder if needed.
+	 */
+	public function input_location( $name, $placeholder = null )
+	{
+		$ret = "\n" . std::tag( 'script', ['src'=>"https://maps.googleapis.com/maps/api/js?libraries=places" ]) ."</script>\n";
+		$ret .= $this->input_text($name, $placeholder);
+		$ret .= $this->hidden("{$name}_lat", null );
+		$ret .= $this->hidden("{$name}_lng", null );
+		$this->forId = $this->group;
+		$canvas_id = "{$this->group}-canvas";
+		$ret .= $this->encapsule(std::tag('div', [ 'id' => $canvas_id, "style"=>"height: 300px;" ]) . "</div>\n");
+		$dataset = [
+				'canvas_id' => $canvas_id,
+				'input_id' => $this->group,
+				'name' => $name];
+		$ret .= std::expandFromFile(__DIR__.'/input_location.shtml', $dataset);
+		return $ret;
+	}
+	
+	/**
 	 * Second round is the full search box including the map
 	 * attached.
 	 * 
@@ -673,122 +725,125 @@ class BootstrapForm {
 		// pick list containing a mix of places and predicted search terms.
 		
 		// TODO: code refactoring with the input_address()
-		$ret = "\n" . std::tag( 'script', ['src'=>"https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" ]) ."</script>\n";
+		$ret = "\n" . std::tag( 'script', ['src'=>"https://maps.googleapis.com/maps/api/js?libraries=places" ]) ."</script>\n";
 		
+		$set = [ 'pacinput' => $this->inject_into_angular('pac-input', $name, 'places') ]; 
+		$ret .= std::expandFromFile(__DIR__.'/input_search.shtml', $set);
 		// TODO: the variables are hard-coded (not posible to use multiple search boxes)
 		// TODO: no code for angular.
-		$ret .= "
-		   <script type=\"text/javascript\">
+// 		$ret .= "
+// 		   <script type=\"text/javascript\">
 
-function initialize() {
+// function initialize() {
 
-  var markers = [];
-  var map = new google.maps.Map(document.getElementById('map-canvas'), {
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  });
+//   var markers = [];
+//   var map = new google.maps.Map(document.getElementById('map-canvas'), {
+//     mapTypeId: google.maps.MapTypeId.ROADMAP
+//   });
 
-  var defaultBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(44.5, -5),
-      new google.maps.LatLng(49.5, +20));
-  map.fitBounds(defaultBounds);
+//   var defaultBounds = new google.maps.LatLngBounds(
+//       new google.maps.LatLng(44.5, -5),
+//       new google.maps.LatLng(49.5, +20));
+//   map.fitBounds(defaultBounds);
 
-  // Create the search box and link it to the UI element.
-  var input = /** @type {HTMLInputElement} */(
-      document.getElementById('pac-input'));
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+//   // Create the search box and link it to the UI element.
+//   var input = /** @type {HTMLInputElement} */(
+//       document.getElementById('pac-input'));
+//   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-  var searchBox = new google.maps.places.SearchBox(
-    /** @type {HTMLInputElement} */(input));
+//   var searchBox = new google.maps.places.SearchBox(
+//     /** @type {HTMLInputElement} */(input));
 
-  // [START region_getplaces]
-  // Listen for the event fired when the user selects an item from the
-  // pick list. Retrieve the matching places for that item.
-  google.maps.event.addListener(searchBox, 'places_changed', function() {
-    var places = searchBox.getPlaces();
+//   // [START region_getplaces]
+//   // Listen for the event fired when the user selects an item from the
+//   // pick list. Retrieve the matching places for that item.
+//   google.maps.event.addListener(searchBox, 'places_changed', function() {
+//     var places = searchBox.getPlaces();
 
-    if (places.length == 0) {
-      return;
-    }
-    for (var i = 0, marker; marker = markers[i]; i++) {
-      marker.setMap(null);
-    }
+//     if (places.length == 0) {
+//       return;
+//     }
+//     for (var i = 0, marker; marker = markers[i]; i++) {
+//       marker.setMap(null);
+//     }
 
-    // For each place, get the icon, place name, and location.
-    markers = [];
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0, place; place = places[i]; i++) {
-      var image = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
+//     // For each place, get the icon, place name, and location.
+//     markers = [];
+//     var bounds = new google.maps.LatLngBounds();
+//     for (var i = 0, place; place = places[i]; i++) {
+//       var image = {
+//         url: place.icon,
+//         size: new google.maps.Size(71, 71),
+//         origin: new google.maps.Point(0, 0),
+//         anchor: new google.maps.Point(17, 34),
+//         scaledSize: new google.maps.Size(25, 25)
+//       };
 
-      // Create a marker for each place.
-      var marker = new google.maps.Marker({
-        map: map,
-        icon: image,
-        title: place.name,
-        position: place.geometry.location
-      });
+//       // Create a marker for each place.
+//       var marker = new google.maps.Marker({
+//         map: map,
+//         icon: image,
+//         title: place.name,
+//         position: place.geometry.location
+//       });
 
-      markers.push(marker);
-					" 
-					. $this->inject_into_angular('pac-input', $name, 'places') .
-					"
-      bounds.extend(place.geometry.location);
-    }
+//       markers.push(marker);
+// 					" 
+// 					. $this->inject_into_angular('pac-input', $name, 'places') .
+// 					"
+//       bounds.extend(place.geometry.location);
+//     }
 
-    map.fitBounds(bounds);
-  });
-  // [END region_getplaces]
+//     map.fitBounds(bounds);
+//   });
+//   // [END region_getplaces]
 
-  // Bias the SearchBox results towards places that are within the bounds of the
-  // current map's viewport.
-  google.maps.event.addListener(map, 'bounds_changed', function() {
-    var bounds = map.getBounds();
-    searchBox.setBounds(bounds);
-  });
-}
+//   // Bias the SearchBox results towards places that are within the bounds of the
+//   // current map's viewport.
+//   google.maps.event.addListener(map, 'bounds_changed', function() {
+//     var bounds = map.getBounds();
+//     searchBox.setBounds(bounds);
+//   });
+// }
 
-	google.maps.event.addDomListener(window, 'load', initialize);
+// 	google.maps.event.addDomListener(window, 'load', initialize);
 
-    </script>
+//     </script>
 				
-	<style>
-	.controls {
-        margin-top: 16px;
-        border: 1px solid transparent;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        height: 32px;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      }
+// 	<style>
+// 	.controls {
+//         margin-top: 16px;
+//         border: 1px solid transparent;
+//         border-radius: 2px 0 0 2px;
+//         box-sizing: border-box;
+//         -moz-box-sizing: border-box;
+//         height: 32px;
+//         outline: none;
+//         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+//       }
 				
-	  #pac-input {
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        margin-left: 12px;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
-        width: 400px;
-      }
+// 	  #pac-input {
+//         background-color: #fff;
+//         font-family: Roboto;
+//         font-size: 15px;
+//         font-weight: 300;
+//         margin-left: 12px;
+//         padding: 0 11px 0 13px;
+//         text-overflow: ellipsis;
+//         width: 400px;
+//       }
 
-      #pac-input:focus {
-        border-color: #4d90fe;
-      }
+//       #pac-input:focus {
+//         border-color: #4d90fe;
+//       }
 
-      .pac-container {
-        font-family: Roboto;
-      }
+//       .pac-container {
+//         font-family: Roboto;
+//       }
 				
-	</style>
-";
+// 	</style>
+// ";
+		
 		$attrs = [ 'id'=>"pac-input", 'class'=>"controls", 'type'=>"text" ];
 		if( $placeholder ) $attrs['placeholder'] = $placeholder;
 		$ret .= std::tagln('input', $attrs );
@@ -829,9 +884,25 @@ function initialize() {
 			$btns .= std::tagln('input', array('type'=>'submit', 'class'=>$classes, 'name'=>$k, "value"=>$v));
 		}
 		
+// 		if( $this->mode == self::HORIZONTAL ){
+// 			$ret .= std::tagln("div", [ 'class'=>"form-group" ]);
+				
+// 			$ret .= std::tag('div', array('class'=>$this->horiz_label_class)) . "&nbsp;</div>\n";
+// 			$ret .= std::tagln('div', array('class'=>$this->horiz_field_class)) . "{$btns}</div>\n";
+// 			$ret .= "</div>\n";
+// 		}
+// 		else {
+// 			$ret .= $btns;
+// 		}
+		$ret .= $this->encapsule($btns);
+		return $ret;
+	}
+	
+	protected function encapsule( $btns ){
+		$ret = "";
 		if( $this->mode == self::HORIZONTAL ){
 			$ret .= std::tagln("div", [ 'class'=>"form-group" ]);
-				
+		
 			$ret .= std::tag('div', array('class'=>$this->horiz_label_class)) . "&nbsp;</div>\n";
 			$ret .= std::tagln('div', array('class'=>$this->horiz_field_class)) . "{$btns}</div>\n";
 			$ret .= "</div>\n";
