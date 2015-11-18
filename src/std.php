@@ -405,6 +405,12 @@ class std {
 	 *	When possible, use Mustache or something more
 	 *	complete.
 	 *
+	 *  @param string $data the data to expand
+	 *  @param array $set the possible variable
+	 *  @param string $expander a string of 3 characters for extension pattern.
+	 *  
+	 *  @return string $data expanded.
+	 *
  	 */
 	public static function expand( $data, $set, $expander = '${}' ){
 		$len = strlen($data);
@@ -452,6 +458,13 @@ class std {
 		return $str;
 	}
 
+	/**
+	 * Exapnd from file.
+	 * 
+	 * @see std::expand
+	 * @param unknown $filename
+	 * @param unknown $set
+	 */
 	public static function expandFromFile( $filename, $set ){
 		$txt = file_get_contents( $filename );
 		return self::expand( $txt, $set );
