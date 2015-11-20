@@ -273,18 +273,24 @@ class BootstrapForm {
 	 * 
 	 * @return string the HTML text to display. 
 	 */
-	public function new_group( $name, $hint_text = '' ) {
+	public function new_group( $name, $hint_text = '', $attribs = [] ) {
 		$ret = $this->close_group_if_necessary(); 
 		$this->group = $name;
 		$this->hintGroup = $hint_text;
 		if( $this->hintGroup ){
 			$this->tooltips = true;
 		}
-		$classes = "form-group";
+		
+		$classes = "form-group ";
 		if( isset($this->error_list[$name]) ){
-			$classes .= ' has-error';
+			$classes .= 'has-error ';
 		}
-		$ret .= std::tagln( 'div', array( 'class'=>$classes, 'id'=>"group_{$name}"));
+		if (isset( $attribs['class'] )){
+			$classes .= $attribs['class'];
+		}
+		$attribs['class'] = trim($classes);
+		$attribs['id'] = "group_{$name}";
+		$ret .= std::tagln( 'div', $attribs);
 		return $ret;
 	}
 
@@ -607,7 +613,53 @@ class BootstrapForm {
 		$this->setDisabled();
 		return $this->input('text', $name, $placeholder);
 	}
-	
+
+	/**
+	 * Force a INPUT disabled. You can set the disable flag
+	 * to TRUE and use a specific type but if you know the
+	 * input is disabled, simply use this method.
+	 *
+	 * @param string $name name of the input (should be ignored)
+	 */
+	public function input_static( $name, $placeholder = null ) {
+		$attributes = array(
+				'type' => $type,
+				'class' => "form-control {$this->input_size}" );
+		if( $this->angularCtrl ){
+			$attributes['ng-model'] = $this->angular_model($name);
+		}
+		else {
+			$attributes['value'] = 
+			$attributes['name'] = $name;
+		}
+		
+		if( $this->forId ){
+			$attributes['id'] = $this->forId;
+		}
+		else {
+			$attributes['id'] = uniqid('input');
+		}
+		if( $placeholder ){
+			$attributes['placeholder'] = $placeholder;
+		}
+		
+		if( $this->disabled ){
+			// Add the disable qttribute
+			$attributes[] = 'disabled';
+		}
+		else if( $this->required ){
+			// Add the required qttribute
+			// Not compatible with DISABLED.
+			$attributes[] = 'required';
+		}
+		
+		// $ret = std::tag('input', $attributes) . "\n";
+		//$ret .= $this->hint_text();
+		$ret = std::tag("p", ['class'=>"form-control-static"] ) . std::html($this->find($name)) . "</p>\n";
+		$ret = $this->horizontal($ret);
+		return $ret;
+		return $this->input('text', $name, $placeholder);
+	}
 	
 	protected function inject_into_angular($id, $name, $places ){
 		$ret = "
