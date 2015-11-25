@@ -371,6 +371,25 @@ class DAO extends SQL {
 		throw new DAOException("Too many lines returned.");
 	}
 	
+	/**
+	 * Count the number of records based on a WHERE clause.
+	 * 
+	 * @param DBEntity $obj a entity (used for the correct format).
+	 * @param string a WHERE condition.
+	 * @return int the number of records found.
+	 */
+	public function count( $obj, $where ){
+		$whereClause = $this->getWhereClause($obj, $where);
+		$sql = "SELECT COUNT(*) FROM " . $obj->getTableName()
+		. " " . $whereClause;
+		$results = $this->query($sql);
+		
+		$nb = 0;
+		foreach( $results as $row ){
+			$nb = $row[0];
+		}
+		return $nb;
+	}
 	
 	/**
 	 * Reload from the database.
