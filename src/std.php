@@ -482,6 +482,16 @@ class std {
         return $ret;
     }
 
+	/**
+	 * Converts a timestamp to a Javascript Date object. 
+	 */
+	public static function timestamp2js( $ts ){
+		$ts = std::timestamp($ts); // ensure it is a timestamp
+		$y = date('Y', $ts);
+		$m = intval( date('n', $ts) - 1);
+		$d = date('j', $ts);
+		return "new Date( $y, $m, $d )";
+	}
 
 // 	/**
 // 	 *	Converts an ISO date to a timestamp.
