@@ -24,12 +24,15 @@ class std {
 	 * @param string $url an URL containing the 
 	 * 	page where the user will be redirected. This
 	 * 	URL should be complete (including the server).
+	 * @param boolean $temporary TRUE if this page must redirect
+	 * 		with an HTTP response 302 (FALSE to redirect permanently
+	 * 		with code 301).
 	 */
-	public static function redirect( $url ){
-		header( "Location: $url" );
+	public static function redirect( $url, $temporary = FALSE ){
 		header( "Content-type: text/html");
+		header( "Location: $url", TRUE, ($temporary ? 302 : 301) );
 		echo "Redirected to <a href=\"$url\">$url</a>\n";
-		exit(0);
+		die(0);
 	}
 	
 	
@@ -482,16 +485,6 @@ class std {
         return $ret;
     }
 
-	/**
-	 * Converts a timestamp to a Javascript Date object. 
-	 */
-	public static function timestamp2js( $ts ){
-		$ts = std::timestamp($ts); // ensure it is a timestamp
-		$y = date('Y', $ts);
-		$m = intval( date('n', $ts) - 1);
-		$d = date('j', $ts);
-		return "new Date( $y, $m, $d )";
-	}
 
 // 	/**
 // 	 *	Converts an ISO date to a timestamp.
