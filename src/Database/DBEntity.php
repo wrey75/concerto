@@ -245,7 +245,7 @@ abstract class DBEntity implements \JsonSerializable {
 	 * 
 	 */
 	public function update(){
-		$this->_dao->update($this);
+		return $this->_dao->update($this);
 	}
 	
 	
@@ -255,7 +255,7 @@ abstract class DBEntity implements \JsonSerializable {
 	 * can be deleted.
 	 */
 	public function delete(){
-		$this->_dao->delete($this);
+		return $this->_dao->delete($this);
 	}
 	
 	/**
