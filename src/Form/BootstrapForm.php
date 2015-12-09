@@ -402,6 +402,25 @@ class BootstrapForm {
 		$ret = $this->horizontal($ret);
 		return $ret;
 	}
+
+	public function radio_buttons($name, $values) {
+		$ret = "";
+		$default_val = $this->find($name);
+		foreach( $values as $k=>$v ){
+			$ret .= std::tag("div", ['class'=>"radio"]);
+			$ret .= std::tag("label", array("class"=>"radio-inline"));
+			$arr = array("type"=>"radio", "name"=>$name, "id"=>"{$name}_{$k}", "value"=>$k);
+			if( $k == $default_val ){
+				$arr[] = "checked";
+			}
+			$ret .= std::tag("input", $arr);
+			$ret .= $v;
+			$ret .= "</label>";
+			$ret .= "</div>\n";
+		}
+		$ret = $this->horizontal($ret);
+		return $ret;
+	}
 	
 	protected function hint_text(){
 		$ret = '';
@@ -702,7 +721,7 @@ class BootstrapForm {
 		$ret .= $this->hidden("{$name}_lat", null );
 		$ret .= $this->hidden("{$name}_lng", null );
 		$this->forId = $this->group;
-		$canvas_id = "{$this->group}-canvas";
+		$canvas_id = "{$this->group}_canvas";
 		$ret .= $this->encapsule(std::tag('div', [ 'id' => $canvas_id, "style"=>"height: 300px;" ]) . "</div>\n");
 		$dataset = [
 				'canvas_id' => $canvas_id,
