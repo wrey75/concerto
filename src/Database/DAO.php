@@ -104,20 +104,13 @@ class DAO extends SQL {
 	/**
 	 * Insert the entity in the database.
 	 * 
-	 * @param DBEntity $obj the entity to insert. If the
-	 * entity is an array, the insert will be applied to
-	 * each of the elements.
+	 * @param DBEntity $obj the entity to insert.
 	 * 
-	 * @return the number of inserted records.
+	 * @return TRUE if the record has been successfully
+	 * 		inserted.
 	 *
 	 */
 	public function insert( &$obj ) {
-		if( is_array($obj) ){
-			$ok = 0;
-			foreach( $obj as $single ) $ok += $this->insert( $single );
-			return $ok;
-		}
-		
 		// Signgle record.
 		$columns = $obj->getColumns();
 	
@@ -163,7 +156,7 @@ class DAO extends SQL {
 		}
 		else if( $identityPropName ){
 			// Get the last inserted ID if apply...
-			$this->$identityPropName = $this->getLastId( $identityColumnName );
+			$obj->$identityPropName = $this->getLastId( $identityColumnName );
 		}
 		$obj->setDAO($this);
 		return TRUE;
@@ -190,7 +183,7 @@ class DAO extends SQL {
 		$where = [];
 		$data = get_object_vars($obj);
 		foreach( $columns as $name => $definition ){
-			$val = $data[$name];
+			$val = @$data[$name];
 			$columnName = $definition->getName();
 			$sqlVal = $this->converter->sqlOf($definition, $val);
 			if( $definition->isPrimaryKey() ){
@@ -247,10 +240,9 @@ class DAO extends SQL {
 		$columns = $obj->getPrimaryColumns();
 		$where = [];
 		foreach( $columns as $name => $definition ){
-			$val = $data[$name];
+			$val = $obj->$name;
 			$where[] = $definition->getName() . " = " . $this->converter->sqlOf($definition, $val);
 		}
-		
 		return implode( " AND ", $where);
 	}
 	
@@ -265,7 +257,7 @@ class DAO extends SQL {
 		$sql = "DELETE FROM " . $obj->getTableName() . " WHERE {$whereClause};";
 		$nb = $this->execute($sql);
 		if( $nb != 1 ){
-			$this->logQuery($sql, "Delete of $nb rows instead of one!" );
+			$this->sqlError($sql, "Delete of $nb rows instead of one!" );
 		}
 		$obj->setDAO(NULL);
 		return TRUE;
@@ -283,7 +275,7 @@ class DAO extends SQL {
 	 * 
 	 */
 	public function deleteRows( $sample, $where ){
-		$whereClause = $sample->getWhereClause( $where );
+		$whereClause = $this->getWhereClause( $sample, $where );
 		$table = $sample->getTableName();
 		$sql = "DELETE FROM $table $whereClause;";
 		$nb = $this->execute($sql);
@@ -345,6 +337,22 @@ class DAO extends SQL {
 				. " " . $orderClause;
 		$results = $this->query($sql);
 		return $this->sql2entities($obj, $results);
+	}
+	
+	public function selectWithCallback( $obj, $callback, $where = null, $order = null ){
+		$whereClause = $this->getWhereClause($obj, $where);
+		$orderClause = $obj->getOrderClause( $order );
+	
+		// Now select data
+		$sql = "SELECT * FROM " . $obj->getTableName()
+		. " " . $whereClause
+		. " " . $orderClause;
+		$results = $this->query($sql);
+		if( $results ){
+			foreach( $results as $row ){
+				call_user_function( $callback, $row);
+			}
+		}
 	}
 	
 	
@@ -451,7 +459,22 @@ class DAO extends SQL {
 		}
 		return $entities;
 	}
+	
 
+	/**
+	 * The scanner for fetching each row.
+	 * 
+	 * @param unknown $rows
+	 * @param unknown $userCallback the user function callback.
+	 */
+	protected function fetch_scanner( $rows, $userCallback  ){
+		if( $rows ){
+			foreach( $rows as $row){
+				call_user_function( $userCallback, $row);
+			}
+		}
+	}
+	
 	/**
 	 * SELECT in the database based on a plain SQL request.
 	 *

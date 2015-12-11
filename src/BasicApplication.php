@@ -205,7 +205,7 @@ class BasicApplication {
 	 * @param string|array $class a class or a list of classes.
 	 * @param string $id a option id for this &lt;div&gt;.
 	 */
-	public function open_div( $class, $id = null, $attrs = array() ){	
+	public function open_div( $class = null, $id = null, $attrs = array() ){	
 		if( $class ) $attrs['class'] = std::implode($class);
 		if( !$id && !$class ) $id = uniqid();
 		if( $id ){

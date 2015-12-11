@@ -168,7 +168,7 @@ class Logger {
 	 */
 	public function fatal($txt)
 	{
-		$this->Log( $txt, Logger::FATAL );
+		$this->Log( $txt, Logger::EMERGENCY );
 	}
 	
 	/**
