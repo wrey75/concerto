@@ -204,8 +204,9 @@ class DAO extends SQL {
 			}
 		}
 		$table = $obj->getTableName();
-		$sql = "UPDATE $table SET " . implode( ", ", $set) . " WHERE " . implode( " AND ", $where) . ";";
-	
+		$sql = "UPDATE $table SET " . implode( ", ", $set) . " WHERE " . implode( " AND ", $where) ;
+		
+		
 		$nb = $this->execute($sql);
 		if( $nb > 1 ){
 			// $log = KLogger::getDefault();
@@ -225,7 +226,8 @@ class DAO extends SQL {
 				$this->$versionColumn++;
 			}
 		}
-		return ($nb == 1);
+
+		return ($nb < 2); // If an update DOES NOT UPDATE anything (no changes in columns, it can return 0).
 	}
 	
 	/**
