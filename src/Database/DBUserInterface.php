@@ -67,10 +67,10 @@ class DBUserInterface {
 				if( $col->isNumeric() ){
 					$info .= "|numeric";
 				}
-// 				else if( $col->isDate() ){
-//					Dates are NOT timestamp and cabe in the past (before 1970).
-// 					$info .= "|date";
-// 				}
+ 				else if( $col->isDate() ){
+					//	We provide the data hardcoded (data-order) and display.
+ 					$info .= "|html";
+ 				}
 				$ret[$k] = $info;
 			}
 		}

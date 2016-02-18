@@ -23,7 +23,8 @@ class BasicConverter {
 	 * 	are translated as "NULL".
 	 */
 	public function sqlstr( $str ){
-	 	if( strlen($str) == 0 ) {
+		$str = strval($str);
+		if( strlen($str) == 0 ) {
 			// Empty string generates a NULL string
 			return "NULL";
 		}
@@ -187,7 +188,7 @@ class BasicConverter {
 				return (is_numeric( $value ) ? $value : 'NULL' );
 					
 			case DBColumn::BOOLEAN :
-				return $this->sqlstr($value === TRUE ? 'Y' : ($value === FALSE ? 'N' : NULL) );
+				return $this->sqlstr($value === NULL ? null : ($value ? 'Y' : 'N' ) );
 				
 			case DBColumn::GROUP :
 				return $this->sqlstr( implode(',', $value) );
