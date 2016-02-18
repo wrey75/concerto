@@ -408,7 +408,7 @@ class BootstrapForm {
 		$default_val = $this->find($name);
 		foreach( $values as $k=>$v ){
 			$ret .= std::tag("div", ['class'=>"radio"]);
-			$ret .= std::tag("label", array("class"=>"radio-inline"));
+			$ret .= std::tag("label");
 			$arr = array("type"=>"radio", "name"=>$name, "id"=>"{$name}_{$k}", "value"=>$k);
 			if( $k == $default_val ){
 				$arr[] = "checked";

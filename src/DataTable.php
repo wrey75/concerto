@@ -279,7 +279,7 @@ class DataTable {
 					}
 					
 					else {
-						throw new Exception( "Unknown qualifier '$key' for column $colname.");
+						throw new \Exception( "Unknown qualifier '$key' for column $colname.");
 					}
 				}
 				$i++;
@@ -368,7 +368,10 @@ class DataTable {
 	    	    if( strlen( $rowstyle ) > 0 ){
 	    		    $options["style"] = $rowstyle;
 	    	    }
-	    	
+	    	    if( isset($data['tr-class']) ){
+	    	    	$options['class'] = $data["tr-class"];
+	    	    }
+	    	    
 			    $ret .= std::tagln("tr", $options);
 	            foreach( $this->headers as $key => $value ){
 	        	    $opt = array();
