@@ -57,6 +57,19 @@ class DataTable {
 		$this->thousand_char = static::$static_thousand_char;
 	}
 	
+	
+	/**
+	 * Returns the ID of the table (note this ID is created automatically).
+	 * This attribute is necessary for changing some behaviour on the DataTable
+	 * directly in PHP.
+	 * 
+	 * @return string a value than is used as the id attribute for the Datatable.
+	 * 	
+	 */
+	public function getId(){
+		return $this->id;
+	}
+	
 	public function setWaitingText($txt = "Loading, please wait" ) {
 		$this->waitingText = $txt;
 	}

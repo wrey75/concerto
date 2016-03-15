@@ -25,7 +25,9 @@ class Country {
 		 'BD' => [ 'label' => [ 'en' => 'Bangladesh' ], 'iso3' => 'BGD', 'num' => 050 ],
 		 'BB' => [ 'label' => [ 'en' => 'Barbados' ], 'iso3' => 'BRB', 'num' => 052 ],
 		 'BY' => [ 'label' => [ 'en' => 'Belarus' ], 'iso3' => 'BLR', 'num' => 112 ],
-		 'BE' => [ 'label' => [ 'en' => 'Belgium', 'fr' => 'Belgique' ], 'iso3' => 'BEL', 'num' => 056 ],
+		 'BE' => [ 'label' => [
+		 		'en' => 'Belgium', 
+		 		'fr' => 'Belgique' ], 'iso3' => 'BEL', 'num' => 056 ],
 		 'BZ' => [ 'label' => [ 'en' => 'Belize' ], 'iso3' => 'BLZ', 'num' => 084 ],
 		 'BJ' => [ 'label' => [ 'en' => 'Benin' ], 'iso3' => 'BEN', 'num' => 204 ],
 		 'BM' => [ 'label' => [ 'en' => 'Bermuda' ], 'iso3' => 'BMU', 'num' => 060 ],
@@ -80,7 +82,9 @@ class Country {
 		 'FO' => [ 'label' => [ 'en' => 'Faroe Islands' ], 'iso3' => 'FRO', 'num' => 234 ],
 		 'FJ' => [ 'label' => [ 'en' => 'Fiji' ], 'iso3' => 'FJI', 'num' => 242 ],
 		 'FI' => [ 'label' => [ 'en' => 'Finland' ], 'iso3' => 'FIN', 'num' => 246 ],
-		 'FR' => [ 'label' => [ 'en' => 'France' ], 'iso3' => 'FRA', 'num' => 250 ],
+		 'FR' => [ 'label' => [
+		 		'en' => 'France',
+		 		'fr' => 'France' ], 'iso3' => 'FRA', 'num' => 250 ],
 		 'GF' => [ 'label' => [ 'en' => 'French Guiana', 'fr'=>'Guyane' ], 'iso3' => 'GUF', 'num' => 254 ],
 		 'PF' => [ 'label' => [ 'en' => 'French Polynesia' ], 'iso3' => 'PYF', 'num' => 258 ],
 		 'TF' => [ 'label' => [ 'en' => 'French Southern Territories' ], 'iso3' => 'ATF', 'num' => 260 ],
@@ -133,7 +137,9 @@ class Country {
 		 'LY' => [ 'label' => [ 'en' => 'Libya' ], 'iso3' => 'LBY', 'num' => 434 ],
 		 'LI' => [ 'label' => [ 'en' => 'Liechtenstein' ], 'iso3' => 'LIE', 'num' => 438 ],
 		 'LT' => [ 'label' => [ 'en' => 'Lithuania' ], 'iso3' => 'LTU', 'num' => 440 ],
-		 'LU' => [ 'label' => [ 'en' => 'Luxembourg' ], 'iso3' => 'LUX', 'num' => 442 ],
+		 'LU' => [ 'label' => [
+		 		'en' => 'Luxembourg',
+		 		'fr' => 'Luxembourg' ], 'iso3' => 'LUX', 'num' => 442 ],
 		 'MK' => [ 'label' => [ 'en' => 'Macedonia, Republic of' ], 'iso3' => 'MKD', 'num' => 807 ],
 		 'MG' => [ 'label' => [ 'en' => 'Madagascar' ], 'iso3' => 'MDG', 'num' => 450 ],
 		 'MW' => [ 'label' => [ 'en' => 'Malawi' ], 'iso3' => 'MWI', 'num' => 454 ],
@@ -217,8 +223,12 @@ class Country {
 		 'SR' => [ 'label' => [ 'en' => 'Suriname *' ], 'iso3' => 'SUR', 'num' => 740 ],
 		 'SJ' => [ 'label' => [ 'en' => 'Svalbard and Jan Mayen Islands' ], 'iso3' => 'SJM', 'num' => 744 ],
 		 'SZ' => [ 'label' => [ 'en' => 'Swaziland' ], 'iso3' => 'SWZ', 'num' => 748 ],
-		 'SE' => [ 'label' => [ 'en' => 'Sweden' ], 'iso3' => 'SWE', 'num' => 752 ],
-		 'CH' => [ 'label' => [ 'en' => 'Switzerland', 'fr'=>'Suisse' ], 'iso3' => 'CHE', 'num' => 756 ],
+		 'SE' => [ 'label' => [ 
+		 		'en' => 'Sweden',
+		 		'fr' => 'Suède' ], 'iso3' => 'SWE', 'num' => 752 ],
+		 'CH' => [ 'label' => [ 
+		 		'en' => 'Switzerland', 
+		 		'fr'=>'Suisse' ], 'iso3' => 'CHE', 'num' => 756 ],
 		 'SY' => [ 'label' => [ 'en' => 'Syrian Arab Republic (Syria)' ], 'iso3' => 'SYR', 'num' => 760 ],
 		 'TW' => [ 'label' => [ 'en' => 'Taiwan, Republic of China' ], 'iso3' => 'TWN', 'num' => 158 ],
 		 'TJ' => [ 'label' => [ 'en' => 'Tajikistan' ], 'iso3' => 'TJK', 'num' => 762 ],
@@ -237,8 +247,12 @@ class Country {
 		 'UG' => [ 'label' => [ 'en' => 'Uganda' ], 'iso3' => 'UGA', 'num' => 800 ],
 		 'UA' => [ 'label' => [ 'en' => 'Ukraine' ], 'iso3' => 'UKR', 'num' => 804 ],
 		 'AE' => [ 'label' => [ 'en' => 'United Arab Emirates' ], 'iso3' => 'ARE', 'num' => 784 ],
-		 'GB' => [ 'label' => [ 'en' => 'United Kingdom' ], 'iso3' => 'GBR', 'num' => 826 ],
-		 'US' => [ 'label' => [ 'en' => 'United States of America' ], 'iso3' => 'USA', 'num' => 840 ],
+		 'GB' => [ 'label' => [
+		 		'en' => 'United Kingdom',
+		 		'fr' => 'Royuame-Uni'], 'iso3' => 'GBR', 'num' => 826 ],
+		 'US' => [ 'label' => [ 
+		 		'en' => 'United States of America',
+		 		'fr' => 'États-Unis'], 'iso3' => 'USA', 'num' => 840 ],
 		 'UM' => [ 'label' => [ 'en' => 'United States Minor Outlying Islands' ], 'iso3' => 'UMI', 'num' => 581 ],
 		 'UY' => [ 'label' => [ 'en' => 'Uruguay' ], 'iso3' => 'URY', 'num' => 858 ],
 		 'UZ' => [ 'label' => [ 'en' => 'Uzbekistan' ], 'iso3' => 'UZB', 'num' => 860 ],
@@ -258,10 +272,15 @@ class Country {
 	
 	public function __construct( $code ){
 		$this->code = strtoupper($code);
+		if( !isset( self::$COUNTRIES[ $this->code ] ) ){
+			trigger_error("Code '$code' unknown for Country.");
+			return;
+		}
 		$this->data = self::$COUNTRIES[ $this->code ];
 	}
 	
 	public function label( $lang = 'en' ){
+		$lang = substr( $lang, 0, 2 ); // We don't manage specificities (yet)
 		$label = @$this->data['label'][$lang];
 		if( !$label ){
 			$label = @$this->data['label']['en'];

@@ -287,13 +287,22 @@ class std {
 	 * 		(case sensitive).
 	 * @param string $value the default value if the
 	 * 		parameter has not been given (non mandatory)
+	 * @param bool $protect set to TRUE by default will
+	 * 		replace "<" by "< " (this will avoid an interpretation
+	 * 		by the browser -- note the protection is quite weak
+	 * 		but sufficient for minimal protection).
 	 * @return Ambigous <unknown, string>
 	 */
-	static public function get( $name, $defaultValue = null ){
+	static public function get( $name, $defaultValue = null, $protect = TRUE ){
 		global $ANGULAR_POST;
 		$name = self::normalizeVariableName( $name );
 		if (isset( $_REQUEST[$name]) ){
-			return $_REQUEST[$name];
+			$value = $_REQUEST[$name];
+			if( $protect ){
+				// Adding a space after the sign should protect the variable
+				$value = str_replace( "<", "< ", $value);
+			}
+			return $value;
 		}
 		else if (@$ANGULAR_POST && isset( $ANGULAR_POST[$name]) ){
 			return $ANGULAR_POST[$name];
