@@ -108,10 +108,11 @@ class JsonSerializer {
 	 */
 	protected function serializeData($value) {
 		if (is_scalar($value) || $value === null) {
-			if (!$this->preserveZeroFractionSupport && is_float($value) && strpos((string)$value, '.') === false) {
+			if (!$this->preserveZeroFractionSupport && is_float($value) && abs($value) < 1e+10 && abs($value) > 0.01 ) {
 				// Because the PHP bug #50224, the float numbers with no
 				// precision numbers are converted to integers when encoded
-				$value = static::FLOAT_ADAPTER . '(' . $value . '.0)';
+				// Notice the following will not be sensible to locale.
+				$value = static::FLOAT_ADAPTER . '(' . number_format($value, 6, ".", "" ) . ')';
 			}
 			return $value;
 		}
