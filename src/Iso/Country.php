@@ -159,7 +159,9 @@ class Country {
 		 'MN' => [ 'label' => [ 'en' => 'Mongolia' ], 'iso3' => 'MNG', 'num' => 496 ],
 		 'ME' => [ 'label' => [ 'en' => 'Montenegro' ], 'iso3' => 'MNE', 'num' => 499 ],
 		 'MS' => [ 'label' => [ 'en' => 'Montserrat' ], 'iso3' => 'MSR', 'num' => 500 ],
-		 'MA' => [ 'label' => [ 'en' => 'Morocco' ], 'iso3' => 'MAR', 'num' => 504 ],
+		 'MA' => [ 'label' => [ 
+		 		'en' => 'Morocco',
+		 		'fr' => 'Maroc' ], 'iso3' => 'MAR', 'num' => 504 ],
 		 'MZ' => [ 'label' => [ 'en' => 'Mozambique' ], 'iso3' => 'MOZ', 'num' => 508 ],
 		 'MM' => [ 'label' => [ 'en' => 'Myanmar' ], 'iso3' => 'MMR', 'num' => 104 ],
 		 'NA' => [ 'label' => [ 'en' => 'Namibia' ], 'iso3' => 'NAM', 'num' => 516 ],
