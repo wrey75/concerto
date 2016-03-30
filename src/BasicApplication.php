@@ -149,11 +149,13 @@ class BasicApplication {
 		}
 		$url = $item['url'];
 		$text = $item['text'];
-		return $this->tabbed(
-				std::tag("li", $attribs) .
-				std::tag("a", [ 'href'=>$url ]) .
-				$text.
-				'</a></li>');
+		if( $text ){
+			$ret = std::tag("li", $attribs) . std::link($url, $text ) . '</li>';
+		}
+		else {
+			$ret = '<li role="separator" class="divider"></li>';
+		}
+		return $this->tabbed($ret);
 	}
 	
 	/**
