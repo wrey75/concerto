@@ -733,10 +733,133 @@ class std {
 	}
 	
 	/**
+	 * Clean of the text for using it as part of an URL. Based
+	 * on rules about encoding URLs. This function is intended
+	 * to maximize the results given by the search engines.
+	 *	Experience shows that using text in the URL itself
+	 *	gives better ranking on Google and other search engines.
+	 *
+	 * @param string $str the text to encode.
+	 * @param int $max_len the maximum number of characters
+	 *		to return when the text is cleaned.
+	 * @return string an encoded text without punctuation.
+	 * 		Some accents and UTF8 characters are kept
+	 * 		for a better view on search engines.
+	 */
+	public static function url_clean($str, $max_len = 72) {
+		$converter = [
+				"(" => "(",
+				")" => ")",
+				"[" => "(",
+				"]" => ")",
+				"²" => "",
+				"\xCF\x9F" => "", // GREEK SMALL LETTER KOPPA
+				"\xC2\xB7" => "",
+				"\xE2\x97\x86" => "",
+				"\xE2\x98\x86" => "", // WHITE STAR
+				"\xE2\x98\x85" => "", // BLACK STAR
+				"\xEF\xBD\x82" => "b", // FULLWIDTH LATIN SMALL LETTER B
+				"\xC2\xA0" => "-", // NO-BREAK SPACE (U+00A0)
+				"\xE2\x96\xBA" => "-", // A fucking ">" character..
+				"!" => "",
+				"¨" => "-",
+				'─' => "-",
+				'—' => "-",
+				'­' => "-",
+				'°' => ".",
+				'•' => "-",
+				'“' => "''",
+				'ñ' => "n",
+				"\xE2\x82\xAC" /* '€' */ => "euro", // Unicode Character 'EURO SIGN' (U+20AC)
+				"\xE2\x84\xA2" => "(tm)", // Trade mark
+				"\xC2\xB3" => "3", // SUPERSCRIPT THREE
+				'…' => "...",
+				'«' => "''",
+				'»' => "''",
+				'”' => "''",
+				'"' => "''",
+				'®' => '',
+				'ç' => 'c',
+				'œ' => 'oe',
+				'æ' => 'ae',
+				'á' => 'o',
+				'é' => 'e',
+				'í' => 'i',
+				'ó' => 'o',
+				'ú' => 'u',
+				'ã' => 'a',
+				'à' => 'a',
+				'è' => 'e',
+				'ì' => 'i',
+				'ō' => 'o',
+				'ò' => 'o',
+				'ù' => 'u',
+				'ä' => 'a',
+				'ë' => 'e',
+				'ï' => 'i',
+				'ö' => 'o',
+				'ü' => 'u',
+				'ÿ' => 'y',
+				'â' => 'a',
+				'ê' => 'e',
+				'î' => 'i',
+				'ô' => 'o',
+				'û' => 'u',
+				'å' => 'a',
+				'e' => 'e',
+				'i' => 'i',
+				'ø' => 'o',
+				'u' => 'u',
+				'&' => 'et',
+				'’' => '\'',
+				'‘' => '\'',
+				'´' => '\'',
+				'©' => '(c)',
+				'–' => '-'
+		];
+	
+		// Limit to 70 characters
+		$truncated = '';
+		$str = std::lower($str);
+	
+		// Net line will create an array of chars (UTF-8)A
+		// see http://stackoverflow.com/questions/3666306/how-to-iterate-utf-8-string-in-php
+		$char_array = preg_split('//u', $str, -1, PREG_SPLIT_NO_EMPTY);
+		$ret = '';
+		foreach( $char_array as $c ){
+			if( ($c >= 'a' && $c <= 'z') || ($c >= '0' && $c <= '9') || in_array( $c, [ '(', ')', '$', '_', '\'' ] )  /* can be also: '$-_.+!*\'(), */  ){
+				$ret .= $c;
+			}
+			else if( isset( $converter[$c] ) ){
+				$ret .= $converter[$c];
+			}
+			else if( strlen($c) > 1 ){
+				// UTF-8
+				$ret .= urlencode($c);
+			}
+			else if( std::lastChar($ret) != '-' ){
+				if( std::len($ret) <= $max_len ) $truncated = $ret;
+				$ret .= '-';
+			}
+		}
+	
+		// Use no more than 72 characters
+		if( std::len($ret) <= $max_len ){
+			// Add the last word when necessary
+			$truncated = $ret;
+		}
+		$ret = trim( $truncated, '-' );
+		if( !$ret ) $ret = 'empty'; // avoid empty data
+		return $ret;
+	}
+	
+	
+	/**
 	 * Clean of the text for real text output. Based
 	 * on rules about encoding URLs. This function is intended
 	 * to maximize the results given by the search engines.
 	 *
+	 * @deprecated use url_clean() instead
 	 * @param string $str the text to encode.
 	 * @return string an encoded text without punctuation
 	 * 		but accents and UTF8 characters are kept
