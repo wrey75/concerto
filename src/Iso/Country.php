@@ -18,7 +18,9 @@ class Country {
 		 'AM' => [ 'label' => [ 'en' => 'Armenia' ], 'iso3' => 'ARM', 'num' => 051 ],
 		 'AW' => [ 'label' => [ 'en' => 'Aruba' ], 'iso3' => 'ABW', 'num' => 533 ],
 		 'AU' => [ 'label' => [ 'en' => 'Australia', 'fr'=>'Autriche' ], 'iso3' => 'AUS', 'num' => 036 ],
-		 'AT' => [ 'label' => [ 'en' => 'Austria' ], 'iso3' => 'AUT', 'num' => 040 ],
+		 'AT' => [ 'label' => [ 
+		 		'en' => 'Austria',
+		 		'fr' => 'Autriche' ], 'iso3' => 'AUT', 'num' => 040 ],
 		 'AZ' => [ 'label' => [ 'en' => 'Azerbaijan' ], 'iso3' => 'AZE', 'num' => 031 ],
 		 'BS' => [ 'label' => [ 'en' => 'Bahamas' ], 'iso3' => 'BHS', 'num' => 044 ],
 		 'BH' => [ 'label' => [ 'en' => 'Bahrain' ], 'iso3' => 'BHR', 'num' => 048 ],
@@ -81,7 +83,9 @@ class Country {
 		 'FK' => [ 'label' => [ 'en' => 'Falkland Islands (Malvinas)' ], 'iso3' => 'FLK', 'num' => 238 ],
 		 'FO' => [ 'label' => [ 'en' => 'Faroe Islands' ], 'iso3' => 'FRO', 'num' => 234 ],
 		 'FJ' => [ 'label' => [ 'en' => 'Fiji' ], 'iso3' => 'FJI', 'num' => 242 ],
-		 'FI' => [ 'label' => [ 'en' => 'Finland' ], 'iso3' => 'FIN', 'num' => 246 ],
+		 'FI' => [ 'label' => [ 
+		 		'en' => 'Finland',
+		 		'fr' => 'Finlande'], 'iso3' => 'FIN', 'num' => 246 ],
 		 'FR' => [ 'label' => [
 		 		'en' => 'France',
 		 		'fr' => 'France' ], 'iso3' => 'FRA', 'num' => 250 ],
@@ -91,7 +95,9 @@ class Country {
 		 'GA' => [ 'label' => [ 'en' => 'Gabon' ], 'iso3' => 'GAB', 'num' => 266 ],
 		 'GM' => [ 'label' => [ 'en' => 'Gambia' ], 'iso3' => 'GMB', 'num' => 270 ],
 		 'GE' => [ 'label' => [ 'en' => 'Georgia' ], 'iso3' => 'GEO', 'num' => 268 ],
-		 'DE' => [ 'label' => [ 'en' => 'Germany' ], 'iso3' => 'DEU', 'num' => 276 ],
+		 'DE' => [ 'label' => [ 
+		 		'en' => 'Germany',
+		 		'fr' => 'Allemagne' ], 'iso3' => 'DEU', 'num' => 276 ],
 		 'GH' => [ 'label' => [ 'en' => 'Ghana' ], 'iso3' => 'GHA', 'num' => 288 ],
 		 'GI' => [ 'label' => [ 'en' => 'Gibraltar' ], 'iso3' => 'GIB', 'num' => 292 ],
 		 'GR' => [ 'label' => [ 'en' => 'Greece' ], 'iso3' => 'GRC', 'num' => 300 ],
@@ -114,12 +120,20 @@ class Country {
 		 'ID' => [ 'label' => [ 'en' => 'Indonesia' ], 'iso3' => 'IDN', 'num' => 360 ],
 		 'IR' => [ 'label' => [ 'en' => 'Iran, Islamic Republic of' ], 'iso3' => 'IRN', 'num' => 364 ],
 		 'IQ' => [ 'label' => [ 'en' => 'Iraq' ], 'iso3' => 'IRQ', 'num' => 368 ],
-		 'IE' => [ 'label' => [ 'en' => 'Ireland' ], 'iso3' => 'IRL', 'num' => 372 ],
+		 'IE' => [ 'label' => [ 
+		 		'en' => 'Ireland',
+		 		'fr' => 'Irlande' ], 'iso3' => 'IRL', 'num' => 372 ],
 		 'IM' => [ 'label' => [ 'en' => 'Isle of Man' ], 'iso3' => 'IMN', 'num' => 833 ],
-		 'IL' => [ 'label' => [ 'en' => 'Israel', 'fr'=>'Israël' ], 'iso3' => 'ISR', 'num' => 376 ],
-		 'IT' => [ 'label' => [ 'en' => 'Italy' ], 'iso3' => 'ITA', 'num' => 380 ],
+		 'IL' => [ 'label' => [ 
+		 		'en' => 'Israel', 
+		 		'fr'=>'Israël' ], 'iso3' => 'ISR', 'num' => 376 ],
+		 'IT' => [ 'label' => [ 
+		 		'en' => 'Italy',
+		 		'fr' => 'Italie' ], 'iso3' => 'ITA', 'num' => 380 ],
 		 'JM' => [ 'label' => [ 'en' => 'Jamaica' ], 'iso3' => 'JAM', 'num' => 388 ],
-		 'JP' => [ 'label' => [ 'en' => 'Japan' ], 'iso3' => 'JPN', 'num' => 392 ],
+		 'JP' => [ 'label' => [
+		 		'en' => 'Japan', 
+		 		'fr' => 'Japon' ], 'iso3' => 'JPN', 'num' => 392 ],
 		 'JE' => [ 'label' => [ 'en' => 'Jersey' ], 'iso3' => 'JEY', 'num' => 832 ],
 		 'JO' => [ 'label' => [ 'en' => 'Jordan' ], 'iso3' => 'JOR', 'num' => 400 ],
 		 'KZ' => [ 'label' => [ 'en' => 'Kazakhstan' ], 'iso3' => 'KAZ', 'num' => 398 ],
@@ -131,7 +145,9 @@ class Country {
 		 'KG' => [ 'label' => [ 'en' => 'Kyrgyzstan' ], 'iso3' => 'KGZ', 'num' => 417 ],
 		 'LA' => [ 'label' => [ 'en' => 'Lao PDR' ], 'iso3' => 'LAO', 'num' => 418 ],
 		 'LV' => [ 'label' => [ 'en' => 'Latvia' ], 'iso3' => 'LVA', 'num' => 428 ],
-		 'LB' => [ 'label' => [ 'en' => 'Lebanon' ], 'iso3' => 'LBN', 'num' => 422 ],
+		 'LB' => [ 'label' => [ 
+		 		'en' => 'Lebanon',
+		 		'fr' => 'Liban' ], 'iso3' => 'LBN', 'num' => 422 ],
 		 'LS' => [ 'label' => [ 'en' => 'Lesotho' ], 'iso3' => 'LSO', 'num' => 426 ],
 		 'LR' => [ 'label' => [ 'en' => 'Liberia' ], 'iso3' => 'LBR', 'num' => 430 ],
 		 'LY' => [ 'label' => [ 'en' => 'Libya' ], 'iso3' => 'LBY', 'num' => 434 ],
@@ -150,7 +166,9 @@ class Country {
 		 'MH' => [ 'label' => [ 'en' => 'Marshall Islands' ], 'iso3' => 'MHL', 'num' => 584 ],
 		 'MQ' => [ 'label' => [ 'en' => 'Martinique' ], 'iso3' => 'MTQ', 'num' => 474 ],
 		 'MR' => [ 'label' => [ 'en' => 'Mauritania' ], 'iso3' => 'MRT', 'num' => 478 ],
-		 'MU' => [ 'label' => [ 'en' => 'Mauritius' ], 'iso3' => 'MUS', 'num' => 480 ],
+		 'MU' => [ 'label' => [ 
+		 		'en' => 'Mauritius',
+		 		'fr' => 'Île Maurice'], 'iso3' => 'MUS', 'num' => 480 ],
 		 'YT' => [ 'label' => [ 'en' => 'Mayotte' ], 'iso3' => 'MYT', 'num' => 175 ],
 		 'MX' => [ 'label' => [ 'en' => 'Mexico' ], 'iso3' => 'MEX', 'num' => 484 ],
 		 'FM' => [ 'label' => [ 'en' => 'Micronesia, Federated States of' ], 'iso3' => 'FSM', 'num' => 583 ],
@@ -167,7 +185,9 @@ class Country {
 		 'NA' => [ 'label' => [ 'en' => 'Namibia' ], 'iso3' => 'NAM', 'num' => 516 ],
 		 'NR' => [ 'label' => [ 'en' => 'Nauru' ], 'iso3' => 'NRU', 'num' => 520 ],
 		 'NP' => [ 'label' => [ 'en' => 'Nepal' ], 'iso3' => 'NPL', 'num' => 524 ],
-		 'NL' => [ 'label' => [ 'en' => 'Netherlands' ], 'iso3' => 'NLD', 'num' => 528 ],
+		 'NL' => [ 'label' => [ 
+		 		'en' => 'Netherlands',
+		 		'fr' => 'Pays-Bas' ], 'iso3' => 'NLD', 'num' => 528 ],
 		 'AN' => [ 'label' => [ 'en' => 'Netherlands Antilles' ], 'iso3' => 'ANT', 'num' => 530 ],
 		 'NC' => [ 'label' => [ 'en' => 'New Caledonia' ], 'iso3' => 'NCL', 'num' => 540 ],
 		 'NZ' => [ 'label' => [ 'en' => 'New Zealand' ], 'iso3' => 'NZL', 'num' => 554 ],
@@ -219,7 +239,9 @@ class Country {
 		 'ZA' => [ 'label' => [ 'en' => 'South Africa' ], 'iso3' => 'ZAF', 'num' => 710 ],
 		 'GS' => [ 'label' => [ 'en' => 'South Georgia and the South Sandwich Islands' ], 'iso3' => 'SGS', 'num' => 239 ],
 		 'SS' => [ 'label' => [ 'en' => 'South Sudan' ], 'iso3' => 'SSD', 'num' => 728 ],
-		 'ES' => [ 'label' => [ 'en' => 'Spain' ], 'iso3' => 'ESP', 'num' => 724 ],
+		 'ES' => [ 'label' => [ 
+		 		'en' => 'Spain',
+		 		'fr' => 'Espagne' ], 'iso3' => 'ESP', 'num' => 724 ],
 		 'LK' => [ 'label' => [ 'en' => 'Sri Lanka' ], 'iso3' => 'LKA', 'num' => 144 ],
 		 'SD' => [ 'label' => [ 'en' => 'Sudan' ], 'iso3' => 'SDN', 'num' => 736 ],
 		 'SR' => [ 'label' => [ 'en' => 'Suriname *' ], 'iso3' => 'SUR', 'num' => 740 ],
