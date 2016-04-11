@@ -3,6 +3,7 @@
 namespace Concerto;
 
 
+use Symfony\Component\Validator\Constraints\DateTime;
 /**
  * This is a basic class for PHP development. It is
  * intended to implement very useful stuff not available
@@ -1001,6 +1002,34 @@ class std {
 		return [ $value ];
 	}
 	
+	/**
+	 * This text suppress multiple sucessive blank characters.
+	 * 
+	 * @param string $text a text (could be HTML but not a script).
+	 *  @return string the text with only 1 white space between words. 
+	 */
+	public static function compressText( $text ){
+		if( !$text ) return "";
+		return preg_replace('/\s+/', ' ', $text);
+	}
+	
+	
+	/**
+	 * Get the timezone offset.
+	 * 
+	 * @param string $tz the name of the timezone. If not given,
+	 * 		we use the current timezone.
+	 * @return int the number of seconds for the offset.
+	 * 
+	 */
+	public static function getTimezoneOffset( $tz = null ){
+		if( !$tz ){
+			$tz = date_default_timezone_get();
+		}
+		$datetime_tz = new \DateTimeZone( $tz );
+		$offset = $datetime_tz->getOffset( new \DateTime() );
+		return $offset;
+	}
 }
 
 
