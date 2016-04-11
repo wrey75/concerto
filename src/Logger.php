@@ -261,7 +261,7 @@ class Logger {
 			trigger_error( "$line\n", E_USER_NOTICE );
 		}
 		else {
-			$fic = fopen( $this->log_file, "a" );
+			$fic = @fopen( $this->log_file, "a" );
 			if( $fic ){
 				fwrite( $fic, $line );
 				fclose( $fic );
