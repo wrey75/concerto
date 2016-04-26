@@ -708,6 +708,21 @@ class std {
 		if( strlen($text) < 1 ) return "";
 		return std::upper(mb_substr($text,0,1,'UTF-8')) . mb_substr($text,1,NULL,'UTF-8');
 	}
+
+	/**
+	 * Remove the capital on the first character of the string.
+	 *
+	 * @param string $text the string to capitalize. If
+	 * 	NULL is passed, the returned string is an empty one.
+	 * @return string the string uncapitalized.
+	 *
+	 */
+	public static function uncapitalizeFirst($text){
+		if( !$text ) return "";
+		$text = trim( $text );
+		if( strlen($text) < 1 ) return "";
+		return std::lower(mb_substr($text,0,1,'UTF-8')) . mb_substr($text,1,NULL,'UTF-8');
+	}
 	
 	public static function dump($a){
  		echo " -->";

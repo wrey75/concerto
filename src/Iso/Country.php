@@ -5,7 +5,7 @@ namespace Concerto\Iso;
 class Country {
 	public static $COUNTRIES = [
 		 'AF' => [ 'label' => [ 'en' => 'Afghanistan' ], 'iso3' => 'AFG', 'num' => 004 ],
-		 'AX' => [ 'label' => [ 'en' => 'ALA|Aland Islands' ], 'iso3' => 'ALA', 'num' => 248 ],
+		 'AX' => [ 'label' => [ 'en' => 'Aland Islands' ], 'iso3' => 'ALA', 'num' => 248 ],
 		 'AL' => [ 'label' => [ 'en' => 'Albania' ], 'iso3' => 'ALB', 'num' => 008 ],
 		 'DZ' => [ 'label' => [ 'en' => 'Algeria' ], 'iso3' => 'DZA', 'num' => 012 ],
 		 'AS' => [ 'label' => [ 'en' => 'American Samoa' ], 'iso3' => 'ASM', 'num' => 016 ],
@@ -275,7 +275,7 @@ class Country {
 		 		'en' => 'United Kingdom',
 		 		'fr' => 'Royuame-Uni'], 'iso3' => 'GBR', 'num' => 826 ],
 		 'US' => [ 'label' => [ 
-		 		'en' => 'United States of America',
+		 		'en' => 'United States',
 		 		'fr' => 'États-Unis'], 'iso3' => 'USA', 'num' => 840 ],
 		 'UM' => [ 'label' => [ 'en' => 'United States Minor Outlying Islands' ], 'iso3' => 'UMI', 'num' => 581 ],
 		 'UY' => [ 'label' => [ 'en' => 'Uruguay' ], 'iso3' => 'URY', 'num' => 858 ],
