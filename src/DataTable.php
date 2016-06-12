@@ -87,6 +87,7 @@ class DataTable {
 
 	public function getJavaScript(){
 		$ret = "<script>\n";
+		$ret .= file_get_contents( __DIR__ . "/date.format.js");
 		$ret .= '$(document).ready( function() {' . "\n";
 		$ret .= '   $(\'#' . $this->id . '\').dataTable(' . "\n";
 		$json = json_encode( $this->opt );
@@ -271,7 +272,7 @@ class DataTable {
 						$mRender = "function(val, type) {
 										var d = new Date(val * 1000);
 										if(type=='display'){
-											var ret = \$.datepicker.formatDate( \"$value\", d );
+											var ret = d.format(\"$value\");
 											return ret; 
 										}
 										return d;
