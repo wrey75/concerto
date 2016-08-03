@@ -755,6 +755,10 @@ class std {
 	 *	Experience shows that using text in the URL itself
 	 *	gives better ranking on Google and other search engines.
 	 *
+	 * NOTE: some changes can occurs on translation before the
+	 * version 1 of the library. Even, the system is quite stable,
+	 * we can decide some changes.
+	 *
 	 * @param string $str the text to encode.
 	 * @param int $max_len the maximum number of characters
 	 *		to return when the text is cleaned.
@@ -768,7 +772,7 @@ class std {
 				")" => ")",
 				"[" => "(",
 				"]" => ")",
-				"²" => "",
+				"²" => "2",
 				"\xCF\x9F" => "", // GREEK SMALL LETTER KOPPA
 				"\xC2\xB7" => "",
 				"\xE2\x97\x86" => "",
@@ -784,16 +788,16 @@ class std {
 				'­' => "-",
 				'°' => ".",
 				'•' => "-",
-				'“' => "''",
+				'“' => "-",
 				'ñ' => "n",
 				"\xE2\x82\xAC" /* '€' */ => "euro", // Unicode Character 'EURO SIGN' (U+20AC)
 				"\xE2\x84\xA2" => "(tm)", // Trade mark
 				"\xC2\xB3" => "3", // SUPERSCRIPT THREE
 				'…' => "...",
-				'«' => "''",
-				'»' => "''",
-				'”' => "''",
-				'"' => "''",
+				'«' => "-",
+				'»' => "-",
+				'”' => "-",
+				'"' => "-",
 				'®' => '',
 				'ç' => 'c',
 				'œ' => 'oe',

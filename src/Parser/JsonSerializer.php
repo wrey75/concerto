@@ -238,7 +238,8 @@ class JsonSerializer {
 			$obj = $this->restoreMongoId($className, $value);
 			$this->objectMapping[$this->objectMappingIndex++] = $obj;
 			return $obj;
-		}		
+		}
+		
 
 		$ref = new ReflectionClass($className);
 		$obj = $ref->newInstanceWithoutConstructor();
