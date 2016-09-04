@@ -2,6 +2,7 @@
 
 namespace Concerto\Iso;
 
+
 class Country {
 	public static $COUNTRIES = [
 		 'AF' => [ 'label' => [ 'en' => 'Afghanistan' ], 'iso3' => 'AFG', 'num' => '004' ],
@@ -300,6 +301,10 @@ class Country {
 	protected $data;
 	protected $code;
 	
+	/**
+	 * @deprecated use the static getCountryFromCode() instead.
+	 * @param unknown $code
+	 */
 	public function __construct( $code ){
 		$this->code = strtoupper($code);
 		if( !isset( self::$COUNTRIES[ $this->code ] ) ){
@@ -309,6 +314,17 @@ class Country {
 		$this->data = self::$COUNTRIES[ $this->code ];
 	}
 	
+	public static function getCountryFromCode($code){
+		if( isset( self::$COUNTRIES[ $code ] ) ){
+			return new Country($code);
+		}
+		return NULL;
+	}
+	
+	/**
+	 * @deprecated use getLabel instead.
+	 * 
+	 */
 	public function label( $lang = 'en' ){
 		$lang = substr( $lang, 0, 2 ); // We don't manage specificities (yet)
 		$label = @$this->data['label'][$lang];
@@ -317,7 +333,36 @@ class Country {
 		}
 		return $label;
 	}
+	
+	/**
+	 * Returns the label for this country in the
+	 * requested language when available or english
+	 * if no other language is found..
+	 *
+	 * @param string $lang the language to use. If not
+	 * given, use the LANG environment variable
+	 */
+	public function getLabel( $lang = NULL ){
+		if( !$lang ) $lang = getenv("LANG");
+		$lang = substr( $lang, 0, 2 ); // We don't manage specificities (yet)
+		$label = @$this->data['label'][$lang];
+		if( !$label ){
+			$label = @$this->data['label']['en'];
+		}
+		return $label;
+	}
+	
+	/**
+	 * Returns the country code.
+	 * 
+	 */
+	public function getCode(){
+		return $this->code;
+	}
 
+	/**
+	 * @deprecated use getCode() instead.
+	 */
 	public function code(){
 		return $this->code;
 	}
