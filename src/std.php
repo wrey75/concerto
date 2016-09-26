@@ -4,6 +4,7 @@ namespace Concerto;
 
 
 use Symfony\Component\Validator\Constraints\DateTime;
+use phpDocumentor\Descriptor\Builder\Reflector\Tags\UsesAssembler;
 /**
  * This is a basic class for PHP development. It is
  * intended to implement very useful stuff not available
@@ -16,6 +17,81 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class std {
 
+	const BASIC_CONVERTER = [
+			"(" => "(",
+			")" => ")",
+			"[" => "(",
+			"]" => ")",
+			"²" => "2",
+			"\xCF\x9F" => "", // GREEK SMALL LETTER KOPPA
+			"\xC2\xB7" => "",
+			"\xE2\x97\x86" => "",
+			"\xE2\x98\x86" => "", // WHITE STAR
+			"\xE2\x98\x85" => "", // BLACK STAR
+			"\xEF\xBD\x82" => "b", // FULLWIDTH LATIN SMALL LETTER B
+			"\xC2\xA0" => "-", // NO-BREAK SPACE (U+00A0)
+			"\xE2\x96\xBA" => "-", // A fucking ">" character..
+			"!" => "",
+			"¨" => "-",
+			'─' => "-",
+			'—' => "-",
+			'­' => "-",
+			'°' => ".",
+			'•' => "-",
+			'“' => "-",
+			'ñ' => "n",
+			"\xE2\x82\xAC" /* '€' */ => "euro", // Unicode Character 'EURO SIGN' (U+20AC)
+			"\xE2\x84\xA2" => "(tm)", // Trade mark
+			"\xC2\xB3" => "3", // SUPERSCRIPT THREE
+			"\xC5\x82" => 'l', // LATIN SMALL LETTER L WITH STROKE
+			"\xC5\x81" => 'l', // LATIN CAPITAL LETTER L WITH STROKE
+			"\xC5\xBA" => 'z',
+			'…' => "...",
+			'«' => "-",
+			'»' => "-",
+			'”' => "-",
+			'"' => "-",
+			'®' => '',
+			'ç' => 'c',
+			'œ' => 'oe',
+			'æ' => 'ae',
+			'á' => 'o',
+			'é' => 'e',
+			'í' => 'i',
+			'ó' => 'o',
+			'ú' => 'u',
+			'ã' => 'a',
+			'à' => 'a',
+			'è' => 'e',
+			'ì' => 'i',
+			'ō' => 'o',
+			'ò' => 'o',
+			'ù' => 'u',
+			'ä' => 'a',
+			'ë' => 'e',
+			'ï' => 'i',
+			'ö' => 'o',
+			'ü' => 'u',
+			'ÿ' => 'y',
+			'â' => 'a',
+			'ê' => 'e',
+			'î' => 'i',
+			'ô' => 'o',
+			'û' => 'u',
+			'å' => 'a',
+			'e' => 'e',
+			'i' => 'i',
+			'ø' => 'o',
+			'u' => 'u',
+			'&' => 'et',
+			'’' => '\'',
+			'‘' => '\'',
+			'´' => '\'',
+			'©' => '(c)',
+			'–' => '-'
+	];
+	
+	
 	/**
 	 * Redirect to a page. Once called, this function do NOT
 	 * return. It is a temporary rediction not a permanent one.
@@ -762,81 +838,13 @@ class std {
 	 * @param string $str the text to encode.
 	 * @param int $max_len the maximum number of characters
 	 *		to return when the text is cleaned.
+	 * @param int $converter The array for converting. Uses
+	 * 		the basic converter provided with the library.
 	 * @return string an encoded text without punctuation.
 	 * 		Some accents and UTF8 characters are kept
 	 * 		for a better view on search engines.
 	 */
-	public static function url_clean($str, $max_len = 72) {
-		$converter = [
-				"(" => "(",
-				")" => ")",
-				"[" => "(",
-				"]" => ")",
-				"²" => "2",
-				"\xCF\x9F" => "", // GREEK SMALL LETTER KOPPA
-				"\xC2\xB7" => "",
-				"\xE2\x97\x86" => "",
-				"\xE2\x98\x86" => "", // WHITE STAR
-				"\xE2\x98\x85" => "", // BLACK STAR
-				"\xEF\xBD\x82" => "b", // FULLWIDTH LATIN SMALL LETTER B
-				"\xC2\xA0" => "-", // NO-BREAK SPACE (U+00A0)
-				"\xE2\x96\xBA" => "-", // A fucking ">" character..
-				"!" => "",
-				"¨" => "-",
-				'─' => "-",
-				'—' => "-",
-				'­' => "-",
-				'°' => ".",
-				'•' => "-",
-				'“' => "-",
-				'ñ' => "n",
-				"\xE2\x82\xAC" /* '€' */ => "euro", // Unicode Character 'EURO SIGN' (U+20AC)
-				"\xE2\x84\xA2" => "(tm)", // Trade mark
-				"\xC2\xB3" => "3", // SUPERSCRIPT THREE
-				'…' => "...",
-				'«' => "-",
-				'»' => "-",
-				'”' => "-",
-				'"' => "-",
-				'®' => '',
-				'ç' => 'c',
-				'œ' => 'oe',
-				'æ' => 'ae',
-				'á' => 'o',
-				'é' => 'e',
-				'í' => 'i',
-				'ó' => 'o',
-				'ú' => 'u',
-				'ã' => 'a',
-				'à' => 'a',
-				'è' => 'e',
-				'ì' => 'i',
-				'ō' => 'o',
-				'ò' => 'o',
-				'ù' => 'u',
-				'ä' => 'a',
-				'ë' => 'e',
-				'ï' => 'i',
-				'ö' => 'o',
-				'ü' => 'u',
-				'ÿ' => 'y',
-				'â' => 'a',
-				'ê' => 'e',
-				'î' => 'i',
-				'ô' => 'o',
-				'û' => 'u',
-				'å' => 'a',
-				'e' => 'e',
-				'i' => 'i',
-				'ø' => 'o',
-				'u' => 'u',
-				'&' => 'et',
-				'’' => '\'',
-				'‘' => '\'',
-				'´' => '\'',
-				'©' => '(c)',
-				'–' => '-'
-		];
+	public static function url_clean($str, $max_len = 72, $converter = self::BASIC_CONVERTER ) {
 	
 		// Limit to 70 characters
 		$truncated = '';
