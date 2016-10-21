@@ -23,14 +23,8 @@ class std {
 			"[" => "(",
 			"]" => ")",
 			"²" => "2",
-			"\xCF\x9F" => "", // GREEK SMALL LETTER KOPPA
-			"\xC2\xB7" => "",
-			"\xE2\x97\x86" => "",
-			"\xE2\x98\x86" => "", // WHITE STAR
-			"\xE2\x98\x85" => "", // BLACK STAR
 			"\xEF\xBD\x82" => "b", // FULLWIDTH LATIN SMALL LETTER B
-			"\xC2\xA0" => "-", // NO-BREAK SPACE (U+00A0)
-			"\xE2\x96\xBA" => "-", // A fucking ">" character..
+
 			"!" => "",
 			"¨" => "-",
 			'─' => "-",
@@ -40,12 +34,33 @@ class std {
 			'•' => "-",
 			'“' => "-",
 			'ñ' => "n",
-			"\xE2\x82\xAC" /* '€' */ => "euro", // Unicode Character 'EURO SIGN' (U+20AC)
-			"\xE2\x84\xA2" => "(tm)", // Trade mark
+
+			"\xC2\xA0" => "-", // NO-BREAK SPACE (U+00A0)
 			"\xC2\xB3" => "3", // SUPERSCRIPT THREE
+			"\xC2\xB7" => "",
+			"\xC2\xA1" => "!", // INVERTED EXCLAMATION MARK
+			
+			"\xC4\x81" => "a",
+			"\xC4\x87" => "c",
+			"\xC4\x93" => "e",
+			"\xC4\xAB" => 'i',
+			
 			"\xC5\x82" => 'l', // LATIN SMALL LETTER L WITH STROKE
 			"\xC5\x81" => 'l', // LATIN CAPITAL LETTER L WITH STROKE
+			"\xC5\x9B" => 's',
+			"\xC5\xA1" => 'S',
 			"\xC5\xBA" => 'z',
+			"\xC5\xBC" => 'z',
+			"\xC5\xBE" => 'z', // LATIN SMALL LETTER Z (U+007A) COMBINING CARON (U+030C)
+			
+			"\xCF\x9F" => "", // GREEK SMALL LETTER KOPPA
+					
+			"\xE2\x82\xAC" /* '€' */ => "euro", // Unicode Character 'EURO SIGN' (U+20AC)
+			"\xE2\x84\xA2" => "(tm)", // Trade mark
+			"\xE2\x96\xBA" => "-", // A ">" character..
+			"\xE2\x97\x86" => "",
+			"\xE2\x98\x86" => "", // WHITE STAR
+			"\xE2\x98\x85" => "", // BLACK STAR
 			'…' => "...",
 			'«' => "-",
 			'»' => "-",
