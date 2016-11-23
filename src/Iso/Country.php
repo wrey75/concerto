@@ -447,6 +447,17 @@ class Country {
 		return $label;
 	}
 	
+	/**
+	 * Get all the known labels for this country.
+	 * 
+	 * @return array an associative array with the language 
+	 *  as the key and the label as value.
+	 * @since v0.57
+	 */
+	public function getLabels(){
+		return @$this->data['label'];
+	}
+	
 	
 	/**
 	 * Returns the country code.
