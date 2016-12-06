@@ -1,7 +1,6 @@
 {
     "name": "wrey75/concerto",
-    "version": "0.57.0",
-    "version": "0.56.0",
+    "version": "0.60.0",
     "description": "A basic library for PHP projects",
     "authors": [
         {

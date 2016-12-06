@@ -1312,17 +1312,38 @@ class std {
 	}
 	
 	/**
+	 * Try to add an ellipsis to the text. The ellipsis used is the UNICODE
+	 * character (rather than 3 dots).
+	 * 
+	 * You can NOT create an ellipsis for a text less than 10 characters
+	 * (in UNICODE characters, not UTF-8 counting).
 	 * 
 	 * @param string $text the text to ellipsis
 	 * @param int $max_length the maximum length you accept.
+	 * @param boolean $word_cut if the cut must be done at a word rather than
+	 *   anywhere in the text. This flag is only indeicative.
+	 * 
 	 */
-	public static function ellipsis($text, $max_length)
+	public static function ellipsis($text, $max_length, $word_cut = TRUE)
 	{
 		if( $max_length < 10 ) $max_length = 10; 
 		if( std::len($text) > $max_length ){
 			$text = mb_substr($text, 0, $max_length - 5, 'utf-8');
+			if( $word_cut && $max_length > 30 ){
+				// Try to cut at a space...
+				$i = $len = std::len($text);
+				while( $i > 20 && $i > $len - 30) {
+					if( ctype_space( $text[--$i] ) ){
+						// DO NOT USE mb_substr as we found the cut based
+						// on the byte inside the string (and not the caracter).
+						// This is faster, then don't worry.
+						$text = substr($text, 0, $i+1);
+						$i = 0; // end the loop 
+					}
+				}
+			}
 			$text = trim($text);
-			$text .= "...";
+			$text .= "\u{2026}"; // Ellipsis as unicode
 		}
 		return $text;
 	}
