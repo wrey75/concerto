@@ -46,7 +46,7 @@ To log data. You can create as many loggers as you want.
 
 ## The `DataTable` class
 
-Used to print tables (using the "<table>" tag). Note this class uses the DataTables
+Used to print tables (using the "\<table\>" tag). Note this class uses the DataTables
 JQuery library which can be a little old-style but working pretty well for 90% of the
 basic needs. There are some very enthousiastic mathods to avoid coding Javascript
 for this library.
