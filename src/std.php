@@ -390,7 +390,10 @@ class std {
 			"\xc7\xbe" => 'O', //U+01FE	Ǿ 	LATIN CAPITAL LETTER O WITH STROKE AND ACUTE
 			"\xc7\xbf" => 'o', //U+01FF	ǿ 	LATIN SMALL LETTER O WITH STROKE AND ACUTE
 			
+			"\xc9\x99" => "2", // LATIN SMALL LETTER SCHWA
+			
 			"\xCF\x9F" => "", // GREEK SMALL LETTER KOPPA
+
 					
 			"\xE2\x82\xAC" /* '€' */ => "euro", // Unicode Character 'EURO SIGN' (U+20AC)
 			"\xE2\x84\xA2" => "(tm)", // Trade mark
