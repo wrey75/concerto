@@ -694,7 +694,7 @@ class std {
 		global $ANGULAR_POST;
 		$name = self::normalizeVariableName( $name );
 		if (isset( $_REQUEST[$name]) ){
-			$value = $_REQUEST[$name];
+			$value = (string)$_REQUEST[$name];
 			if( $protect ){
 				// Adding a space after the sign should protect the variable
 				$value = str_replace( "<", "< ", $value);

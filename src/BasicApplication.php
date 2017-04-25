@@ -224,7 +224,7 @@ class BasicApplication {
 	 * the tabulations. Then, you should always close the tag
 	 * somewhere. It is a convenient way to have well displayed
 	 * tags in debug mode.
-	 * 
+	 *
 	 * @param string $tag
 	 * @param array $attribs the attributes for the tag.
 	 */
@@ -239,7 +239,7 @@ class BasicApplication {
 	 * Closes the previous opened tag. The tabulation is then reset
 	 * of one. NOTE: we assume you close the correct tag (there is
 	 * no control).
-	 * 
+	 *
 	 * @param string $tag the tag (without the "/" character).
 	 */
 	public function close_tag( $tag )
@@ -248,7 +248,6 @@ class BasicApplication {
 		$ret = $this->getTabulation() . "</$tag>\n";
 		return $ret;
 	}
-	
 	
 	/**
 	 * Closes one or more &lt;div&t; elements.
@@ -261,10 +260,9 @@ class BasicApplication {
 		while( $nb > 0 ){
 			$this->tabs--;
 			$ret .= $this->getTabulation() . "</div>";
-
-			list( $id, $class ) = array_pop( $this->div );
 			if( $this->debug ){
 				// Display the class or ID linked.
+				list( $id, $class ) = array_pop( $this->div );
 				if( $id ){
 					$ret .= $this->comment("#{$id}");
 				}
