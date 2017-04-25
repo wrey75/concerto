@@ -14,7 +14,7 @@ class Country {
 		 'AO' => [ 'label' => [ 'en' => 'Angola' ], 'iso3' => 'AGO', 'num' => '024' ],
 		 'AI' => [ 'label' => [ 'en' => 'Anguilla' ], 'iso3' => 'AIA', 'num' => '660' ],
 		 'AQ' => [ 'label' => [ 'en' => 'Antarctica' ], 'iso3' => 'ATA', 'num' => '010' ],
-		 'AG' => [ 'label' => [ 'en' => 'Antigua and Barbuda' ], 'iso3' => 'ATG', 'num' => '028' ],
+		 'AG' => [ 'label' => [ 'en' => 'Antigua' ], 'iso3' => 'ATG', 'num' => '028' ],
 		 'AR' => [ 'label' => [ 'en' => 'Argentina' ], 'iso3' => 'ARG', 'num' => '032' ],
 		 'AM' => [ 'label' => [ 
 		 		'en' => 'Armenia',
@@ -65,7 +65,9 @@ class Country {
 		 'CC' => [ 'label' => [ 'en' => 'Cocos (Keeling) Islands' ], 'iso3' => 'CCK', 'num' => '166' ],
 		 'CO' => [ 'label' => [ 'en' => 'Colombia' ], 'iso3' => 'COL', 'num' => '170' ],
 		 'KM' => [ 'label' => [ 'en' => 'Comoros' ], 'iso3' => 'COM', 'num' => '174' ],
-		 'CG' => [ 'label' => [ 'en' => 'Congo (Brazzaville)' ], 'iso3' => 'COG', 'num' => '178' ],
+		 'CG' => [ 'label' => [ 
+		 		'en' => 'Republic of the Congo',
+		 		'fr' => 'République du Congo' ], 'iso3' => 'COG', 'num' => '178' ],
 		 'CD' => [ 'label' => [ 'en' => 'Congo, Democratic Republic of the' ], 'iso3' => 'COD', 'num' => '180' ],
 		 'CK' => [ 'label' => [ 'en' => 'Cook Islands' ], 'iso3' => 'COK', 'num' => '184' ],
 		 'CR' => [ 'label' => [ 'en' => 'Costa Rica' ], 'iso3' => 'CRI', 'num' => '188' ],
@@ -176,7 +178,9 @@ class Country {
 		 		'fr' => 'Corée du Sud' ], 'iso3' => 'KOR', 'num' => '410' ],
 		 'KW' => [ 'label' => [ 'en' => 'Kuwait' ], 'iso3' => 'KWT', 'num' => '414' ],
 		 'KG' => [ 'label' => [ 'en' => 'Kyrgyzstan' ], 'iso3' => 'KGZ', 'num' => '417' ],
-		 'LA' => [ 'label' => [ 'en' => 'Lao PDR' ], 'iso3' => 'LAO', 'num' => '418' ],
+		 'LA' => [ 'label' => [ 
+		 		'en' => 'Laos',
+		 		'fr' => 'Loas' ], 'iso3' => 'LAO', 'num' => '418' ],
 		 'LV' => [ 'label' => [ 
 		 		'en' => 'Latvia',
 		 		'fr' => 'Lettonie' ], 'iso3' => 'LVA', 'num' => '428' ],
@@ -253,7 +257,9 @@ class Country {
 		 'OM' => [ 'label' => [ 'en' => 'Oman' ], 'iso3' => 'OMN', 'num' => '512' ],
 		 'PK' => [ 'label' => [ 'en' => 'Pakistan' ], 'iso3' => 'PAK', 'num' => '586' ],
 		 'PW' => [ 'label' => [ 'en' => 'Palau' ], 'iso3' => 'PLW', 'num' => '585' ],
-		 'PS' => [ 'label' => [ 'en' => 'Palestinian Territory, Occupied' ], 'iso3' => 'PSE', 'num' => '275' ],
+		 'PS' => [ 'label' => [ 
+		 		'en' => 'State of Palestine',
+		 		'fr' => 'Palestine'], 'iso3' => 'PSE', 'num' => '275' ],
 		 'PA' => [ 'label' => [ 'en' => 'Panama' ], 'iso3' => 'PAN', 'num' => '591' ],
 		 'PG' => [ 'label' => [ 'en' => 'Papua New Guinea' ], 'iso3' => 'PNG', 'num' => '598' ],
 		 'PY' => [ 'label' => [ 'en' => 'Paraguay' ], 'iso3' => 'PRY', 'num' => '600' ],
@@ -338,10 +344,13 @@ class Country {
 		 		'en' => 'Switzerland', 
 		 		'fr'=>'Suisse' ], 'iso3' => 'CHE', 'num' => '756' ],
 		 'SY' => [ 'label' => [ 
-		 		'en' => 'Syrian Arab Republic (Syria)',
+		 		'en' => 'Syria',
 		 		'fr' => 'Syrie' ], 'iso3' => 'SYR', 'num' => '760' ],
-		 'TW' => [ 'label' => [ 'en' => 'Taiwan, Republic of China' ], 'iso3' => 'TWN', 'num' => '158' ],
-		 'TJ' => [ 'label' => [ 'en' => 'Tajikistan' ], 'iso3' => 'TJK', 'num' => '762' ],
+		 'TW' => [ 'label' => [
+		 		'en' => 'Taiwan',
+		 		'fr' => 'Taïwan'], 'iso3' => 'TWN', 'num' => '158' ],
+		 'TJ' => [ 'label' => [ 
+		 		'en' => 'Tajikistan' ], 'iso3' => 'TJK', 'num' => '762' ],
 		 'TZ' => [ 'label' => [ 
 		 		'en' => 'Tanzania',
 		 		'fr' => 'Tanzanie' ], 'iso3' => 'TZA', 'num' => '834' ],
@@ -380,8 +389,11 @@ class Country {
 		 'VE' => [ 'label' => [ 
 		 		'en' => 'Venezuela',
 		 		'fr' => 'Venezuela' ], 'iso3' => 'VEN', 'num' => '862' ],
-		 'VN' => [ 'label' => [ 'en' => 'Viet Nam' ], 'iso3' => 'VNM', 'num' => '704' ],
-		 'VI' => [ 'label' => [ 'en' => 'Virgin Islands, US' ], 'iso3' => 'VIR', 'num' => '850' ],
+		 'VN' => [ 'label' => [ 
+		 		'en' => 'Viet Nam',
+		 		'fr' => 'Viêt Nam' ], 'iso3' => 'VNM', 'num' => '704' ],
+		 'VI' => [ 'label' => [ 
+		 		'en' => 'US Virgin Islands' ], 'iso3' => 'VIR', 'num' => '850' ],
 		 'WF' => [ 'label' => [ 'en' => 'Wallis and Futuna Islands' ], 'iso3' => 'WLF', 'num' => '876' ],
 		 'EH' => [ 'label' => [ 'en' => 'Western Sahara' ], 'iso3' => 'ESH', 'num' => '732' ],
 		 'YE' => [ 'label' => [ 'en' => 'Yemen' ], 'iso3' => 'YEM', 'num' => '887' ],
