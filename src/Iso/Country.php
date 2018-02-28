@@ -423,7 +423,7 @@ class Country {
 		 'VI' => [ 'label' => [ 
 		 		'en' => 'US Virgin Islands' ], 'iso3' => 'VIR', 'num' => '850' ],
 		 'WF' => [ 'label' => [ 'en' => 'Wallis and Futuna Islands' ], 'iso3' => 'WLF', 'num' => '876' ],
-		 'XK​' => [ 'label' => [ 
+		 'XK' => [ 'label' => [ 
 		 		'en' => 'Kosovo',
 		 		'ja' => 'コソボ' ], 'iso3' => '', 'num' => '' ],
 		 'EH' => [ 'label' => [ 'en' => 'Western Sahara' ], 'iso3' => 'ESH', 'num' => '732' ],
