@@ -501,6 +501,16 @@ class Country {
 		return @$this->data['label'];
 	}
 	
+	static public function getCountryFromlabel($inputLabel){
+	    foreach(self::$COUNTRIES as $k => $country){
+	        foreach($country['label'] as $label){
+	            if( $label == $inputLabel ){
+	                return Country::getCountryFromCode($k);
+	            }
+	        }
+	    }
+	    return null;
+	}
 	
 	/**
 	 * Returns the country code.
