@@ -452,6 +452,13 @@ class Country {
 		$this->data = self::$COUNTRIES[ $this->code ];
 	}
 	
+	/**
+	 * Set the country using its code. Use
+	 * 
+	 * @param string $code the 2-letter code.
+	 * @return \Concerto\Iso\Country|NULL
+	 * @deprecated use getCountryFromLabel() instead.
+	 */
 	public static function getCountryFromCode($code){
 		if( isset( self::$COUNTRIES[ $code ] ) ){
 			return new Country($code);
@@ -501,11 +508,29 @@ class Country {
 		return @$this->data['label'];
 	}
 	
-	static public function getCountryFromlabel($inputLabel){
+	/**
+	 * Try to convert to a Country.
+	 * 
+	 * @param mixed $input the label which can be a code or a full label.
+	 * @return NULL|\Concerto\Iso\Country
+	 */
+	static public function getCountryFromlabel($input){
+	    if( !$input ){
+	        return null;
+	    }
+	    
+	    // Very convenient
+	    if( $input instanceof Country){
+	        return $input;
+	    }
+	    if(strlen($input) == 2 && self::$COUNTRIES[strtoupper($input)] ){
+	        return new Country($input);
+	    }
 	    foreach(self::$COUNTRIES as $k => $country){
+	        $input = std::lower($input);
 	        foreach($country['label'] as $label){
-	            if( $label == $inputLabel ){
-	                return Country::getCountryFromCode($k);
+	            if( std::lower($label) == $input ){
+	                return new Country($k);
 	            }
 	        }
 	    }
