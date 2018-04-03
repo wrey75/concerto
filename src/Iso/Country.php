@@ -3,6 +3,8 @@
 namespace Concerto\Iso;
 
 
+use Concerto\std;
+
 class Country {
 	public static $COUNTRIES = [
 		 'AF' => [ 'label' => [ 'en' => 'Afghanistan' ], 'iso3' => 'AFG', 'num' => '004' ],
@@ -187,15 +189,21 @@ class Country {
 		 'KZ' => [ 'label' => [ 'en' => 'Kazakhstan' ], 'iso3' => 'KAZ', 'num' => '398' ],
 		 'KE' => [ 'label' => [ 'en' => 'Kenya' ], 'iso3' => 'KEN', 'num' => '404' ],
 		 'KI' => [ 'label' => [ 'en' => 'Kiribati' ], 'iso3' => 'KIR', 'num' => '296' ],
-		 'KP' => [ 'label' => [ 'en' => 'Korea, Democratic People\'s Republic of' ], 'iso3' => 'PRK', 'num' => '408' ],
+		 'KP' => [ 'label' => [ 
+		          'en' => 'North Korea',
+		          'fr' => "Corée du Nord"], 'iso3' => 'PRK', 'num' => '408' ],
 		 'KR' => [ 'label' => [ 
 		 		'en' => 'South Korea',
 		 		'fr' => 'Corée du Sud' ], 'iso3' => 'KOR', 'num' => '410' ],
-		 'KW' => [ 'label' => [ 'en' => 'Kuwait' ], 'iso3' => 'KWT', 'num' => '414' ],
-		 'KG' => [ 'label' => [ 'en' => 'Kyrgyzstan' ], 'iso3' => 'KGZ', 'num' => '417' ],
+		 'KW' => [ 'label' => [ 
+                'en' => 'Kuwait',
+		          'fr' => 'Koweït' ], 'iso3' => 'KWT', 'num' => '414' ],
+		 'KG' => [ 'label' => [ 
+		          'en' => 'Kyrgyzstan',
+		          'fr' => 'Kirghizistan' ], 'iso3' => 'KGZ', 'num' => '417' ],
 		 'LA' => [ 'label' => [ 
 		 		'en' => 'Laos',
-		 		'fr' => 'Loas' ], 'iso3' => 'LAO', 'num' => '418' ],
+		 		'fr' => 'Laos' ], 'iso3' => 'LAO', 'num' => '418' ],
 		 'LV' => [ 'label' => [ 
 		 		'en' => 'Latvia',
 		 		'fr' => 'Lettonie' ], 'iso3' => 'LVA', 'num' => '428' ],
@@ -204,7 +212,9 @@ class Country {
 		 		'fr' => 'Liban' ], 'iso3' => 'LBN', 'num' => '422' ],
 		 'LS' => [ 'label' => [ 'en' => 'Lesotho' ], 'iso3' => 'LSO', 'num' => '426' ],
 		 'LR' => [ 'label' => [ 'en' => 'Liberia' ], 'iso3' => 'LBR', 'num' => '430' ],
-		 'LY' => [ 'label' => [ 'en' => 'Libya' ], 'iso3' => 'LBY', 'num' => '434' ],
+		 'LY' => [ 'label' => [ 
+		          'en' => 'Libya',
+		          'fr' => 'Libye'], 'iso3' => 'LBY', 'num' => '434' ],
 		 'LI' => [ 'label' => [ 'en' => 'Liechtenstein' ], 'iso3' => 'LIE', 'num' => '438' ],
 		 'LT' => [ 'label' => [ 
 		 		'en' => 'Lithuania',
@@ -218,7 +228,9 @@ class Country {
 		 		'fr' => 'Macédoine' ], 'iso3' => 'MKD', 'num' => '807' ],
 		 'MG' => [ 'label' => [ 'en' => 'Madagascar' ], 'iso3' => 'MDG', 'num' => '450' ],
 		 'MW' => [ 'label' => [ 'en' => 'Malawi' ], 'iso3' => 'MWI', 'num' => '454' ],
-		 'MY' => [ 'label' => [ 'en' => 'Malaysia' ], 'iso3' => 'MYS', 'num' => '458' ],
+		 'MY' => [ 'label' => [ 
+		          'en' => 'Malaysia',
+		          'fr' => 'Malaisie' ], 'iso3' => 'MYS', 'num' => '458' ],
 		 'MV' => [ 'label' => [ 'en' => 'Maldives' ], 'iso3' => 'MDV', 'num' => '462' ],
 		 'ML' => [ 'label' => [ 'en' => 'Mali' ], 'iso3' => 'MLI', 'num' => '466' ],
 		 'MT' => [ 'label' => [ 
@@ -226,7 +238,9 @@ class Country {
 		 		'fr' => 'Malte' ], 'iso3' => 'MLT', 'num' => '470' ],
 		 'MH' => [ 'label' => [ 'en' => 'Marshall Islands' ], 'iso3' => 'MHL', 'num' => '584' ],
 		 'MQ' => [ 'label' => [ 'en' => 'Martinique' ], 'iso3' => 'MTQ', 'num' => '474' ],
-		 'MR' => [ 'label' => [ 'en' => 'Mauritania' ], 'iso3' => 'MRT', 'num' => '478' ],
+		 'MR' => [ 'label' => [ 
+		          'en' => 'Mauritania',
+		          'fr' => 'Mauritanie' ], 'iso3' => 'MRT', 'num' => '478' ],
 		 'MU' => [ 'label' => [ 
 		 		'en' => 'Mauritius',
 		 		'fr' => 'Île Maurice'], 'iso3' => 'MUS', 'num' => '480' ],
@@ -251,14 +265,18 @@ class Country {
 		 		'fr' => 'Maroc' ], 'iso3' => 'MAR', 'num' => '504' ],
 		 'MZ' => [ 'label' => [ 'en' => 'Mozambique' ], 'iso3' => 'MOZ', 'num' => '508' ],
 		 'MM' => [ 'label' => [ 'en' => 'Myanmar' ], 'iso3' => 'MMR', 'num' => '104' ],
-		 'NA' => [ 'label' => [ 'en' => 'Namibia' ], 'iso3' => 'NAM', 'num' => '516' ],
+		 'NA' => [ 'label' => [ 
+		          'en' => 'Namibia',
+		          'fr' => 'Namibie' ], 'iso3' => 'NAM', 'num' => '516' ],
 		 'NR' => [ 'label' => [ 'en' => 'Nauru' ], 'iso3' => 'NRU', 'num' => '520' ],
 		 'NP' => [ 'label' => [ 'en' => 'Nepal' ], 'iso3' => 'NPL', 'num' => '524' ],
 		 'NL' => [ 'label' => [ 
 		 		'en' => 'Netherlands',
 		 		'fr' => 'Pays-Bas' ], 'iso3' => 'NLD', 'num' => '528' ],
 		 'AN' => [ 'label' => [ 'en' => 'Netherlands Antilles' ], 'iso3' => 'ANT', 'num' => '530' ],
-		 'NC' => [ 'label' => [ 'en' => 'New Caledonia' ], 'iso3' => 'NCL', 'num' => '540' ],
+		 'NC' => [ 'label' => [ 
+		          'en' => 'New Caledonia',
+		          'fr' => 'Nouvelle Calédonie'], 'iso3' => 'NCL', 'num' => '540' ],
 		 'NZ' => [ 'label' => [ 
 		 		'en' => 'New Zealand',
 		 		'fr' => 'Nouvelle-Zélande' ], 'iso3' => 'NZL', 'num' => '554' ],
@@ -278,7 +296,9 @@ class Country {
 		 'PA' => [ 'label' => [ 'en' => 'Panama' ], 'iso3' => 'PAN', 'num' => '591' ],
 		 'PG' => [ 'label' => [ 'en' => 'Papua New Guinea' ], 'iso3' => 'PNG', 'num' => '598' ],
 		 'PY' => [ 'label' => [ 'en' => 'Paraguay' ], 'iso3' => 'PRY', 'num' => '600' ],
-		 'PE' => [ 'label' => [ 'en' => 'Peru' ], 'iso3' => 'PER', 'num' => '604' ],
+		 'PE' => [ 'label' => [ 
+		          'en' => 'Peru',
+		          'fr' => 'Pérou'], 'iso3' => 'PER', 'num' => '604' ],
 		 'PH' => [ 'label' => [ 'en' => 'Philippines' ], 'iso3' => 'PHL', 'num' => '608' ],
 		 'PN' => [ 'label' => [ 
 		 		'en' => 'Pitcairn Islands',
@@ -287,7 +307,10 @@ class Country {
 		 		'en' => 'Poland',
 		 		'fr' => 'Pologne' ], 'iso3' => 'POL', 'num' => '616' ],
 		 'PT' => [ 'label' => [ 'en' => 'Portugal' ], 'iso3' => 'PRT', 'num' => '620' ],
-		 'PR' => [ 'label' => [ 'en' => 'Puerto Rico' ], 'iso3' => 'PRI', 'num' => '630' ],
+		 'PR' => [ 'label' => [ 
+		          'en' => 'Puerto Rico',
+		          'fr' => 'Porto Rico'
+		          ], 'iso3' => 'PRI', 'num' => '630' ],
 		 'QA' => [ 'label' => [ 
 		 		'en' => 'Qatar',
 		 		'fr' => 'Qatar' // ou "Katar" mais tend à disparaître
@@ -299,7 +322,7 @@ class Country {
 		 		'en' => 'Romania',
 		 		'fr' => "Roumanie" ], 'iso3' => 'ROU', 'num' => '642' ],
 		 'RU' => [ 'label' => [ 
-		 		'en' => 'Russian Federation',
+		 		'en' => 'Russia',
 		 		'fr' => 'Russie'], 'iso3' => 'RUS', 'num' => '643' ],
 		 'RW' => [ 'label' => [ 'en' => 'Rwanda' ], 'iso3' => 'RWA', 'num' => '646' ],
 		 'BL' => [ 'label' => [ 'en' => 'Saint-Barthélemy' ], 'iso3' => 'BLM', 'num' => '652' ],
@@ -328,7 +351,9 @@ class Country {
 		 'SA' => [ 'label' => [ 
 		 		'en' => 'Saudi Arabia',
 		 		'fr' => 'Arabie saoudite' ], 'iso3' => 'SAU', 'num' => '682' ],
-		 'SN' => [ 'label' => [ 'en' => 'Senegal' ], 'iso3' => 'SEN', 'num' => '686' ],
+		 'SN' => [ 'label' => [ 
+		          'en' => 'Senegal',
+		          'fr' => 'Sénégal' ], 'iso3' => 'SEN', 'num' => '686' ],
 		 'RS' => [ 'label' => [ 
 		 		'en' => 'Serbia',		 	
 		 		'fr' => 'Serbie' ], 'iso3' => 'SRB', 'num' => '688' ],
@@ -342,7 +367,9 @@ class Country {
 		 		'fr' => 'Slovaquie' ], 'iso3' => 'SVK', 'num' => '703' ],
 		 'SI' => [ 'label' => [ 'en' => 'Slovenia' ], 'iso3' => 'SVN', 'num' => '705' ],
 		 'SB' => [ 'label' => [ 'en' => 'Solomon Islands' ], 'iso3' => 'SLB', 'num' => '090' ],
-		 'SO' => [ 'label' => [ 'en' => 'Somalia' ], 'iso3' => 'SOM', 'num' => '706' ],
+		 'SO' => [ 'label' => [ 
+		          'en' => 'Somalia',
+		          'fr' => 'Somalie' ], 'iso3' => 'SOM', 'num' => '706' ],
 		 'ZA' => [ 'label' => [ 
 		 		'en' => 'South Africa',
 		 		'fr' => 'Afrique du Sud' ], 'iso3' => 'ZAF', 'num' => '710' ],
@@ -353,7 +380,7 @@ class Country {
 		 		'en' => 'South Sudan',
 		 		'fr' => 'Sud Soudan' ], 'iso3' => 'SSD', 'num' => '728' ],
 		 'ES' => [ 'label' => [
-		 		'de' => 'Schweiz',
+		 		'de' => 'Spanien',
 		 		'en' => 'Spain',
 		 		'es' => 'España',
 		 		'fr' => 'Espagne' ], 'iso3' => 'ESP', 'num' => '724' ],
@@ -387,7 +414,10 @@ class Country {
 		 'TK' => [ 'label' => [ 'en' => 'Tokelau' ], 'iso3' => 'TKL', 'num' => '772' ],
 		 'TO' => [ 'label' => [ 'en' => 'Tonga' ], 'iso3' => 'TON', 'num' => '776' ],
 		 'TT' => [ 'label' => [ 'en' => 'Trinidad and Tobago' ], 'iso3' => 'TTO', 'num' => '780' ],
-		 'TN' => [ 'label' => [ 'en' => 'Tunisia' ], 'iso3' => 'TUN', 'num' => '788' ],
+		 'TN' => [ 'label' => [ 
+		          'en' => 'Tunisia',
+		          'fr' => 'Tunisie'
+		          ], 'iso3' => 'TUN', 'num' => '788' ],
 		 'TR' => [ 'label' => [ 
 		 		'en' => 'Turkey',
 		 		'fr' => 'Turquie' ], 'iso3' => 'TUR', 'num' => '792' ],
@@ -415,7 +445,7 @@ class Country {
 		 'VU' => [ 'label' => [ 'en' => 'Vanuatu' ], 'iso3' => 'VUT', 'num' => '548' ],
 		 'VE' => [ 'label' => [ 
 		 		'en' => 'Venezuela',
-		 		'fr' => 'Venezuela' ], 'iso3' => 'VEN', 'num' => '862' ],
+		 		'fr' => 'Vénézuéla' ], 'iso3' => 'VEN', 'num' => '862' ],
 		 'VN' => [ 'label' => [ 
 		 		'en' => 'Vietnam',
 		 		'fr' => 'Viêt Nam',
