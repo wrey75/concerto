@@ -257,7 +257,7 @@ class Country {
 		 'MC' => [ 'label' => [ 'en' => 'Monaco' ], 'iso3' => 'MCO', 'num' => '492' ],
 		 'MN' => [ 'label' => [ 
 		 		'en' => 'Mongolia',
-		 		'fr' => 'Mongolie '], 'iso3' => 'MNG', 'num' => '496' ],
+		 		'fr' => 'Mongolie'], 'iso3' => 'MNG', 'num' => '496' ],
 		 'ME' => [ 'label' => [ 'en' => 'Montenegro' ], 'iso3' => 'MNE', 'num' => '499' ],
 		 'MS' => [ 'label' => [ 'en' => 'Montserrat' ], 'iso3' => 'MSR', 'num' => '500' ],
 		 'MA' => [ 'label' => [ 
